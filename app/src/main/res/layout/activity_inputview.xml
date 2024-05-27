@@ -31,11 +31,12 @@
                 android:orientation="horizontal"
                 android:layout_marginBottom="8dp">
 
-                <TextView
+                <EditText
+                    android:id="@+id/editTextUsageDetails"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/usage_details"
+                    android:hint="@string/usage_details"
                     style="@style/CommonTextStyle" />
 
                 <Spinner
