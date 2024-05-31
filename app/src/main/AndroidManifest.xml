@@ -37,6 +37,17 @@
             android:name=".InputViewActivity"
             android:exported="true"/>
 
+<!--        <activity android:name=".MyPageView" />-->
+<!--        <activity android:name=".MyExpenseFragment" />-->
+<!--        <activity android:name=".SharedExpenseFragment" />-->
+<!--        <activity android:name=".InputView" />-->
+<!--        <activity-->
+<!--            android:name=".MainView"-->
+<!--            android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
     </application>
-
 </manifest>

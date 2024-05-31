@@ -7,6 +7,7 @@
     <string name="usage_date">사용 일자</string>
     <string name="payer">지출인</string>
     <string name="default_payer">본인 이름 기본 세팅</string>
+    <string name="for_whom">For whom</string>
     <string name="friend_name">친구 이름</string>
     <string name="submit">입력</string>
     <string-array name="category_array">

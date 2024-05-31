@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:id="@+id/my_expense_layout">
+
+    <!-- 예시 항목 -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="독일 여행"
+        android:textSize="18sp"
+        android:padding="8dp"
+        android:background="?attr/selectableItemBackground"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="데이트 통장"
+        android:textSize="18sp"
+        android:padding="8dp"
+        android:background="?attr/selectableItemBackground"/>
+
+    <!-- 추가 항목들 -->
+</LinearLayout>
