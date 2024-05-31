@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:theme="?attr/actionBarTheme" />
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_above="@+id/buttonSubmit"
+        android:layout_below="@id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:background="#E6F0F1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+
+                <EditText
+                    android:id="@+id/editTextUsageDetails"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/usage_details"
+                    style="@style/CommonTextStyle" />
+
+                <Spinner
+                    android:id="@+id/spinnerCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/category_array"
+                    android:minHeight="48dp"
+                    style="@style/CommonTextStyle" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
+
+                <EditText
+                    android:id="@+id/editTextAmount"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/usage_amount"
+                    android:inputType="numberDecimal"
+                    android:layout_weight="1"
+                    android:minHeight="48dp"
+                    android:autofillHints="autofill"
+                    android:textColor="#000000"
+                    style="@style/CommonTextStyle" />
+
+                <Spinner
+                    android:id="@+id/spinnerCurrency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/currency_array"
+                    android:layout_marginStart="8dp"
+                    android:minHeight="48dp"
+                    style="@style/CommonTextStyle" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray" />
+
+            <EditText
+                android:id="@+id/editTextDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/usage_date"
+                android:inputType="date"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:minHeight="48dp"
+                android:autofillHints="autofill"
+                android:textColor="#000000"
+                style="@style/CommonTextStyle" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/payer"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                style="@style/CommonTextStyle" />
+
+            <Spinner
+                android:id="@+id/spinnerPayer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:minHeight="48dp"
+                style="@style/CommonTextStyle" />
+
+            <CheckBox
+                android:id="@+id/checkBoxForWhom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/for_whom"
+                android:layout_marginBottom="8dp"
+                android:minHeight="48dp"
+                style="@style/CommonTextStyle" />
+
+            <EditText
+                android:id="@+id/editTextFriendName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/friend_name"
+                android:inputType="textPersonName"
+                android:layout_marginBottom="8dp"
+                android:minHeight="48dp"
+                android:autofillHints="autofill"
+                android:textColor="#000000"
+                style="@style/CommonTextStyle" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray" />
+
+            <ImageView
+                android:id="@+id/imageViewReceipt"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:src="@android:drawable/ic_menu_camera"
+                android:scaleType="center"
+                android:contentDescription="@string/usage_details"
+                android:background="@android:drawable/ic_menu_gallery" />
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/buttonSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/submit"
+        android:background="@color/colorPrimary"
+        android:textColor="#FFFFFF"
+        android:minHeight="48dp"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        style="@style/CommonTextStyle" />
+
+</RelativeLayout>

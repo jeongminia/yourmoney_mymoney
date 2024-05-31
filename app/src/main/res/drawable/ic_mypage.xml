@@ -1,0 +1,22 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="65"
+    android:viewportHeight="55">
+
+        <ground>
+                <path
+                    android:fillColor="#FFEBF2F2"
+                    android:strokeColor="#FFFFFFFF"
+                    android:strokeWidth="1"
+                    android:pathData="M33.43 24.74L33 24.05l-0.43 0.69-12.99 21-0.47 0.76h0.9 25.98 0.9l-0.47-0.76-13-21Z"/>
+                <!--위에 거: 마이페이지 아이콘 몸통-->
+                <path
+                    android:fillColor="#FFEBF2F2"
+                    android:strokeColor="#FFFFFFFF"
+                    android:strokeWidth="1"
+                    android:pathData="M33.5 30.5c5.52 0 10-4.48 10-10s-4.48-10-10-10-10 4.48-10 10 4.48 10 10 10Z"/>
+                <!--위에 거: 마이페이지 아이콘 머리-->
+        </ground>
+
+</vector>
