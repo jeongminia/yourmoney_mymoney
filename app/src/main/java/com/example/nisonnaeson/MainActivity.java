@@ -1,6 +1,7 @@
 package com.example.nisonnaeson;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -21,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private Spinner spinnerPayer;
     private CheckBox checkBoxForWhom;
     private ImageView imageViewReceipt;
-    private Button buttonSubmit;
+    private Button buttonSubmit, reportButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,13 @@ public class MainActivity extends AppCompatActivity {
         // 버튼 클릭 리스너 설정
         buttonSubmit.setOnClickListener(view -> {
             // 입력 처리 로직
+        });
+
+        // ReportActivity로 이동하는 버튼 설정
+        reportButton = findViewById(R.id.reportButton);
+        reportButton.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, ReportActivity.class);
+            startActivity(intent);
         });
     }
 

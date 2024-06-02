@@ -32,8 +32,6 @@ public class LoginActivity extends AppCompatActivity {
         textView.setTextSize(24);
         textView.setTextColor(Color.WHITE);
 
-        Typeface typeface = Typeface.createFromAsset(getAssets(), "nanumpenscript-regular.ttf");
-        textView.setTypeface(typeface);
         FlexboxLayout.LayoutParams textLayoutParams = new FlexboxLayout.LayoutParams(
                 FlexboxLayout.LayoutParams.WRAP_CONTENT, FlexboxLayout.LayoutParams.WRAP_CONTENT);
         textLayoutParams.setMargins(convertToPx(76), convertToPx(237), convertToPx(75), convertToPx(80));
@@ -46,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         kakaoLoginButton.setBackgroundColor(Color.YELLOW);
         kakaoLoginButton.setTextColor(Color.BLACK);
         FlexboxLayout.LayoutParams loginButtonParams = new FlexboxLayout.LayoutParams(
-                FlexboxLayout.LayoutParams.WRAP_CONTENT, FlexboxLayout.LayoutParams.WRAP_CONTENT);
+                convertToPx(300), convertToPx(100)); // Set width and height
         loginButtonParams.setMargins(0, convertToPx(20), 0, 0); // top margin
         kakaoLoginButton.setLayoutParams(loginButtonParams);
         flexboxLayout.addView(kakaoLoginButton);
@@ -57,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         kakaoSignupButton.setBackgroundColor(Color.YELLOW);
         kakaoSignupButton.setTextColor(Color.BLACK);
         FlexboxLayout.LayoutParams signupButtonParams = new FlexboxLayout.LayoutParams(
-                FlexboxLayout.LayoutParams.WRAP_CONTENT, FlexboxLayout.LayoutParams.WRAP_CONTENT);
+                convertToPx(300), convertToPx(100)); // Set width and height
         signupButtonParams.setMargins(0, convertToPx(20), 0, 0); // top margin
         kakaoSignupButton.setLayoutParams(signupButtonParams);
         flexboxLayout.addView(kakaoSignupButton);

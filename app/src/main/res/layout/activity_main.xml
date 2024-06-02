@@ -16,4 +16,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- ReportActivity로 이동하는 버튼 추가 -->
+    <Button
+        android:id="@+id/reportButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Report View"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
