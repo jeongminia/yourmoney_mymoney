@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F5F5F5"
+    tools:context=".InputViewActivity">
+
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:theme="?attr/actionBarTheme"
+        android:navigationIcon="@android:drawable/ic_menu_revert" />
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#F5F5F5">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:background="#F5F5F5">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp"
+                android:background="#F5F5F5">
+
+                <EditText
+                    android:id="@+id/editTextUsageDetails"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/usage_details"
+                    android:inputType="text"
+                    style="@style/CommonTextStyle"
+                    android:background="#F5F5F5" />
+
+                <Spinner
+                    android:id="@+id/spinnerCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/category_array"
+                    android:minHeight="48dp"
+                    style="@style/CommonTextStyle"
+                    android:background="#F5F5F5" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="#F5F5F5">
+
+                <EditText
+                    android:id="@+id/editTextAmount"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/usage_amount"
+                    android:inputType="numberDecimal"
+                    android:layout_weight="1"
+                    android:minHeight="48dp"
+                    android:autofillHints="autofill"
+                    android:textColor="#000000"
+                    style="@style/CommonTextStyle"
+                    android:background="#F5F5F5" />
+
+                <Spinner
+                    android:id="@+id/spinnerCurrency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/currency_array"
+                    android:layout_marginStart="8dp"
+                    android:minHeight="48dp"
+                    style="@style/CommonTextStyle"
+                    android:background="#F5F5F5" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray" />
+
+            <!-- 실시간 환율 입력 섹션 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="#F5F5F5">
+
+                <CheckBox
+                    android:id="@+id/checkBoxRealTimeExchangeRate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/editTextRealTimeExchangeRate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="실시간 환율 입력"
+                    android:inputType="numberDecimal"
+                    android:minHeight="48dp"
+                    android:autofillHints="autofill"
+                    android:textColor="#000000"
+                    style="@style/CommonTextStyle"
+                    android:background="#F5F5F5" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray" />
+
+            <EditText
+                android:id="@+id/editTextDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/usage_date"
+                android:focusable="false"
+                android:clickable="true"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:minHeight="48dp"
+                android:autofillHints="autofill"
+                android:textColor="#000000"
+                style="@style/CommonTextStyle"
+                android:background="#F5F5F5" />
+
+            <EditText
+                android:id="@+id/editTextPayer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="지출인"
+                android:inputType="textPersonName"
+                android:layout_marginBottom="8dp"
+                android:minHeight="48dp"
+                android:autofillHints="autofill"
+                android:textColor="#000000"
+                style="@style/CommonTextStyle"
+                android:background="#F5F5F5" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="#F5F5F5">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="함께 지불할 사람"
+                    style="@style/CommonTextStyle"
+                    android:background="#F5F5F5" />
+
+                <ImageButton
+                    android:id="@+id/buttonAddFriend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_input_add"
+                    android:background="?attr/selectableItemBackground"
+                    android:contentDescription="Add Friend" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayoutFriends"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="#F5F5F5">
+                <!-- 동적으로 추가될 EditText 들이 여기에 삽입될 예정입니다. -->
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="#F5F5F5">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="사진 추가"
+                    style="@style/CommonTextStyle"
+                    android:background="#F5F5F5" />
+
+                <ImageButton
+                    android:id="@+id/buttonAddPhoto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_menu_camera"
+                    android:background="?attr/selectableItemBackground"
+                    android:contentDescription="Add Photo" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imageViewPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone"
+                android:scaleType="centerCrop"
+                android:contentDescription="Selected Photo" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/buttonSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="입력"
+        android:background="#DCE7D5"
+        android:textColor="#000000"
+        android:minHeight="48dp"
+        android:gravity="center" />
+
+</LinearLayout>

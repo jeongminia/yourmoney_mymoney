@@ -82,7 +82,10 @@ esac
 
 CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 62e54ebd9738791ff784583806b0316a779a5d79
 # Determine the Java command to use to start the JVM.
 if [ -n "$JAVA_HOME" ] ; then
     if [ -x "$JAVA_HOME/jre/sh/java" ] ; then

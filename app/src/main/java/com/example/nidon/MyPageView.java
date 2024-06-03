@@ -8,6 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.nisonnaeson.R;
+
 public class MyPageView extends AppCompatActivity {
 
     private TextView nameTextView;

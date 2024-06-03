@@ -13,6 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.example.nisonnaeson.InputViewActivity;
+import com.example.nisonnaeson.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainView extends AppCompatActivity {
@@ -67,7 +70,7 @@ public class MainView extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainView.this, InputView.class);
+                Intent intent = new Intent(MainView.this, InputViewActivity.class); //원래는 InputView.class였는데, 오류 해결하려 Activity로 코드 변경했습니다. 실제로 어디에 쓰이는지 모르고 충돌 해결하려 한 거라 문제 될 수도 있어요!! 참고해서 수정해주세요._신호연
                 startActivityForResult(intent, REQUEST_CODE_CREATE_ACCOUNT);
             }
         });
