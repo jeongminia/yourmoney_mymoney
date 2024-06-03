@@ -4,15 +4,14 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import java.util.Calendar;
 
@@ -27,13 +26,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_inputview);
+        setContentView(R.layout.activity_main);
 
-        // Toolbar 설정
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        // 초기화
         editTextAmount = findViewById(R.id.editTextAmount);
         editTextDate = findViewById(R.id.editTextDate);
         editTextFriendName = findViewById(R.id.editTextFriendName);
@@ -41,27 +36,26 @@ public class MainActivity extends AppCompatActivity {
         checkBoxForWhom = findViewById(R.id.checkBoxForWhom);
         imageViewReceipt = findViewById(R.id.imageViewReceipt);
         buttonSubmit = findViewById(R.id.buttonSubmit);
+        reportButton = findViewById(R.id.reportButton);
 
-        // 스피너 설정
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.payer_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerPayer.setAdapter(adapter);
-
-        // 날짜 선택기 설정
-        editTextDate.setOnClickListener(view -> showDatePickerDialog());
-
-        // 버튼 클릭 리스너 설정
-        buttonSubmit.setOnClickListener(view -> {
-            // 입력 처리 로직
+        // InputViewActivity로 이동하는 버튼 설정
+        Button buttonOpenInputView = findViewById(R.id.buttonOpenInputView);
+        buttonOpenInputView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, InputViewActivity.class);
+                startActivity(intent);
+            }
         });
 
         // ReportActivity로 이동하는 버튼 설정
-        reportButton = findViewById(R.id.reportButton);
         reportButton.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, ReportActivity.class);
             startActivity(intent);
         });
+
+        // DatePickerDialog를 여는 메서드
+        editTextDate.setOnClickListener(v -> showDatePickerDialog());
     }
 
     private void showDatePickerDialog() {
