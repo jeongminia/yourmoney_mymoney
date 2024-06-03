@@ -44,10 +44,10 @@ public class InputView extends AppCompatActivity {
         buttonSubmit = findViewById(R.id.buttonSubmit);
 
         // 스피너 설정
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.payer_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerPayer.setAdapter(adapter);
+//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+//                R.array.payer_array, android.R.layout.simple_spinner_item);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spinnerPayer.setAdapter(adapter);
 
         // 날짜 선택기 설정
         editTextDate.setOnClickListener(view -> showDatePickerDialog());
