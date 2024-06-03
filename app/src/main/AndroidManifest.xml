@@ -9,17 +9,30 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Nisonnaeson">
+
         <activity
             android:name=".AccountViewActivity"
+            android:exported="true">
+        </activity>
+
+        <activity
+            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity
+            android:name=".ReportActivity"
+            android:exported="false">
+        </activity>
+        
         <activity
             android:name=".InputViewActivity"
             android:exported="true"/>
+        
     </application>
 
 </manifest>
