@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">mymoneyyourmoney</string>
+    <string-array name="currency_array">
+        <item>EUR - Euro</item>
+        <item>USD - US Dollar</item>
+        <item>AUD - Australian Dollar</item>
+        <item>GBP - British Pound</item>
+        <item>KRW - South Korean Won</item>
+    </string-array>
+</resources>
