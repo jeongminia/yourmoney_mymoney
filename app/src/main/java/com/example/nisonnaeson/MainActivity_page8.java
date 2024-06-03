@@ -1,4 +1,4 @@
-package com.example.mymoneyyourmoney;
+package com.example.nisonnaeson;
 
 import android.os.Bundle;
 import android.view.View;
@@ -10,8 +10,6 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.nisonnaeson.R;
 
 public class MainActivity_page8 extends AppCompatActivity {
 

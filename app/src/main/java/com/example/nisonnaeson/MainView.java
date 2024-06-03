@@ -1,4 +1,4 @@
-package com.example.nidon;
+package com.example.nisonnaeson;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.nisonnaeson.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainView extends AppCompatActivity {
@@ -102,13 +101,13 @@ public class MainView extends AppCompatActivity {
         }
     }
 
-//    public void onMyExpenseClick(View view) {
-//        loadFragment(new MyExpenseFragment());
-//    }
-//
-//    public void onSharedExpenseClick(View view) {
-//        loadFragment(new SharedExpenseFragment());
-//    }
+    public void onMyExpenseClick(View view) {
+        loadFragment(new MyExpenseFragment());
+    }
+
+    public void onSharedExpenseClick(View view) {
+        loadFragment(new SharedExpenseFragment());
+    }
 
     private void loadFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();

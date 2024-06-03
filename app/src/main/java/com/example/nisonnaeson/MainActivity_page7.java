@@ -1,4 +1,4 @@
-package com.example.mymoneyyourmoney;
+package com.example.nisonnaeson;
 
 import android.os.Bundle;
 import android.view.View;
@@ -6,8 +6,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.nisonnaeson.R;
 
 public class MainActivity_page7 extends AppCompatActivity {
 
@@ -32,7 +30,7 @@ public class MainActivity_page7 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // 수정하기 버튼 클릭 시 처리
-                Toast.makeText(com.example.mymoneyyourmoney.MainActivity_page7.this, "수정하기 버튼 클릭됨", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity_page7.this, "수정하기 버튼 클릭됨", Toast.LENGTH_SHORT).show();
                 // 수정 로직 추가
             }
         });
