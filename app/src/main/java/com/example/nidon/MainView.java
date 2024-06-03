@@ -100,13 +100,13 @@ public class MainView extends AppCompatActivity {
         }
     }
 
-//    public void onMyExpenseClick(View view) {
-//        loadFragment(new MyExpenseFragment());
-//    }
-//
-//    public void onSharedExpenseClick(View view) {
-//        loadFragment(new SharedExpenseFragment());
-//    }
+    public void onMyExpenseClick(View view) {
+        loadFragment(new MyExpenseFragment());
+    }
+
+    public void onSharedExpenseClick(View view) {
+        loadFragment(new SharedExpenseFragment());
+    }
 
     private void loadFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
