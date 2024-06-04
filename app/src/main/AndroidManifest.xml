@@ -38,6 +38,9 @@
         <activity
             android:name=".MainView"
             android:exported="true" />
+        <activity
+            android:name=".MainActivity_page8"
+            android:exported="true" />
     </application>
 
 </manifest>

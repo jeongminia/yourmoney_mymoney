@@ -14,6 +14,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.nisonnaeson.MainActivity_page8;
+import com.example.nisonnaeson.MyExpenseFragment;
+import com.example.nisonnaeson.MyPageView;
+import com.example.nisonnaeson.R;
+import com.example.nisonnaeson.SharedExpenseFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainView extends AppCompatActivity {
@@ -68,8 +73,8 @@ public class MainView extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainView.this, InputView.class);
-                startActivityForResult(intent, REQUEST_CODE_CREATE_ACCOUNT);
+                Intent intent = new Intent(MainView.this, MainActivity_page8.class);
+                startActivity(intent);
             }
         });
 
