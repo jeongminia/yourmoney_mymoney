@@ -78,6 +78,32 @@ public class MainView extends AppCompatActivity {
             }
         });
 
+        // 나의 가계부 항목 클릭 리스너 설정
+        TextView accountNameMy = findViewById(R.id.account_name_my);
+        TextView accountDateMy = findViewById(R.id.account_date_my);
+        View.OnClickListener myExpenseClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainView.this, AccountViewActivity.class);
+                startActivity(intent);
+            }
+        };
+        accountNameMy.setOnClickListener(myExpenseClickListener);
+        accountDateMy.setOnClickListener(myExpenseClickListener);
+
+        // 공유 가계부 항목 클릭 리스너 설정
+        TextView accountNameShared = findViewById(R.id.account_name_shared);
+        TextView accountDateShared = findViewById(R.id.account_date_shared);
+        View.OnClickListener sharedExpenseClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainView.this, AccountViewActivity.class);
+                startActivity(intent);
+            }
+        };
+        accountNameShared.setOnClickListener(sharedExpenseClickListener);
+        accountDateShared.setOnClickListener(sharedExpenseClickListener);
+
         loadFragment(new MyExpenseFragment());
     }
 
@@ -104,6 +130,15 @@ public class MainView extends AppCompatActivity {
         } else {
             sharedExpenseLayout.addView(newAccountTextView);
         }
+
+        // 클릭 리스너 추가
+        newAccountTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainView.this, AccountViewActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void onMyExpenseClick(View view) {
