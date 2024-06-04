@@ -1,5 +1,6 @@
 package com.example.nisonnaeson;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
@@ -59,6 +60,12 @@ public class LoginActivity extends AppCompatActivity {
         kakaoLoginButton.setLayoutParams(loginButtonParams);
         flexboxLayout.addView(kakaoLoginButton);
 
+        // Set onClickListener for login button
+        kakaoLoginButton.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, MainView.class);
+            startActivity(intent);
+        });
+
         // Initialize the Kakao signup button
         kakaoSignupButton = new Button(this);
         kakaoSignupButton.setText("카카오톡 회원가입");
@@ -75,6 +82,12 @@ public class LoginActivity extends AppCompatActivity {
         signupButtonParams.setMargins(0, convertToPx(20), 0, 0); // top margin
         kakaoSignupButton.setLayoutParams(signupButtonParams);
         flexboxLayout.addView(kakaoSignupButton);
+
+        // Set onClickListener for signup button
+        kakaoSignupButton.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, MainView.class);
+            startActivity(intent);
+        });
 
         setContentView(flexboxLayout);
     }
