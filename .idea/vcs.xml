@@ -2,10 +2,18 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
 <<<<<<< HEAD
+<<<<<<< HEAD
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/frontend" vcs="Git" />
 =======
     <mapping directory="" vcs="Git" />
 >>>>>>> 62e54ebd9738791ff784583806b0316a779a5d79
+=======
+    <mapping directory="" vcs="Git" />
+=======
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/frontend" vcs="Git" />
+>>>>>>> 74c64fb (new commit)
+>>>>>>> new-jeongmin
   </component>
 </project>

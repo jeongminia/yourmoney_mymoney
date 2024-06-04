@@ -7,10 +7,22 @@
     tools:context=".SharedExpenseFragment">
 
     <LinearLayout
+<<<<<<< HEAD
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="16dp">
+=======
+        android:id="@+id/mainLinearLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+>>>>>>> new-jeongmin
 
         <TextView
             android:id="@+id/textViewTitle"
@@ -32,9 +44,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
+<<<<<<< HEAD
                 android:background="@drawable/ic_mypage"
                 android:orientation="horizontal"
                 android:padding="8dp">
+=======
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:background="@drawable/ic_mypage">
+>>>>>>> new-jeongmin
 
                 <ImageView
                     android:layout_width="wrap_content"

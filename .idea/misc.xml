@@ -1,7 +1,13 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 =======
 >>>>>>> 62e54ebd9738791ff784583806b0316a779a5d79
+=======
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+>>>>>>> 2863a81 (Initial commit)
+>>>>>>> new-jeongmin
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="jbr-17" project-jdk-type="JavaSDK">
