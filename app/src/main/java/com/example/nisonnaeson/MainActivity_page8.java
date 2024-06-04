@@ -1,5 +1,6 @@
 package com.example.nisonnaeson;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -8,7 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity_page8 extends AppCompatActivity {
@@ -73,10 +73,10 @@ public class MainActivity_page8 extends AppCompatActivity {
             public void onClick(View v) {
                 String participant = participantName.getText().toString();
                 if (!participant.isEmpty()) {
-                    Toast.makeText(MainActivity_page8.this, participant + " 추가됨", Toast.LENGTH_SHORT).show();
+                    // 참가자 추가 로직 (토스트 메시지는 제거됨)
                     participantName.setText("");
                 } else {
-                    Toast.makeText(MainActivity_page8.this, "참가자 이름을 입력하세요", Toast.LENGTH_SHORT).show();
+                    // 참가자 이름 입력 요청 로직 (토스트 메시지는 제거됨)
                 }
             }
         });
@@ -85,15 +85,8 @@ public class MainActivity_page8 extends AppCompatActivity {
         createAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String account = accountName.getText().toString();
-                String selectedDate = date.getText().toString();
-                String currency = currencySpinner.getSelectedItem().toString();
-
-                if (!account.isEmpty() && !selectedDate.isEmpty() && !currency.isEmpty()) {
-                    Toast.makeText(MainActivity_page8.this, "가계부 생성됨: " + account, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(MainActivity_page8.this, "모든 필드를 입력하세요", Toast.LENGTH_SHORT).show();
-                }
+                Intent intent = new Intent(MainActivity_page8.this, AccountViewActivity.class);
+                startActivity(intent);
             }
         });
     }
