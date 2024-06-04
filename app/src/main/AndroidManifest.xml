@@ -41,6 +41,9 @@
         <activity
             android:name=".MainActivity_page8"
             android:exported="true" />
+        <activity
+            android:name=".MyPageView"
+            android:exported="true" />
     </application>
 
 </manifest>
