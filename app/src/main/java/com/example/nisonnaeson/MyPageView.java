@@ -4,16 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.nisonnaeson.R;
 
 public class MyPageView extends AppCompatActivity {
 
-    private TextView nameTextView;
-    private TextView nicknameTextView;
+    private EditText nameEditText;
+    private EditText nicknameEditText;
     private Button saveButton;
     private Button logoutButton;
     private Button exitButton;
@@ -31,8 +29,8 @@ public class MyPageView extends AppCompatActivity {
             }
         });
 
-        nameTextView = findViewById(R.id.name_text_view);
-        nicknameTextView = findViewById(R.id.nickname_text_view);
+        nameEditText = findViewById(R.id.name_edit_text);
+        nicknameEditText = findViewById(R.id.nickname_edit_text);
         saveButton = findViewById(R.id.save_button);
         logoutButton = findViewById(R.id.logout_button);
         exitButton = findViewById(R.id.exit_button);
