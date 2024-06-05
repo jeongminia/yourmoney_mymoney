@@ -56,94 +56,13 @@
                 android:text="공유 가계부" />
         </LinearLayout>
 
-        <!-- detail_account 중앙 정렬 -->
-        <LinearLayout
+        <!-- RecyclerView 추가 -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <include
-                layout="@layout/detail_account1"
-                android:layout_margin="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <include
-                layout="@layout/detail_account2"
-                android:layout_margin="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <include
-                layout="@layout/detail_account3"
-                android:layout_margin="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <include
-                layout="@layout/detail_account4"
-                android:layout_margin="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
-
-        <!-- 나의 가계부 레이아웃 -->
-        <LinearLayout
-            android:id="@+id/my_expense_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="visible">
-
-
-
-        </LinearLayout>
-
-        <!-- 공유 가계부 레이아웃 -->
-        <LinearLayout
-            android:id="@+id/shared_expense_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="8dp"
-                android:layout_marginTop="20dp">
-
-                <TextView
-                    android:id="@+id/account_name_shared"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="118dp"
-                    android:layout_marginLeft="30dp"
-                    android:text="포르투 살이"
-                    android:textColor="#000000"
-                    android:textSize="18sp" />
-                <TextView
-                    android:id="@+id/account_date_shared"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="118dp"
-                    android:layout_marginLeft="50dp"
-                    android:text="2024.3.31~2024.4.3"
-                    android:textColor="#000000"
-                    android:textSize="18sp" />
-
-            </LinearLayout>
-        </LinearLayout>
     </LinearLayout>
 
     <!-- 플로팅 액션 버튼 오른쪽 아래 고정 -->
