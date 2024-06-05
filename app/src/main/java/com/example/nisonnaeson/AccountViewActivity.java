@@ -7,11 +7,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,7 +20,7 @@ import java.util.Set;
 public class AccountViewActivity extends AppCompatActivity {
 
     private ArrayList<String> accountList;
-    private AccountAdapter adapter;
+    private ArrayAdapter<String> adapter;
     private SharedPreferences sharedPreferences;
     private static final String PREFS_NAME = "account_data";
     private static final String KEY_ACCOUNTS = "accounts";
@@ -41,13 +41,9 @@ public class AccountViewActivity extends AppCompatActivity {
         });
 
         accountList = new ArrayList<>();
-        RecyclerView recyclerViewAccounts = findViewById(R.id.recyclerViewAccounts);
-        recyclerViewAccounts.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new AccountAdapter(accountList);
-        recyclerViewAccounts.setAdapter(adapter);
-
-        // Divider 추가
-        recyclerViewAccounts.addItemDecoration(new DividerItemDecoration(this));
+        ListView listViewAccounts = findViewById(R.id.listViewAccounts);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, accountList);
+        listViewAccounts.setAdapter(adapter);
 
         sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         loadAccounts();
@@ -93,7 +89,6 @@ public class AccountViewActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_accountview, menu);
         return true;
     }
-
 
     private void loadAccounts() {
         Set<String> accountSet = sharedPreferences.getStringSet(KEY_ACCOUNTS, new HashSet<>());
