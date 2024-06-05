@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_invite_friends"
+        android:title="카카오톡 친구 초대" />
+    <item
+        android:id="@+id/action_share_link"
+        android:title="링크 공유" />
+    <item
+        android:id="@+id/action_add_to_my_account"
+        android:title="나의 가계부에 담기" />
+    <item
+        android:id="@+id/action_delete_account"
+        android:title="가계부 삭제" />
+</menu>
