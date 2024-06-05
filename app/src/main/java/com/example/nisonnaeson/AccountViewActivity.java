@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -80,6 +81,18 @@ public class AccountViewActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent reportIntent = new Intent(AccountViewActivity.this, ReportActivity.class);
                 startActivity(reportIntent);
+            }
+        });
+
+        // ListView item click listener
+        listViewAccounts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Only proceed if the first item is clicked
+                if (position == 0) {
+                    Intent mainPageIntent = new Intent(AccountViewActivity.this, MainActivity_page7.class);
+                    startActivity(mainPageIntent);
+                }
             }
         });
     }
