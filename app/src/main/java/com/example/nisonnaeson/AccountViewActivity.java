@@ -73,15 +73,15 @@ public class AccountViewActivity extends AppCompatActivity {
                 startActivity(addIntent);
             }
         });
-
         ImageButton buttonSearch = findViewById(R.id.buttonSearch);
         buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent reportIntent = new Intent(AccountViewActivity.this, ReportActivity.class);
-                startActivity(reportIntent);
+                Intent intent = new Intent(AccountViewActivity.this, ReportActivity.class);
+                startActivity(intent);
             }
         });
+
     }
 
     @Override
