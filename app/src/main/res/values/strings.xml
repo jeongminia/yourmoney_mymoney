@@ -7,6 +7,7 @@
     <string name="usage_date">사용 일자</string>
     <string name="payer">지출인</string>
     <string name="default_payer">본인 이름 기본 세팅</string>
+    <string name="for_whom">For whom</string>
     <string name="friend_name">친구 이름</string>
     <string name="submit">입력</string>
     <string-array name="category_array">
@@ -17,11 +18,12 @@
         <item>기타</item>
     </string-array>
     <string-array name="currency_array">
-        <item>USD</item>
-        <item>EUR</item>
-        <item>JPY</item>
-        <item>CNY</item>
-        <item>KRW</item>
+        <item>USD - US Dollar</item>
+        <item>EUR - Euro</item>
+        <item>JPY - Japanese Yen</item>
+        <item>CNY - Chinese Yuan</item>
+        <item>KRW - South Korean Won</item>
+        <item>AUD - Australian Dollar</item>
+        <item>GBP - British Pound</item>
     </string-array>
 </resources>
-

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string-array name="payer_array">
-        <item>본인 이름 기본 세팅</item>
-        <item>친구 1</item>
-        <item>친구 2</item>
-        <!-- 다른 항목 추가 -->
-    </string-array>
-</resources>

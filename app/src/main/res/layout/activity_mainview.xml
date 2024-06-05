@@ -1,0 +1,147 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainView">
+
+    <!-- 상단바 -->
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FF6DB33F"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/profile_image"
+            android:layout_width="59dp"
+            android:layout_height="49dp"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/ic_mypage" />
+
+        <TextView
+            android:id="@+id/header_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="니돈내돈"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:layout_centerInParent="true"
+            android:gravity="center" />
+
+    </RelativeLayout>
+
+    <!-- 가계부 선택 버튼 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/my_expense_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="80dp"
+            android:text="나의 가계부" />
+
+        <Button
+            android:id="@+id/shared_expense_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="80dp"
+            android:text="공유 가계부" />
+    </LinearLayout>
+
+    <!-- 나의 가계부 레이아웃 -->
+    <LinearLayout
+        android:id="@+id/my_expense_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/list_item_background"
+            android:padding="8dp"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:id="@+id/account_name_my"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="118dp"
+                android:layout_marginLeft="30dp"
+                android:text="독일 여행"
+                android:textColor="#000000"
+                android:textSize="18sp" />
+            <TextView
+                android:id="@+id/account_date_my"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="118dp"
+                android:layout_marginLeft="90dp"
+                android:text="2024.3.31~2024.4.3"
+                android:textColor="#000000"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- 공유 가계부 레이아웃 -->
+    <LinearLayout
+        android:id="@+id/shared_expense_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/list_item_background"
+            android:padding="8dp"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:id="@+id/account_name_shared"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="118dp"
+                android:layout_marginLeft="30dp"
+                android:text="포르투 살이"
+                android:textColor="#000000"
+                android:textSize="18sp" />
+            <TextView
+                android:id="@+id/account_date_shared"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="118dp"
+                android:layout_marginLeft="50dp"
+                android:text="2024.3.31~2024.4.3"
+                android:textColor="#000000"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 플로팅 액션 버튼 -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:backgroundTint="@android:color/holo_green_dark"
+        android:contentDescription="추가"
+        android:elevation="6dp"
+        android:src="@drawable/ic_plus" />
+
+</RelativeLayout>

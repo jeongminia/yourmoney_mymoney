@@ -69,7 +69,16 @@ goto fail
 
 set CLASSPATH=%APP_HOME%\gradle\wrapper\gradle-wrapper.jar
 
+<<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> 62e54ebd9738791ff784583806b0316a779a5d79
+=======
+=======
+
+>>>>>>> 2863a81 (Initial commit)
+>>>>>>> new-jeongmin
 @rem Execute Gradle
 "%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %GRADLE_OPTS% "-Dorg.gradle.appname=%APP_BASE_NAME%" -classpath "%CLASSPATH%" org.gradle.wrapper.GradleWrapperMain %*
 
@@ -80,7 +89,18 @@ if "%ERRORLEVEL%"=="0" goto mainEnd
 :fail
 rem Set variable GRADLE_EXIT_CONSOLE if you need the _script_ return code instead of
 rem the _cmd.exe /c_ return code!
+<<<<<<< HEAD
+<<<<<<< HEAD
 if  not "" == "%GRADLE_EXIT_CONSOLE%" exit 1
+=======
+if not "" == "%GRADLE_EXIT_CONSOLE%" exit 1
+>>>>>>> 62e54ebd9738791ff784583806b0316a779a5d79
+=======
+if not "" == "%GRADLE_EXIT_CONSOLE%" exit 1
+=======
+if  not "" == "%GRADLE_EXIT_CONSOLE%" exit 1
+>>>>>>> 2863a81 (Initial commit)
+>>>>>>> new-jeongmin
 exit /b 1
 
 :mainEnd
