@@ -78,9 +78,6 @@ public class MainView extends AppCompatActivity {
             }
         });
 
-        // 나의 가계부 항목 클릭 리스너 설정
-        TextView accountNameMy = findViewById(R.id.account_name_my);
-        TextView accountDateMy = findViewById(R.id.account_date_my);
         View.OnClickListener myExpenseClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,8 +85,6 @@ public class MainView extends AppCompatActivity {
                 startActivity(intent);
             }
         };
-        accountNameMy.setOnClickListener(myExpenseClickListener);
-        accountDateMy.setOnClickListener(myExpenseClickListener);
 
         // 공유 가계부 항목 클릭 리스너 설정
         TextView accountNameShared = findViewById(R.id.account_name_shared);
