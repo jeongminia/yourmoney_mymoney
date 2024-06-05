@@ -78,7 +78,8 @@ public class AccountViewActivity extends AppCompatActivity {
         buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 검색 기능 구현 예정
+                Intent reportIntent = new Intent(AccountViewActivity.this, ReportActivity.class);
+                startActivity(reportIntent);
             }
         });
     }
