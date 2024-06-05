@@ -11,7 +11,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="54dp"
-        android:background="#8bc34a"
+        android:background="@color/colorPrimary"
         android:orientation="horizontal"
         android:padding="16dp">
 
