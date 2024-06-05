@@ -11,5 +11,5 @@
         android:title="나의 가계부에 담기" />
     <item
         android:id="@+id/action_delete_account"
-        android:title="가계부 삭제" />
+        android:title="내역 삭제" />
 </menu>
