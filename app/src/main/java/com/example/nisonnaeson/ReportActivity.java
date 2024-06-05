@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -56,10 +57,15 @@ public class ReportActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
         ImageView backButton = new ImageView(this);
-        backButton.setImageResource(android.R.drawable.ic_media_previous); // replace with your back icon
+        backButton.setImageResource(R.drawable.baseline_arrow_back_ios_24); // replace with your back icon
         backButton.setColorFilter(Color.WHITE); // Set icon color to white
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish(); // Closes the current activity and returns to the previous one
+            }
+        });
         toolbarLayout.addView(backButton);
-
         TextView titleView = new TextView(this);
         titleView.setText("             독일 여행");
         titleView.setTextSize(32);
