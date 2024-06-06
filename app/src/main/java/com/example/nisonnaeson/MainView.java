@@ -47,7 +47,7 @@ public class MainView extends AppCompatActivity {
                 Intent intent = new Intent(MainView.this, AccountViewActivity.class);
                 startActivity(intent);
             }
-        });
+        }, this);
 
         recyclerView.setAdapter(expenseAdapter);
 
@@ -83,11 +83,10 @@ public class MainView extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainView.this, MainActivity_page8.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_CREATE_ACCOUNT);
             }
         });
     }
-
     private void updateExpenseList() {
         if (isMyExpense) {
             expenseAdapter = new ExpenseAdapter(myExpenseList, new ExpenseAdapter.OnItemClickListener() {
@@ -96,7 +95,7 @@ public class MainView extends AppCompatActivity {
                     Intent intent = new Intent(MainView.this, AccountViewActivity.class);
                     startActivity(intent);
                 }
-            });
+            }, this);
         } else {
             expenseAdapter = new ExpenseAdapter(sharedExpenseList, new ExpenseAdapter.OnItemClickListener() {
                 @Override
@@ -104,8 +103,9 @@ public class MainView extends AppCompatActivity {
                     Intent intent = new Intent(MainView.this, AccountViewActivity.class);
                     startActivity(intent);
                 }
-            });
+            }, this);
         }
+
         recyclerView.setAdapter(expenseAdapter);
     }
 
@@ -114,8 +114,10 @@ public class MainView extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CREATE_ACCOUNT && resultCode == RESULT_OK && data != null) {
             String accountName = data.getStringExtra("ACCOUNT_NAME");
-            if (accountName != null && !accountName.isEmpty()) {
-                addAccountToList(accountName, isMyExpense);
+            String accountDate = data.getStringExtra("ACCOUNT_DATE");
+            if (accountName != null && accountDate != null) {
+                String newAccount = accountName + " " + accountDate;
+                addAccountToList(newAccount, isMyExpense);
             }
         }
     }

@@ -1,10 +1,12 @@
 package com.example.nisonnaeson;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
@@ -12,28 +14,39 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
 
     private List<String> expenseList;
     private OnItemClickListener listener;
+    private Context context;
 
-    public interface OnItemClickListener {
-        void onItemClick(int position);
-    }
-
-    public ExpenseAdapter(List<String> expenseList, OnItemClickListener listener) {
+    public ExpenseAdapter(List<String> expenseList, OnItemClickListener listener, Context context) {
         this.expenseList = expenseList;
         this.listener = listener;
+        this.context = context;
     }
 
     @NonNull
     @Override
     public ExpenseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_expense, parent, false);
-        return new ExpenseViewHolder(itemView);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_expense, parent, false);
+        return new ExpenseViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ExpenseViewHolder holder, int position) {
-        String currentExpense = expenseList.get(position);
-        holder.textViewExpense.setText(currentExpense);
+        String expense = expenseList.get(holder.getAdapterPosition());
+        holder.expenseTextView.setText(expense);
+
+        // 배경색 설정
+        if (holder.getAdapterPosition() % 2 == 0) {
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.light_green)); // 짝수 행 배경색
+        } else {
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.light_gray)); // 홀수 행 배경색
+        }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onItemClick(holder.getAdapterPosition());
+            }
+        });
     }
 
     @Override
@@ -41,23 +54,16 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
         return expenseList.size();
     }
 
-    class ExpenseViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewExpense;
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
 
-        ExpenseViewHolder(View itemView) {
+    public static class ExpenseViewHolder extends RecyclerView.ViewHolder {
+        public TextView expenseTextView;
+
+        public ExpenseViewHolder(@NonNull View itemView) {
             super(itemView);
-            textViewExpense = itemView.findViewById(R.id.text_view_expense);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(position);
-                        }
-                    }
-                }
-            });
+            expenseTextView = itemView.findViewById(R.id.expense_text);
         }
     }
 }
