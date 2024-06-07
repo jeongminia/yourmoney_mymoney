@@ -1,4 +1,4 @@
-package com.example.nisonnaeson;
+package com.example.nidonnaedon;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.nisonnaeson.R;
 
 public class MainActivity_page8 extends AppCompatActivity {
 

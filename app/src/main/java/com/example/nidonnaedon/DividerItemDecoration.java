@@ -1,4 +1,4 @@
-package com.example.nisonnaeson;
+package com.example.nidonnaedon;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
+
+import com.example.nisonnaeson.R;
 
 public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     private final Drawable divider;

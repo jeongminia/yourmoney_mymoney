@@ -1,4 +1,4 @@
-package com.example.nisonnaeson;
+package com.example.nidonnaedon;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.example.nisonnaeson.R;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#f0f8ff"
-    tools:context=".MainActivity_page7">
+    tools:context="com.example.nidonnaedon.MainActivity_page7">
 
     <LinearLayout
         android:id="@+id/toolbar"

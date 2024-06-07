@@ -1,4 +1,4 @@
-package com.example.nisonnaeson;
+package com.example.nidonnaedon;
 
 import android.os.Bundle;
 import android.view.View;
@@ -6,6 +6,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.nisonnaeson.R;
 
 public class MainActivity_page7 extends AppCompatActivity {
 

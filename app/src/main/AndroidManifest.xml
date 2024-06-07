@@ -15,7 +15,7 @@
         tools:targetApi="31">
 
         <activity
-            android:name=".SplashActivity"
+            android:name="com.example.nidonnaedon.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,28 +24,28 @@
         </activity>
 
         <activity
-            android:name=".AccountViewActivity"
+            android:name="com.example.nidonnaedon.AccountViewActivity"
             android:exported="true" />
         <activity
-            android:name=".ReportActivity"
+            android:name="com.example.nidonnaedon.ReportActivity"
             android:exported="false" />
         <activity
-            android:name=".InputViewActivity"
+            android:name="com.example.nidonnaedon.InputViewActivity"
             android:exported="true" />
         <activity
-            android:name=".LoginActivity"
+            android:name="com.example.nidonnaedon.LoginActivity"
             android:exported="true" />
         <activity
-            android:name=".MainView"
+            android:name="com.example.nidonnaedon.MainView"
             android:exported="true" />
         <activity
-            android:name=".MainActivity_page8"
+            android:name="com.example.nidonnaedon.MainActivity_page8"
             android:exported="true" />
         <activity
-            android:name=".MyPageView"
+            android:name="com.example.nidonnaedon.MyPageView"
             android:exported="true" />
         <activity
-            android:name=".MainActivity_page7"
+            android:name="com.example.nidonnaedon.MainActivity_page7"
             android:exported="true" />
     </application>
 

@@ -1,4 +1,4 @@
-package com.example.nisonnaeson;
+package com.example.nidonnaedon;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -10,12 +10,11 @@ import android.view.ViewGroup;
 
 import com.example.nisonnaeson.R;
 
-public class MyExpenseFragment extends Fragment {
+public class SharedExpenseFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(
-                R.layout.fragment_my_expense, container, false);
+        return inflater.inflate(R.layout.fragment_shared_expense, container, false);
     }
 }
