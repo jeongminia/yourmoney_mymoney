@@ -53,53 +53,45 @@ public class MainActivity_page8 extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         currencySpinner.setAdapter(adapter);
 
-        // Spinner 항목 선택 리스너 설정
         currencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedCurrency = (String) parent.getItemAtPosition(position);
-                if (selectedCurrency.startsWith("KRW")) {
-                    applyExchangeRateButton.setVisibility(View.GONE);
-                } else {
-                    applyExchangeRateButton.setVisibility(View.VISIBLE);
-                }
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                String selectedCurrency = parentView.getItemAtPosition(position).toString();
+                // 선택된 통화에 따라 환율 적용 등의 로직을 추가합니다.
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Do nothing
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // 아무것도 선택되지 않았을 때의 처리를 여기에 추가합니다.
             }
         });
 
-        // 참가자 추가 버튼 클릭 리스너 설정
+        // 참여자 추가 버튼 클릭 시 처리
         addParticipantButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String participant = participantName.getText().toString();
                 if (!participant.isEmpty()) {
-                    // 참가자 추가 로직
                     TextView textView = new TextView(MainActivity_page8.this);
                     textView.setText(participant);
-                    textView.setTextSize(16);
                     participantList.addView(textView);
-                    participantName.setText("");
-                } else {
-                    // 참가자 이름 입력 요청 로직
+                    participantName.setText(""); // 입력 필드를 초기화합니다.
                 }
             }
         });
 
-        // 가계부 생성 버튼 클릭 리스너 설정
+        // 계좌 생성 버튼 클릭 시 처리
         createAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String newAccountName = accountName.getText().toString();
                 String newAccountDate = date.getText().toString();
 
-                Intent intent = new Intent(MainActivity_page8.this, AccountViewActivity.class);
-                intent.putExtra("ACCOUNT_NAME", newAccountName);
-                intent.putExtra("ACCOUNT_DATE", newAccountDate);
-                startActivity(intent);
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("ACCOUNT_NAME", newAccountName);
+                resultIntent.putExtra("ACCOUNT_DATE", newAccountDate);
+                setResult(RESULT_OK, resultIntent);
+                finish(); // 이전 화면으로 돌아가기
             }
         });
     }
