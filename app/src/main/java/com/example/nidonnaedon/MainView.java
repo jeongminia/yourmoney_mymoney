@@ -49,6 +49,7 @@ public class MainView extends AppCompatActivity {
             @Override
             public void onItemClick(int position) {
                 Intent intent = new Intent(MainView.this, AccountViewActivity.class);
+                intent.putExtra("itemName", myExpenseList.get(position).getName());
                 startActivity(intent);
             }
         }, this);
@@ -104,6 +105,7 @@ public class MainView extends AppCompatActivity {
                 @Override
                 public void onItemClick(int position) {
                     Intent intent = new Intent(MainView.this, AccountViewActivity.class);
+                    intent.putExtra("itemName", myExpenseList.get(position).getName());
                     startActivity(intent);
                 }
             }, this);
@@ -112,6 +114,7 @@ public class MainView extends AppCompatActivity {
                 @Override
                 public void onItemClick(int position) {
                     Intent intent = new Intent(MainView.this, AccountViewActivity.class);
+                    intent.putExtra("itemName", sharedExpenseList.get(position).getName());
                     startActivity(intent);
                 }
             }, this);
