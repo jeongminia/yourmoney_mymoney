@@ -10,20 +10,18 @@
     <LinearLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:background="@color/colorPrimary"
+        android:layout_height="58dp"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:background="@color/colorPrimary"
+        android:gravity="center_vertical">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/back_button"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:padding="12dp"
-            android:src="@drawable/baseline_arrow_back_ios_24"
-            android:contentDescription="뒤로 가기"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:layout_gravity="center_vertical" />
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:contentDescription="Back"
+            android:src="@drawable/ic_back"
+            android:layout_margin="14dp" />
 
     </LinearLayout>
 

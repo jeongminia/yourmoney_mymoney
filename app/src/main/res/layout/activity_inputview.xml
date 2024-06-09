@@ -1,174 +1,278 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#F5F5F5"
-    tools:context="com.example.nidonnaedon.InputViewActivity">
+    tools:context=".InputViewActivity">
 
     <!-- Toolbar -->
-    <androidx.appcompat.widget.Toolbar
+    <LinearLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:theme="?attr/actionBarTheme"
-        android:navigationIcon="@android:drawable/ic_menu_revert" />
+        android:layout_height="58dp"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary"
+        android:gravity="center_vertical">
 
+        <ImageView
+            android:id="@+id/back_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:contentDescription="Back"
+            android:src="@drawable/ic_back"
+            android:layout_margin="14dp" />
+
+    </LinearLayout>
+
+    <!-- Content Layout -->
     <ScrollView
         android:id="@+id/scrollView"
+        android:layout_below="@id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:padding="16dp"
         android:background="#F5F5F5">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp"
-            android:background="#F5F5F5">
+            android:orientation="vertical">
 
-            <!-- 사용 세부사항 -->
-            <EditText
-                android:id="@+id/editTextUsageDetails"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:hint="@string/usage_details"
-                android:inputType="text"
-                android:layout_marginBottom="8dp"
-                android:background="#F5F5F5" />
-
-            <!-- 카테고리 스피너 -->
-            <Spinner
-                android:id="@+id/spinnerCategory"
-                android:layout_width="match_parent"
+            <!-- 사용 내역 -->
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:entries="@array/category_array"
-                android:minHeight="48dp"
-                android:layout_marginBottom="8dp"
-                android:background="#F5F5F5" />
+                android:text="사용 내역"
+                android:textSize="16sp"
+                android:textColor="@android:color/black" />
 
-            <!-- 사용 금액 -->
-            <EditText
-                android:id="@+id/editTextAmount"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:hint="@string/usage_amount"
-                android:inputType="numberDecimal"
-                android:layout_marginBottom="8dp"
-                android:background="#F5F5F5" />
-
-            <!-- 통화 스피너 -->
-            <Spinner
-                android:id="@+id/spinnerCurrency"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:entries="@array/currency_array"
-                android:minHeight="48dp"
-                android:layout_marginBottom="8dp"
-                android:background="#F5F5F5" />
-
-            <!-- 사용 날짜 -->
-            <EditText
-                android:id="@+id/editTextDate"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:hint="@string/usage_date"
-                android:focusable="false"
-                android:clickable="true"
-                android:layout_marginBottom="8dp"
-                android:background="#F5F5F5" />
-
-            <!-- 지출인 -->
-            <EditText
-                android:id="@+id/editTextPayer"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:hint="지출인"
-                android:inputType="textPersonName"
-                android:layout_marginBottom="8dp"
-                android:background="#F5F5F5" />
-
-            <!-- 친구 추가 버튼 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="8dp"
-                android:background="#F5F5F5">
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp">
 
-                <TextView
+                <EditText
+                    android:id="@+id/editTextUsageDetails"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="함께 지불할 사람"
-                    android:background="#F5F5F5" />
-
-                <ImageButton
-                    android:id="@+id/buttonAddFriend"
-                    android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@android:drawable/ic_input_add"
-                    android:background="?attr/selectableItemBackground"
-                    android:contentDescription="Add Friend" />
+                    android:layout_weight="2"
+                    android:background="@drawable/text_underline"
+                    android:hint="사용 내역"
+                    android:padding="8dp"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@android:color/darker_gray" />
+
+                <Spinner
+                    android:id="@+id/spinnerCategory"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:padding="8dp"
+                    android:spinnerMode="dropdown" />
+
             </LinearLayout>
 
-            <!-- 동적으로 추가될 친구들 -->
+            <!-- 사용 금액 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="사용 금액"
+                android:textSize="16sp"
+                android:textColor="@android:color/black" />
+
             <LinearLayout
-                android:id="@+id/linearLayoutFriends"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp">
+
+                <EditText
+                    android:id="@+id/editTextAmount"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="2"
+                    android:hint="사용 금액"
+                    android:inputType="numberDecimal"
+                    android:padding="8dp"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@android:color/darker_gray" />
+
+                <Spinner
+                    android:id="@+id/spinnerCurrency"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:padding="8dp"
+                    android:spinnerMode="dropdown" />
+
+            </LinearLayout>
+
+            <!-- 사용 일자 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="사용 일자"
+                android:textSize="16sp"
+                android:textColor="@android:color/black" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/text_underline"
+                android:padding="8dp">
+
+                <EditText
+                    android:id="@+id/editTextDate"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:hint="사용 일자를 선택하세요."
+                    android:focusable="false"
+                    android:clickable="true"
+                    android:background="@android:color/transparent" />
+
+                <ImageView
+                    android:id="@+id/calendarIcon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/calendar"
+                    android:contentDescription="Calendar Icon" />
+            </LinearLayout>
+
+            <!-- 지출인 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="지출인"
+                android:textSize="16sp"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/textViewPayer"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/text_underline"
+                android:padding="8dp"
+                android:gravity="center_vertical"
+                android:text="신호연"
+                android:textColor="@android:color/black"
+                android:textColorHint="@android:color/darker_gray" />
+
+            <!-- 친구 추가 -->
+            <CheckBox
+                android:id="@+id/checkboxAddFriend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="For whom"
+                android:layout_marginBottom="8dp" />
+
+            <!-- 친구 리스트 -->
+            <LinearLayout
+                android:id="@+id/friendList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="#F5F5F5">
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp">
+
+                    <CheckBox
+                        android:id="@+id/checkboxGwakJiwon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="8dp" />
+
+                    <TextView
+                        android:id="@+id/textViewGwakJiwon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="곽지원"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/black"
+                        android:layout_gravity="center_vertical" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp">
+
+                    <CheckBox
+                        android:id="@+id/checkboxYooJaewon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="8dp" />
+
+                    <TextView
+                        android:id="@+id/textViewYooJaewon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="유재원"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/black"
+                        android:layout_gravity="center_vertical" />
+                </LinearLayout>
             </LinearLayout>
 
             <!-- 사진 추가 버튼 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="사진 추가"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:layout_marginBottom="8dp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="8dp"
-                android:background="#F5F5F5">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="사진 추가"
-                    android:background="#F5F5F5" />
+                android:layout_marginBottom="16dp">
 
                 <ImageButton
                     android:id="@+id/buttonAddPhoto"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@android:drawable/ic_menu_camera"
+                    android:src="@drawable/ic_camera"
                     android:background="?attr/selectableItemBackground"
-                    android:contentDescription="Add Photo" />
+                    android:contentDescription="Add Photo"
+                    android:layout_marginEnd="8dp" />
+
+                <ImageView
+                    android:id="@+id/imageViewPhoto"
+                    android:layout_width="300dp"
+                    android:layout_height="300dp"
+                    android:layout_marginStart="8dp"
+                    android:visibility="gone"
+                    android:scaleType="centerCrop"
+                    android:contentDescription="Selected Photo"
+                    android:background="@drawable/image_border" />
             </LinearLayout>
-
-            <!-- 선택된 사진 미리보기 -->
-            <ImageView
-                android:id="@+id/imageViewPhoto"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:visibility="gone"
-                android:scaleType="centerCrop"
-                android:contentDescription="Selected Photo" />
-
         </LinearLayout>
     </ScrollView>
 
     <Button
         android:id="@+id/buttonSubmit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="440dp"
+        android:layout_height="48dp"
         android:text="입력"
-        android:minHeight="48dp"
         android:gravity="center"
-        style="@style/CustomButtonStyle"/>
+        style="@style/CustomButtonStyle"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"/>
 
-</LinearLayout>
+</RelativeLayout>
