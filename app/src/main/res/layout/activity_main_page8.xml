@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EBF2F2"
+    android:background="@color/white"
     android:clipToOutline="true">
 
     <!-- Toolbar -->
@@ -74,21 +74,34 @@
             android:padding="8dp"
             android:backgroundTint="@android:color/black">
 
-            <EditText
-                android:id="@+id/date"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:text="2024.05.01-2024.05.07"
-                android:textSize="16sp"
-                android:background="@android:color/transparent"
-                android:textColor="@android:color/black" />
-
-            <ImageView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@android:drawable/ic_menu_today"
-                android:contentDescription="Calendar Icon"/>
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="8dp"
+                android:backgroundTint="@android:color/black">
+
+                <EditText
+                    android:id="@+id/date"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:background="@android:color/transparent"
+                    android:textColor="@android:color/black" />
+
+                <ImageView
+                    android:id="@+id/calendar_icon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/calendar"
+                    android:layout_marginRight="8dp"
+                    android:contentDescription="Calendar Icon"
+                    android:onClick="showDatePicker"/>
+
+            </LinearLayout>
+
 
         </LinearLayout>
 
@@ -117,12 +130,6 @@
                 android:layout_weight="1"
                 android:textSize="16sp"
                 android:textColor="@android:color/black" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@android:drawable/ic_menu_more"
-                android:contentDescription="Dropdown Icon"/>
 
         </LinearLayout>
 
@@ -201,9 +208,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:text="가계부 생성"
-        android:backgroundTint="#dcedc8"
-        android:textColor="@android:color/black"
-        android:layout_margin="16dp"
-        android:padding="16dp" />
+        style="@style/CustomButtonStyle"/>
 
 </RelativeLayout>
