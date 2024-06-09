@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -14,6 +15,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -85,24 +88,42 @@ public class InputViewActivity extends AppCompatActivity {
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String amount = editTextAmount.getText().toString();
-                String date = editTextDate.getText().toString();
-                String payer = editTextPayer.getText().toString();
-                String usageDetails = editTextUsageDetails.getText().toString();
-                String category = spinnerCategory.getSelectedItem().toString();
-                String currency = spinnerCurrency.getSelectedItem().toString();
+                if (validateFields()) {
+                    String amount = editTextAmount.getText().toString();
+                    String date = editTextDate.getText().toString();
+                    String payer = editTextPayer.getText().toString();
+                    String usageDetails = editTextUsageDetails.getText().toString();
+                    String category = spinnerCategory.getSelectedItem().toString();
+                    String currency = spinnerCurrency.getSelectedItem().toString();
 
-                Intent intent = new Intent(InputViewActivity.this, AccountViewActivity.class);
-                intent.putExtra("amount", amount);
-                intent.putExtra("date", date);
-                intent.putExtra("payer", payer);
-                intent.putExtra("usageDetails", usageDetails);
-                intent.putExtra("category", category);
-                intent.putExtra("currency", currency);
+                    Intent intent = new Intent(InputViewActivity.this, AccountViewActivity.class);
+                    intent.putExtra("amount", amount);
+                    intent.putExtra("date", date);
+                    intent.putExtra("payer", payer);
+                    intent.putExtra("usageDetails", usageDetails);
+                    intent.putExtra("category", category);
+                    intent.putExtra("currency", currency);
 
-                startActivity(intent);
+                    startActivity(intent);
+                }
             }
         });
+    }
+
+    private boolean validateFields() {
+        boolean isValid = true;
+
+        if (TextUtils.isEmpty(editTextAmount.getText().toString())) {
+            editTextAmount.setError("사용 금액을 입력하세요.");
+            isValid = false;
+        }
+
+        if (TextUtils.isEmpty(editTextDate.getText().toString())) {
+            editTextDate.setError("사용 날짜를 선택하세요.");
+            isValid = false;
+        }
+
+        return isValid;
     }
 
     private void showDatePickerDialog() {
