@@ -1,9 +1,8 @@
 package com.example.nidonnaedon;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -40,11 +39,11 @@ public class MainView extends AppCompatActivity {
 
         // 예제 데이터를 추가합니다.
         myExpenseList.add(new ExpenseItem("독일 여행", "2024.3.31~2024.4.3"));
-        myExpenseList.add(new ExpenseItem("데이트 통장", "2024.3.31~2024.4.3"));
+        myExpenseList.add(new ExpenseItem("데이트 통장", "2024.5.6~2024.5.29"));
 
-        sharedExpenseList.add(new ExpenseItem("지원이 서프라이즈", "2024.3.31~2024.4.3"));
-        sharedExpenseList.add(new ExpenseItem("저녁 산책 모임", "2024.3.31~2024.4.3"));
-        sharedExpenseList.add(new ExpenseItem("어버이날 선물", "2024.3.31~2024.4.3"));
+        sharedExpenseList.add(new ExpenseItem("지원이 서프라이즈", "2023.2.17~2023.2.20"));
+        sharedExpenseList.add(new ExpenseItem("저녁 산책 모임", "2024.3.31~2024.6.12"));
+        sharedExpenseList.add(new ExpenseItem("어버이날 선물", "2024.5.3~2024.5.8"));
 
         expenseAdapter = new ExpenseAdapter(myExpenseList, new ExpenseAdapter.OnItemClickListener() {
             @Override
@@ -122,14 +121,8 @@ public class MainView extends AppCompatActivity {
     }
 
     private void updateButtonStyles() {
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                myExpenseButton.setBackgroundResource(isMyExpense ? R.drawable.button_clicked : R.drawable.button_unclicked);
-                sharedExpenseButton.setBackgroundResource(isMyExpense ? R.drawable.button_unclicked : R.drawable.button_clicked);
-            }
-        });
+        myExpenseButton.setBackgroundColor(isMyExpense ? Color.parseColor("#DCE7D5") : Color.parseColor("#BDD3D3"));
+        sharedExpenseButton.setBackgroundColor(isMyExpense ? Color.parseColor("#BDD3D3") : Color.parseColor("#DCE7D5"));
     }
 
     @Override

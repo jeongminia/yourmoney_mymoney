@@ -1,8 +1,0 @@
-<!-- button_unclicked.xml -->
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item>
-        <shape android:shape="rectangle">
-            <solid android:color="#BDD3D3" />
-        </shape>
-    </item>
-</selector>
