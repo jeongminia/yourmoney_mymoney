@@ -1,8 +1,8 @@
 package com.example.nidonnaedon;
 
 public class ExpenseItem {
-    private String name;
-    private String date;
+    private final String name;
+    private final String date;
 
     public ExpenseItem(String name, String date) {
         this.name = name;

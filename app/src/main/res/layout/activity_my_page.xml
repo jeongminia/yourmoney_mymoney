@@ -2,16 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#E8F5E9">
+    android:orientation="vertical">
 
     <!-- 상단 바 -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="58dp"
         android:orientation="horizontal"
         android:background="@color/colorPrimary"
-        android:padding="16dp"
         android:gravity="center_vertical">
 
         <ImageView
@@ -19,22 +17,23 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:contentDescription="Back"
-            android:src="@drawable/ic_back" />
+            android:src="@drawable/ic_back"
+            android:layout_margin="14dp" />
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:fontFamily="@font/nanumpenscript_regular"
             android:text="마이페이지"
             android:textSize="40sp"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold" />
+            android:textColor="#FFFFFF"/>
 
         <View
             android:layout_width="30dp"
-            android:layout_height="30dp" />
+            android:layout_height="30dp"
+            android:layout_margin="14dp"/>
     </LinearLayout>
 
 
@@ -96,6 +95,7 @@
 
     <!-- 버튼 섹션 -->
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -103,29 +103,30 @@
 
         <Button
             android:id="@+id/save_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="300dp"
+            android:layout_height="56dp"
             android:text="저장하기"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
-            android:background="@drawable/button_background" />
+            style="@style/CustomButtonStyle" />
 
         <Button
             android:id="@+id/logout_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="300dp"
+            android:layout_height="56dp"
             android:text="로그아웃"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:background="@drawable/button_background" />
+            style="@style/CustomButtonStyle" />
 
         <Button
             android:id="@+id/exit_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="300dp"
+            android:layout_height="56dp"
             android:text="탈퇴하기"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
-            android:background="@drawable/button_background" />
+            style="@style/CustomButtonStyle" />
     </LinearLayout>
+
 </LinearLayout>

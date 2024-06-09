@@ -12,7 +12,7 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
+        vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -36,8 +36,9 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
-    implementation("com.google.android.flexbox:flexbox:3.0.0")  // 필요한 추가 의존성을 포함합니다.
-    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")  // 필요한 추가 의존성을 포함합니다.
+    implementation ("com.google.android.material:material:1.4.0")
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

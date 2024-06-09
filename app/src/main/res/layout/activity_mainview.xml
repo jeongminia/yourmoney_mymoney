@@ -10,7 +10,7 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="58dp"
-        android:background="#FF6DB33F">
+        android:background="@color/colorPrimary">
 
         <ImageView
             android:id="@+id/profile_image"

@@ -12,9 +12,9 @@ import java.util.List;
 
 public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseViewHolder> {
 
-    private List<ExpenseItem> expenseList;
-    private OnItemClickListener listener;
-    private Context context;
+    private final List<ExpenseItem> expenseList;
+    private final OnItemClickListener listener;
+    private final Context context;
 
     public ExpenseAdapter(List<ExpenseItem> expenseList, OnItemClickListener listener, Context context) {
         this.expenseList = expenseList;

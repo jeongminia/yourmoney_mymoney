@@ -120,7 +120,7 @@ public class ReportActivity extends AppCompatActivity {
         entries.add(new BarEntry(2, 1800));
 
         BarDataSet dataSet = new BarDataSet(entries, "User Balances");
-        dataSet.setColors(new int[]{Color.parseColor("#bcdaa8"),Color.parseColor("#eebebe"), Color.parseColor("#bcdaa8")});
+        dataSet.setColors(Color.parseColor("#bcdaa8"),Color.parseColor("#eebebe"), Color.parseColor("#bcdaa8"));
         dataSet.setValueTextColor(Color.BLACK);
 
         BarData barData = new BarData(dataSet);
@@ -161,12 +161,10 @@ public class ReportActivity extends AppCompatActivity {
         entries.add(new PieEntry(10, "기타"));
 
         PieDataSet dataSet = new PieDataSet(entries, "Expense Categories");
-        dataSet.setColors(new int[]{
-                Color.parseColor("#e6c0ff"),
+        dataSet.setColors(Color.parseColor("#e6c0ff"),
                 Color.parseColor("#b8ffcc"),
                 Color.parseColor("#ffdca7"),
-                Color.parseColor("#ff8e8f")
-        }); // Example colors
+                Color.parseColor("#ff8e8f")); // Example colors
         dataSet.setDrawValues(false); // 숫자 숨기기
         dataSet.setValueTextColor(Color.parseColor("#262625")); // 텍스트 색상 검은색으로 설정
 
