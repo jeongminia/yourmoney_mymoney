@@ -7,7 +7,10 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
         <item name="android:windowLightStatusBar">true</item>
+
+        <item name="android:windowBackground">@android:color/white</item>
     </style>
+
 
     <!-- Common Text Style -->
     <style name="CommonTextStyle">
