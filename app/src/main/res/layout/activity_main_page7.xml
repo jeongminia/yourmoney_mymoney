@@ -10,19 +10,19 @@
     <LinearLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="58dp"
         android:background="@color/colorPrimary"
         android:orientation="horizontal"
-        android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
             android:id="@+id/back_button"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/baseline_arrow_back_ios_24"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="14dp"
+            android:src="@drawable/ic_back"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="뒤로 가기" />
 
@@ -39,7 +39,7 @@
             android:id="@+id/item_image"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            android:layout_marginTop="16dp"
+            android:layout_margin="8dp"
             android:background="@null"
             android:src="@drawable/ic_menu_gallery"
             app:layout_constraintTop_toBottomOf="@id/toolbar"
@@ -193,13 +193,9 @@
 
         <Button
             android:id="@+id/modify_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:text="수정하기"
-            app:layout_constraintTop_toBottomOf="@id/person_list"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            style="@style/CustomButtonStyle" />
+
     </LinearLayout>
 
 </LinearLayout>
