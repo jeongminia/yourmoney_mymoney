@@ -2,20 +2,12 @@ package com.example.nidonnaedon;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.TypefaceSpan;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -28,8 +20,8 @@ import java.util.Set;
 
 public class AccountViewActivity extends AppCompatActivity {
 
-    private ArrayList<String> accountList;
-    private ArrayAdapter<String> adapter;
+    private ArrayList<Account> accountList;
+    private AccountAdapter adapter;
     private SharedPreferences sharedPreferences;
     private static final String PREFS_NAME = "account_data";
     private static final String KEY_ACCOUNTS = "accounts";
@@ -59,11 +51,14 @@ public class AccountViewActivity extends AppCompatActivity {
 
         accountList = new ArrayList<>();
         ListView listViewAccounts = findViewById(R.id.listViewAccounts);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, accountList);
+        adapter = new AccountAdapter(this, accountList);
         listViewAccounts.setAdapter(adapter);
 
         sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        loadAccounts();
+
+        // 기존 데이터 초기화 및 초기 데이터 추가
+        clearAccounts();
+        addInitialData();
 
         // 데이터 전달받기
         if (intent != null) {
@@ -74,8 +69,7 @@ public class AccountViewActivity extends AppCompatActivity {
             String currency = intent.getStringExtra("currency");
 
             if (amount != null && date != null && usageDetails != null && category != null && currency != null) {
-                String displayText = usageDetails + " " + category + " " + date + " " + amount + " " + currency;
-                accountList.add(displayText);
+                accountList.add(new Account(usageDetails, category, date, amount + " " + currency));
                 adapter.notifyDataSetChanged();
                 saveAccounts();
             }
@@ -85,7 +79,7 @@ public class AccountViewActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent mainPageIntent = new Intent(AccountViewActivity.this, MainActivity_page7.class);
-                mainPageIntent.putExtra("itemName", accountList.get(position));
+                mainPageIntent.putExtra("itemName", accountList.get(position).getUsageDetails());
                 startActivity(mainPageIntent);
             }
         });
@@ -109,34 +103,47 @@ public class AccountViewActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_accountview, menu);
-
-        // 메뉴 아이템 텍스트 스타일 변경
-        for (int i = 0; i < menu.size(); i++) {
-            MenuItem menuItem = menu.getItem(i);
-            SpannableString s = new SpannableString(menuItem.getTitle());
-            s.setSpan(new ForegroundColorSpan(Color.BLACK), 0, s.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            s.setSpan(new TypefaceSpan("sans-serif"), 0, s.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE); // 기본 폰트 사용
-            menuItem.setTitle(s);
-        }
-
-        return true;
-    }
-
     private void loadAccounts() {
         Set<String> accountSet = sharedPreferences.getStringSet(KEY_ACCOUNTS, new HashSet<>());
         accountList.clear();
-        accountList.addAll(accountSet);
+        for (String accountString : accountSet) {
+            String[] parts = accountString.split(" ");
+            if (parts.length >= 5) { // Check if the length is at least 5 to prevent errors
+                String usageDetails = parts[0];
+                String category = parts[1];
+                String date = parts[2];
+                String amount = parts[3];
+                for (int i = 4; i < parts.length; i++) {
+                    amount += " " + parts[i];
+                }
+                accountList.add(new Account(usageDetails, category, date, amount));
+            }
+        }
         adapter.notifyDataSetChanged();
     }
 
     private void saveAccounts() {
-        Set<String> accountSet = new HashSet<>(accountList);
+        Set<String> accountSet = new HashSet<>();
+        for (Account account : accountList) {
+            accountSet.add(account.getUsageDetails() + " " + account.getCategory() + " " + account.getDate() + " " + account.getAmount());
+        }
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putStringSet(KEY_ACCOUNTS, accountSet);
         editor.apply();
+    }
+
+    private void clearAccounts() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+        accountList.clear();
+        adapter.notifyDataSetChanged();
+    }
+
+    private void addInitialData() {
+        accountList.add(new Account("휴지", "기타", "2024-6-5", "3000 KRW"));
+        accountList.add(new Account("도넛", "식비", "2024-5-31", "2500 KRW"));
+        saveAccounts();
+        adapter.notifyDataSetChanged();
     }
 }
