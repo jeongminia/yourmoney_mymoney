@@ -1,7 +1,9 @@
 package com.example.nidonnaedon;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,6 +24,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.nisonnaeson.R;
 
@@ -34,7 +38,7 @@ public class InputViewActivity extends AppCompatActivity {
 
     private EditText editTextAmount, editTextDate, editTextUsageDetails;
     private Spinner spinnerCategory, spinnerCurrency;
-    private ImageView buttonAddPhoto, imageViewPhoto, calendarIcon;
+    private ImageView buttonAddPhoto, imageViewPhoto, calendarIcon, backButton;
     private Button buttonSubmit;
     private CheckBox checkboxAddFriend, checkboxPayer, checkboxGwakJiwon, checkboxYooJaewon;
     private LinearLayout friendList, photoContainer;
@@ -44,15 +48,10 @@ public class InputViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inputview);
 
-        LinearLayout toolbar = findViewById(R.id.toolbar);
-        ImageView backButton = toolbar.findViewById(R.id.back_button);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        // 권한 요청
+        requestPermissions();
 
+        // UI 요소 초기화
         editTextAmount = findViewById(R.id.editTextAmount);
         editTextDate = findViewById(R.id.editTextDate);
         editTextUsageDetails = findViewById(R.id.editTextUsageDetails);
@@ -68,6 +67,15 @@ public class InputViewActivity extends AppCompatActivity {
         checkboxGwakJiwon = findViewById(R.id.checkboxGwakJiwon);
         checkboxYooJaewon = findViewById(R.id.checkboxYooJaewon);
         friendList = findViewById(R.id.friendList);
+        backButton = findViewById(R.id.back_button);  // Back button 추가
+
+        // 뒤로가기 버튼 클릭 이벤트 추가
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();  // 현재 액티비티를 종료하여 뒤로가기 동작을 수행합니다.
+            }
+        });
 
         // 통화 선택 스피너 설정
         ArrayAdapter<CharSequence> currencyAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.currency_array)) {
@@ -194,9 +202,53 @@ public class InputViewActivity extends AppCompatActivity {
         editTextDate.setText(year + "-" + (month + 1) + "-" + day);
     }
 
+    // 권한 요청 메서드
+    private void requestPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA},
+                    100);
+        }
+    }
+
+    // 권한 요청 결과 처리
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults); // 추가된 부분
+        if (requestCode == 100) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 권한이 허용된 경우
+            } else {
+                // 권한이 거부된 경우
+                Toast.makeText(this, "권한이 거부되었습니다. 권한을 허용해주세요.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    // 사진 선택
     private void selectPhoto() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, REQUEST_CODE_SELECT_PHOTO);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_SELECT_PHOTO && resultCode == RESULT_OK && data != null) {
+            Uri selectedImage = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                imageViewPhoto.setImageBitmap(bitmap);
+                imageViewPhoto.setVisibility(View.VISIBLE);
+                buttonAddPhoto.setVisibility(View.GONE); // Hide the camera icon when a photo is selected
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private boolean validateFields() {
@@ -239,21 +291,5 @@ public class InputViewActivity extends AppCompatActivity {
         );
         datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         datePickerDialog.show();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_SELECT_PHOTO && resultCode == RESULT_OK && data != null) {
-            Uri selectedImage = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-                imageViewPhoto.setImageBitmap(bitmap);
-                imageViewPhoto.setVisibility(View.VISIBLE);
-                buttonAddPhoto.setVisibility(View.GONE); // Hide the camera icon when a photo is selected
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 }
