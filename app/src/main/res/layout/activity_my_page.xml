@@ -103,7 +103,7 @@
 
         <Button
             android:id="@+id/save_button"
-            android:layout_width="300dp"
+            android:layout_width="330dp"
             android:layout_height="56dp"
             android:text="저장하기"
             android:layout_marginTop="16dp"
@@ -112,7 +112,7 @@
 
         <Button
             android:id="@+id/logout_button"
-            android:layout_width="300dp"
+            android:layout_width="330dp"
             android:layout_height="56dp"
             android:text="로그아웃"
             android:layout_marginTop="8dp"
@@ -121,7 +121,7 @@
 
         <Button
             android:id="@+id/exit_button"
-            android:layout_width="300dp"
+            android:layout_width="330dp"
             android:layout_height="56dp"
             android:text="탈퇴하기"
             android:layout_marginTop="8dp"

@@ -60,11 +60,8 @@ public class AccountViewActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-        // 기존 데이터 초기화 및 초기 데이터 추가
-        clearAccounts();
-        addInitialData();
+        loadAccounts();
 
-        // 데이터 전달받기
         if (intent != null) {
             String amount = intent.getStringExtra("amount");
             String date = intent.getStringExtra("date");
@@ -93,7 +90,7 @@ public class AccountViewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent addIntent = new Intent(AccountViewActivity.this, InputViewActivity.class);
-                startActivity(addIntent);
+                startActivityForResult(addIntent, 1);
             }
         });
 
@@ -102,10 +99,28 @@ public class AccountViewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent searchIntent = new Intent(AccountViewActivity.this, ReportActivity.class);
-                searchIntent.putExtra("title", toolbarTitle.getText().toString()); // 타이틀 전달
+                searchIntent.putExtra("title", toolbarTitle.getText().toString());
                 startActivity(searchIntent);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
+            String amount = data.getStringExtra("price");
+            String date = data.getStringExtra("date");
+            String usageDetails = data.getStringExtra("usageDetails");
+            String category = data.getStringExtra("category");
+            String currency = data.getStringExtra("currency");
+
+            if (amount != null && date != null && usageDetails != null && category != null && currency != null) {
+                accountList.add(new Account(usageDetails, category, formatDate(date), amount + " " + currency));
+                adapter.notifyDataSetChanged();
+                saveAccounts();
+            }
+        }
     }
 
     private void loadAccounts() {
@@ -113,10 +128,10 @@ public class AccountViewActivity extends AppCompatActivity {
         accountList.clear();
         for (String accountString : accountSet) {
             String[] parts = accountString.split(" ");
-            if (parts.length >= 5) { // Check if the length is at least 5 to prevent errors
+            if (parts.length >= 5) {
                 String usageDetails = parts[0];
                 String category = parts[1];
-                String date = formatDate(parts[2]); // 날짜 포맷 변경
+                String date = formatDate(parts[2]);
                 String amount = parts[3];
                 for (int i = 4; i < parts.length; i++) {
                     amount += " " + parts[i];
@@ -160,7 +175,7 @@ public class AccountViewActivity extends AppCompatActivity {
             return outputFormat.format(parsedDate);
         } catch (ParseException e) {
             e.printStackTrace();
-            return date; // 원본 형식 반환
+            return date;
         }
     }
 }

@@ -47,7 +47,8 @@
             android:exported="false" />
         <activity
             android:name="com.example.nidonnaedon.InputViewActivity"
-            android:exported="true" />
+            android:windowSoftInputMode="adjustPan"
+            android:exported="true"/>
         <activity
             android:name="com.example.nidonnaedon.LoginActivity"
             android:exported="true" />
@@ -56,7 +57,8 @@
             android:exported="true" />
         <activity
             android:name="com.example.nidonnaedon.MainActivity_page8"
-            android:exported="true" />
+            android:windowSoftInputMode="adjustPan"
+            android:exported="true"/>
         <activity
             android:name="com.example.nidonnaedon.MyPageView"
             android:exported="true" />

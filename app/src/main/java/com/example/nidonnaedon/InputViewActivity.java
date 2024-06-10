@@ -1,16 +1,13 @@
 package com.example.nidonnaedon;
 
-import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -20,12 +17,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.example.nisonnaeson.R;
 
@@ -33,8 +27,6 @@ import java.io.IOException;
 import java.util.Calendar;
 
 public class InputViewActivity extends AppCompatActivity {
-
-    private static final int REQUEST_CODE_SELECT_PHOTO = 1;
 
     private EditText editTextAmount, editTextDate, editTextUsageDetails;
     private Spinner spinnerCategory, spinnerCurrency;
@@ -48,10 +40,6 @@ public class InputViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inputview);
 
-        // 권한 요청
-        requestPermissions();
-
-        // UI 요소 초기화
         editTextAmount = findViewById(R.id.editTextAmount);
         editTextDate = findViewById(R.id.editTextDate);
         editTextUsageDetails = findViewById(R.id.editTextUsageDetails);
@@ -67,81 +55,44 @@ public class InputViewActivity extends AppCompatActivity {
         checkboxGwakJiwon = findViewById(R.id.checkboxGwakJiwon);
         checkboxYooJaewon = findViewById(R.id.checkboxYooJaewon);
         friendList = findViewById(R.id.friendList);
-        backButton = findViewById(R.id.back_button);  // Back button 추가
+        backButton = findViewById(R.id.back_button);
 
-        // 뒤로가기 버튼 클릭 이벤트 추가
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();  // 현재 액티비티를 종료하여 뒤로가기 동작을 수행합니다.
+                onBackPressed();
             }
         });
 
-        // 통화 선택 스피너 설정
-        ArrayAdapter<CharSequence> currencyAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.currency_array)) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                TextView textView = (TextView) view;
-                textView.setText(formatCurrencyTitle(textView.getText().toString()));
-                return view;
+        // 받아온 데이터 설정
+        Intent intent = getIntent();
+        if (intent != null) {
+            String date = intent.getStringExtra("date");
+            String price = intent.getStringExtra("price");
+            String usageDetails = intent.getStringExtra("usageDetails");
+            String category = intent.getStringExtra("category");
+
+            editTextDate.setText(date);
+            editTextAmount.setText(price);
+            editTextUsageDetails.setText(usageDetails);
+
+            ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(this, R.array.category_array, android.R.layout.simple_spinner_item);
+            categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerCategory.setAdapter(categoryAdapter);
+            if (category != null) {
+                int spinnerPosition = categoryAdapter.getPosition(category);
+                spinnerCategory.setSelection(spinnerPosition);
             }
 
-            @Override
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                View view = super.getDropDownView(position, convertView, parent);
-                TextView textView = (TextView) view;
-                textView.setText(formatCurrencyDescription(textView.getText().toString()));
-                return view;
-            }
+            ArrayAdapter<CharSequence> currencyAdapter = ArrayAdapter.createFromResource(this, R.array.currency_array, android.R.layout.simple_spinner_item);
+            currencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerCurrency.setAdapter(currencyAdapter);
+        }
 
-            private String formatCurrencyTitle(String original) {
-                if (original.contains("-")) {
-                    String[] parts = original.split("-");
-                    return parts[0].trim();
-                }
-                return original;
-            }
-
-            private String formatCurrencyDescription(String original) {
-                return original; // 드롭다운에서는 전체 텍스트 표시
-            }
-        };
-
-        currencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCurrency.setAdapter(currencyAdapter);
-
-        spinnerCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                String selectedCurrency = parentView.getItemAtPosition(position).toString();
-                // 선택된 통화에 따라 환율 적용 등의 로직을 추가합니다.
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                // 아무것도 선택되지 않았을 때의 처리를 여기에 추가합니다.
-            }
-        });
-
-        // 카테고리 스피너 설정
-        ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(this, R.array.category_array, android.R.layout.simple_spinner_item);
-        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCategory.setAdapter(categoryAdapter);
-
-        View.OnClickListener photoClickListener = new View.OnClickListener() {
+        buttonAddPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectPhoto();
-            }
-        };
-        buttonAddPhoto.setOnClickListener(photoClickListener);
-        photoContainer.setOnClickListener(photoClickListener);
-
-        editTextDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDatePickerDialog();
             }
         });
 
@@ -168,33 +119,20 @@ public class InputViewActivity extends AppCompatActivity {
                     String date = editTextDate.getText().toString();
                     String usageDetails = editTextUsageDetails.getText().toString();
                     String category = spinnerCategory.getSelectedItem().toString();
-                    String currency = spinnerCurrency.getSelectedItem().toString();
+                    String currency = spinnerCurrency.getSelectedItem() != null ? spinnerCurrency.getSelectedItem().toString() : "";
 
-                    StringBuilder friends = new StringBuilder();
-                    if (checkboxPayer.isChecked()) {
-                        friends.append("신호연 ");
-                    }
-                    if (checkboxGwakJiwon.isChecked()) {
-                        friends.append("곽지원 ");
-                    }
-                    if (checkboxYooJaewon.isChecked()) {
-                        friends.append("유재원 ");
-                    }
-
-                    Intent intent = new Intent(InputViewActivity.this, AccountViewActivity.class);
-                    intent.putExtra("amount", amount);
-                    intent.putExtra("date", date);
-                    intent.putExtra("usageDetails", usageDetails);
-                    intent.putExtra("category", category);
-                    intent.putExtra("currency", currency);
-                    intent.putExtra("friends", friends.toString().trim());
-
-                    startActivity(intent);
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("date", date);
+                    resultIntent.putExtra("price", amount);
+                    resultIntent.putExtra("usageDetails", usageDetails);
+                    resultIntent.putExtra("category", category);
+                    resultIntent.putExtra("currency", currency);
+                    setResult(RESULT_OK, resultIntent);
+                    finish();
                 }
             }
         });
 
-        // Set the default date to today
         final Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
@@ -202,49 +140,21 @@ public class InputViewActivity extends AppCompatActivity {
         editTextDate.setText(year + "-" + (month + 1) + "-" + day);
     }
 
-    // 권한 요청 메서드
-    private void requestPermissions() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA},
-                    100);
-        }
-    }
-
-    // 권한 요청 결과 처리
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults); // 추가된 부분
-        if (requestCode == 100) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // 권한이 허용된 경우
-            } else {
-                // 권한이 거부된 경우
-                Toast.makeText(this, "권한이 거부되었습니다. 권한을 허용해주세요.", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    // 사진 선택
     private void selectPhoto() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, REQUEST_CODE_SELECT_PHOTO);
+        startActivityForResult(intent, 1);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_SELECT_PHOTO && resultCode == RESULT_OK && data != null) {
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
             Uri selectedImage = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
                 imageViewPhoto.setImageBitmap(bitmap);
                 imageViewPhoto.setVisibility(View.VISIBLE);
-                buttonAddPhoto.setVisibility(View.GONE); // Hide the camera icon when a photo is selected
+                buttonAddPhoto.setVisibility(View.GONE);
             } catch (IOException e) {
                 e.printStackTrace();
             }
