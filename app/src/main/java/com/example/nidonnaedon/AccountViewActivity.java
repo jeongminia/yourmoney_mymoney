@@ -14,9 +14,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import com.example.nisonnaeson.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
+import java.util.Date;
 
 public class AccountViewActivity extends AppCompatActivity {
 
@@ -69,7 +73,7 @@ public class AccountViewActivity extends AppCompatActivity {
             String currency = intent.getStringExtra("currency");
 
             if (amount != null && date != null && usageDetails != null && category != null && currency != null) {
-                accountList.add(new Account(usageDetails, category, date, amount + " " + currency));
+                accountList.add(new Account(usageDetails, category, formatDate(date), amount + " " + currency));
                 adapter.notifyDataSetChanged();
                 saveAccounts();
             }
@@ -98,6 +102,7 @@ public class AccountViewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent searchIntent = new Intent(AccountViewActivity.this, ReportActivity.class);
+                searchIntent.putExtra("title", toolbarTitle.getText().toString()); // 타이틀 전달
                 startActivity(searchIntent);
             }
         });
@@ -111,7 +116,7 @@ public class AccountViewActivity extends AppCompatActivity {
             if (parts.length >= 5) { // Check if the length is at least 5 to prevent errors
                 String usageDetails = parts[0];
                 String category = parts[1];
-                String date = parts[2];
+                String date = formatDate(parts[2]); // 날짜 포맷 변경
                 String amount = parts[3];
                 for (int i = 4; i < parts.length; i++) {
                     amount += " " + parts[i];
@@ -141,9 +146,21 @@ public class AccountViewActivity extends AppCompatActivity {
     }
 
     private void addInitialData() {
-        accountList.add(new Account("휴지", "기타", "2024-6-5", "3000 KRW"));
-        accountList.add(new Account("도넛", "식비", "2024-5-31", "2500 KRW"));
+        accountList.add(new Account("휴지", "기타", formatDate("2024-6-5"), "3000 KRW"));
+        accountList.add(new Account("도넛", "식비", formatDate("2024-5-31"), "2500 KRW"));
         saveAccounts();
         adapter.notifyDataSetChanged();
+    }
+
+    private String formatDate(String date) {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-M-d", Locale.KOREA);
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
+        try {
+            Date parsedDate = inputFormat.parse(date);
+            return outputFormat.format(parsedDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return date; // 원본 형식 반환
+        }
     }
 }

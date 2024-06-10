@@ -12,8 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.nisonnaeson.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MainView extends AppCompatActivity {
 
@@ -38,12 +42,12 @@ public class MainView extends AppCompatActivity {
         sharedExpenseList = new ArrayList<>();
 
         // 예제 데이터를 추가합니다.
-        myExpenseList.add(new ExpenseItem("독일 여행", "2024.3.31~2024.4.3"));
-        myExpenseList.add(new ExpenseItem("데이트 통장", "2024.5.6~2024.5.29"));
+        myExpenseList.add(new ExpenseItem("독일 여행", formatDate("2024.3.31~2024.4.3")));
+        myExpenseList.add(new ExpenseItem("데이트 통장", formatDate("2024.5.6~2024.5.29")));
 
-        sharedExpenseList.add(new ExpenseItem("지원이 서프라이즈", "2023.2.17~2023.2.20"));
-        sharedExpenseList.add(new ExpenseItem("저녁 산책 모임", "2024.3.31~2024.6.12"));
-        sharedExpenseList.add(new ExpenseItem("어버이날 선물", "2024.5.3~2024.5.8"));
+        sharedExpenseList.add(new ExpenseItem("지원이 서프라이즈", formatDate("2023.2.17~2023.2.20")));
+        sharedExpenseList.add(new ExpenseItem("저녁 산책 모임", formatDate("2024.3.31~2024.6.12")));
+        sharedExpenseList.add(new ExpenseItem("어버이날 선물", formatDate("2024.5.3~2024.5.8")));
 
         expenseAdapter = new ExpenseAdapter(myExpenseList, new ExpenseAdapter.OnItemClickListener() {
             @Override
@@ -135,7 +139,7 @@ public class MainView extends AppCompatActivity {
             String accountName = data.getStringExtra("ACCOUNT_NAME");
             String accountDate = data.getStringExtra("ACCOUNT_DATE");
             if (accountName != null && accountDate != null) {
-                ExpenseItem newAccount = new ExpenseItem(accountName, accountDate);
+                ExpenseItem newAccount = new ExpenseItem(accountName, formatDate(accountDate));
                 addAccountToList(newAccount, isMyExpense);
             }
         }
@@ -148,5 +152,27 @@ public class MainView extends AppCompatActivity {
             sharedExpenseList.add(account);
         }
         updateExpenseList();
+    }
+
+    private String formatDate(String dateRange) {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy.M.d", Locale.KOREA);
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
+        String[] dates = dateRange.split("~");
+        StringBuilder formattedDateRange = new StringBuilder();
+
+        for (int i = 0; i < dates.length; i++) {
+            try {
+                Date date = inputFormat.parse(dates[i].trim());
+                formattedDateRange.append(outputFormat.format(date));
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return dateRange; // 원본 형식 반환
+            }
+            if (i == 0) {
+                formattedDateRange.append(" ~ ");
+            }
+        }
+
+        return formattedDateRange.toString();
     }
 }

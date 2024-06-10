@@ -50,15 +50,15 @@ public class ReportActivity extends AppCompatActivity {
         // Toolbar
         RelativeLayout toolbarLayout = new RelativeLayout(this);
         toolbarLayout.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, convertToPx(58)));
+                LinearLayout.LayoutParams.MATCH_PARENT, convertToPx(58))); // Use int for conversion
         toolbarLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
         ImageView backButton = new ImageView(this);
         backButton.setImageResource(R.drawable.ic_back); // replace with your back icon
         RelativeLayout.LayoutParams backButtonParams = new RelativeLayout.LayoutParams(
-                convertToPx(30), convertToPx(30));
+                convertToPx(30), convertToPx(30)); // Use int for conversion
         backButtonParams.addRule(RelativeLayout.ALIGN_PARENT_START);
-        backButtonParams.setMargins(convertToPx(14), convertToPx(14), convertToPx(14), convertToPx(14));
+        backButtonParams.setMargins(convertToPx(14), convertToPx(14), convertToPx(14), convertToPx(14)); // Use int for conversion
         backButton.setLayoutParams(backButtonParams);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,10 +73,8 @@ public class ReportActivity extends AppCompatActivity {
         String title = intent.getStringExtra("title"); // AccountViewActivity에서 전달된 타이틀
         if (title != null) {
             titleView.setText(title);
-        } else {
-            titleView.setText("니돈내돈");
         }
-        titleView.setTextSize(40);
+        titleView.setTextSize(40); // Use float for text size
         titleView.setTextColor(Color.WHITE);
         titleView.setTypeface(ResourcesCompat.getFont(this, R.font.nanumpenscript_regular)); // Set custom font for title
         RelativeLayout.LayoutParams titleParams = new RelativeLayout.LayoutParams(
@@ -90,16 +88,16 @@ public class ReportActivity extends AppCompatActivity {
         // Bar chart for user balances
         barChart = new HorizontalBarChart(this);
         LinearLayout.LayoutParams barChartParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, convertToPx(200));
-        barChartParams.setMargins(0, 0, 0, 20); // Adjusted top margin
+                LinearLayout.LayoutParams.MATCH_PARENT, convertToPx(200)); // Use int for conversion
+        barChartParams.setMargins(0, 0, 0, convertToPx(20)); // Use int for conversion
         barChart.setLayoutParams(barChartParams);
         parentLayout.addView(barChart);
 
         // Pie chart
         pieChart = new PieChart(this);
         LinearLayout.LayoutParams pieChartParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, convertToPx(300)); // Set your desired width and height
-        pieChartParams.setMargins(0, 20, 0, 20);
+                LinearLayout.LayoutParams.MATCH_PARENT, convertToPx(300)); // Use int for conversion
+        pieChartParams.setMargins(0, convertToPx(20), 0, convertToPx(20)); // Use int for conversion
         pieChart.setLayoutParams(pieChartParams);
         parentLayout.addView(pieChart);
 
@@ -111,7 +109,7 @@ public class ReportActivity extends AppCompatActivity {
         LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         buttonParams.gravity = Gravity.CENTER_HORIZONTAL; // Center horizontally
-        buttonParams.setMargins(90, 120, 90, 20); // Adjusted margin
+        buttonParams.setMargins(convertToPx(90), convertToPx(120), convertToPx(90), convertToPx(20)); // Use int for conversion
         saveButton.setLayoutParams(buttonParams);
         parentLayout.addView(saveButton);
 
@@ -124,9 +122,9 @@ public class ReportActivity extends AppCompatActivity {
 
     private void updateBarChart() {
         List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0, 5900));
-        entries.add(new BarEntry(1, -8500));
-        entries.add(new BarEntry(2, 1800));
+        entries.add(new BarEntry(0f, 5900f));
+        entries.add(new BarEntry(1f, -8500f));
+        entries.add(new BarEntry(2f, 1800f));
 
         BarDataSet dataSet = new BarDataSet(entries, "User Balances");
         dataSet.setColors(Color.parseColor("#bcdaa8"), Color.parseColor("#eebebe"), Color.parseColor("#bcdaa8"));
@@ -166,10 +164,10 @@ public class ReportActivity extends AppCompatActivity {
 
     private void updatePieChart() {
         List<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(40, "식비"));
-        entries.add(new PieEntry(30, "교통"));
-        entries.add(new PieEntry(20, "숙박"));
-        entries.add(new PieEntry(10, "기타"));
+        entries.add(new PieEntry(40f, "식비"));
+        entries.add(new PieEntry(30f, "교통"));
+        entries.add(new PieEntry(20f, "숙박"));
+        entries.add(new PieEntry(10f, "기타"));
 
         PieDataSet dataSet = new PieDataSet(entries, "Expense Categories");
         dataSet.setColors(Color.parseColor("#e6c0ff"),
