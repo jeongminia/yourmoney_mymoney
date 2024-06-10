@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5"
+    android:background="@color/white"
+    android:clipToOutline="true"
     tools:context=".InputViewActivity">
 
     <!-- Toolbar -->
@@ -29,6 +30,7 @@
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_below="@id/toolbar"
+        android:layout_above="@id/buttonSubmit"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="16dp"
@@ -52,18 +54,19 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/text_underline">
 
                 <EditText
                     android:id="@+id/editTextUsageDetails"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_weight="2"
-                    android:background="@drawable/text_underline"
                     android:hint="사용 내역"
                     android:padding="8dp"
                     android:textColor="@android:color/black"
-                    android:textColorHint="@android:color/darker_gray" />
+                    android:textColorHint="@android:color/darker_gray"
+                    android:background="@android:color/transparent" /> <!-- 기본 밑줄 제거 -->
 
                 <Spinner
                     android:id="@+id/spinnerCategory"
@@ -88,7 +91,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/text_underline">
 
                 <EditText
                     android:id="@+id/editTextAmount"
@@ -99,7 +103,8 @@
                     android:inputType="numberDecimal"
                     android:padding="8dp"
                     android:textColor="@android:color/black"
-                    android:textColorHint="@android:color/darker_gray" />
+                    android:textColorHint="@android:color/darker_gray"
+                    android:background="@android:color/transparent" /> <!-- 기본 밑줄 제거 -->
 
                 <Spinner
                     android:id="@+id/spinnerCurrency"
@@ -136,7 +141,7 @@
                     android:hint="사용 일자를 선택하세요."
                     android:focusable="false"
                     android:clickable="true"
-                    android:background="@android:color/transparent" />
+                    android:background="@android:color/transparent" /> <!-- 기본 밑줄 제거 -->
 
                 <ImageView
                     android:id="@+id/calendarIcon"
@@ -269,13 +274,13 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/buttonSubmit"
-        android:layout_width="440dp"
-        android:layout_height="48dp"
-        android:text="입력"
-        android:gravity="center"
-        style="@style/CustomButtonStyle"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"/>
+    android:id="@+id/buttonSubmit"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:text="입력"
+    android:gravity="center"
+    style="@style/CustomButtonStyle"
+    android:layout_alignParentBottom="true"
+    android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>
