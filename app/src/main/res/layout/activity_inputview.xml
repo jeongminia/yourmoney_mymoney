@@ -164,18 +164,25 @@
                 android:textSize="16sp"
                 android:textColor="@android:color/black" />
 
-            <TextView
-                android:id="@+id/textViewPayer"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/text_underline"
-                android:padding="8dp"
-                android:gravity="center_vertical"
-                android:text="신호연"
-                android:textColor="@android:color/black"
-                android:textColorHint="@android:color/darker_gray" />
+                android:layout_marginBottom="16dp">
+
+                <CheckBox
+                    android:id="@+id/checkboxPayer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="신호연"
+                    android:checked="true"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/black"
+                    android:layout_gravity="center_vertical"
+                    android:buttonTint="@color/checkbox_selector" />
+
+            </LinearLayout>
 
             <!-- 친구 추가 -->
             <CheckBox
@@ -183,7 +190,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="For whom"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="8dp"
+                android:buttonTint="@color/checkbox_selector" />
 
             <!-- 친구 리스트 -->
             <LinearLayout
@@ -203,7 +211,8 @@
                         android:id="@+id/checkboxGwakJiwon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="8dp" />
+                        android:layout_marginRight="8dp"
+                        android:buttonTint="@color/checkbox_selector" />
 
                     <TextView
                         android:id="@+id/textViewGwakJiwon"
@@ -225,7 +234,8 @@
                         android:id="@+id/checkboxYooJaewon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="8dp" />
+                        android:layout_marginRight="8dp"
+                        android:buttonTint="@color/checkbox_selector" />
 
                     <TextView
                         android:id="@+id/textViewYooJaewon"
@@ -278,5 +288,4 @@
         style="@style/CustomButtonStyle"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"/>
-
 </RelativeLayout>

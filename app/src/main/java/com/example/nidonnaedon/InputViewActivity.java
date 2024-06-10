@@ -33,11 +33,10 @@ public class InputViewActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_SELECT_PHOTO = 1;
 
     private EditText editTextAmount, editTextDate, editTextUsageDetails;
-    private TextView textViewPayer;
     private Spinner spinnerCategory, spinnerCurrency;
     private ImageView buttonAddPhoto, imageViewPhoto, calendarIcon;
     private Button buttonSubmit;
-    private CheckBox checkboxAddFriend, checkboxGwakJiwon, checkboxYooJaewon;
+    private CheckBox checkboxAddFriend, checkboxPayer, checkboxGwakJiwon, checkboxYooJaewon;
     private LinearLayout friendList, photoContainer;
 
     @Override
@@ -56,7 +55,6 @@ public class InputViewActivity extends AppCompatActivity {
 
         editTextAmount = findViewById(R.id.editTextAmount);
         editTextDate = findViewById(R.id.editTextDate);
-        textViewPayer = findViewById(R.id.textViewPayer);
         editTextUsageDetails = findViewById(R.id.editTextUsageDetails);
         spinnerCategory = findViewById(R.id.spinnerCategory);
         spinnerCurrency = findViewById(R.id.spinnerCurrency);
@@ -66,6 +64,7 @@ public class InputViewActivity extends AppCompatActivity {
         buttonSubmit = findViewById(R.id.buttonSubmit);
         calendarIcon = findViewById(R.id.calendarIcon);
         checkboxAddFriend = findViewById(R.id.checkboxAddFriend);
+        checkboxPayer = findViewById(R.id.checkboxPayer);
         checkboxGwakJiwon = findViewById(R.id.checkboxGwakJiwon);
         checkboxYooJaewon = findViewById(R.id.checkboxYooJaewon);
         friendList = findViewById(R.id.friendList);
@@ -159,12 +158,14 @@ public class InputViewActivity extends AppCompatActivity {
                 if (validateFields()) {
                     String amount = editTextAmount.getText().toString();
                     String date = editTextDate.getText().toString();
-                    String payer = textViewPayer.getText().toString();
                     String usageDetails = editTextUsageDetails.getText().toString();
                     String category = spinnerCategory.getSelectedItem().toString();
                     String currency = spinnerCurrency.getSelectedItem().toString();
 
                     StringBuilder friends = new StringBuilder();
+                    if (checkboxPayer.isChecked()) {
+                        friends.append("신호연 ");
+                    }
                     if (checkboxGwakJiwon.isChecked()) {
                         friends.append("곽지원 ");
                     }
@@ -175,7 +176,6 @@ public class InputViewActivity extends AppCompatActivity {
                     Intent intent = new Intent(InputViewActivity.this, AccountViewActivity.class);
                     intent.putExtra("amount", amount);
                     intent.putExtra("date", date);
-                    intent.putExtra("payer", payer);
                     intent.putExtra("usageDetails", usageDetails);
                     intent.putExtra("category", category);
                     intent.putExtra("currency", currency);
