@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -76,15 +78,21 @@ public class InputViewActivity extends AppCompatActivity {
             editTextAmount.setText(price);
             editTextUsageDetails.setText(usageDetails);
 
-            ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(this, R.array.category_array, android.R.layout.simple_spinner_item);
-            categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerCategory.setAdapter(categoryAdapter);
-            if (category != null) {
-                int spinnerPosition = categoryAdapter.getPosition(category);
-                spinnerCategory.setSelection(spinnerPosition);
-            }
-
-            ArrayAdapter<CharSequence> currencyAdapter = ArrayAdapter.createFromResource(this, R.array.currency_array, android.R.layout.simple_spinner_item);
+            ArrayAdapter<CharSequence> currencyAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.currency_array)) {
+                @Override
+                public View getView(int position, View convertView, ViewGroup parent) {
+                    View view = super.getView(position, convertView, parent);
+                    if (view instanceof TextView) {
+                        TextView textView = (TextView) view;
+                        String currentText = textView.getText().toString();
+                        if (currentText.contains("-")) {
+                            currentText = currentText.substring(0, currentText.indexOf("-")).trim();
+                        }
+                        textView.setText(currentText);
+                    }
+                    return view;
+                }
+            };
             currencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinnerCurrency.setAdapter(currencyAdapter);
         }
