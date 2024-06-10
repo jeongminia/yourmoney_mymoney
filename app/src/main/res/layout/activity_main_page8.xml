@@ -69,7 +69,6 @@
             android:orientation="horizontal"
             android:background="@drawable/text_underline"
             android:gravity="center_vertical"
-            android:padding="8dp"
             android:backgroundTint="@android:color/black">
 
             <LinearLayout

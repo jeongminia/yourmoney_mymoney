@@ -238,25 +238,28 @@
                 android:layout_marginBottom="8dp" />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp">
+                android:id="@+id/photoContainer"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:orientation="vertical"
+                android:layout_marginBottom="60dp"
+                android:background="@drawable/image_border"
+                android:gravity="center"
+                android:layout_gravity="center">
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/buttonAddPhoto"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:src="@drawable/ic_camera"
                     android:background="?attr/selectableItemBackground"
                     android:contentDescription="Add Photo"
-                    android:layout_marginEnd="8dp" />
+                    android:visibility="visible" />
 
                 <ImageView
                     android:id="@+id/imageViewPhoto"
                     android:layout_width="300dp"
                     android:layout_height="300dp"
-                    android:layout_marginStart="8dp"
                     android:visibility="gone"
                     android:scaleType="centerCrop"
                     android:contentDescription="Selected Photo"

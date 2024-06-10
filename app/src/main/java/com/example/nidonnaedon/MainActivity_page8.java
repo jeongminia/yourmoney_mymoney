@@ -9,7 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -58,7 +58,7 @@ public class MainActivity_page8 extends AppCompatActivity {
         participantList = findViewById(R.id.participant_list);
 
         // 뒤로 가기 버튼 설정
-        ImageButton backButton = findViewById(R.id.back_button);
+        ImageView backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(v -> finish());
 
         // 통화 선택 스피너 설정
@@ -90,6 +90,15 @@ public class MainActivity_page8 extends AppCompatActivity {
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         currencySpinner.setAdapter(adapter);
+
+        // 스피너 기본 값을 "krw"로 설정
+        String[] currencyArray = getResources().getStringArray(R.array.currency_array);
+        for (int i = 0; i < currencyArray.length; i++) {
+            if (currencyArray[i].toLowerCase().contains("krw")) {
+                currencySpinner.setSelection(i);
+                break;
+            }
+        }
 
         currencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

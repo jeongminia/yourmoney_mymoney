@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -23,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import com.example.nisonnaeson.R;
 
@@ -37,11 +35,10 @@ public class InputViewActivity extends AppCompatActivity {
     private EditText editTextAmount, editTextDate, editTextUsageDetails;
     private TextView textViewPayer;
     private Spinner spinnerCategory, spinnerCurrency;
-    private ImageButton buttonAddPhoto;
-    private ImageView imageViewPhoto, calendarIcon;
+    private ImageView buttonAddPhoto, imageViewPhoto, calendarIcon;
     private Button buttonSubmit;
     private CheckBox checkboxAddFriend, checkboxGwakJiwon, checkboxYooJaewon;
-    private LinearLayout friendList;
+    private LinearLayout friendList, photoContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +62,7 @@ public class InputViewActivity extends AppCompatActivity {
         spinnerCurrency = findViewById(R.id.spinnerCurrency);
         buttonAddPhoto = findViewById(R.id.buttonAddPhoto);
         imageViewPhoto = findViewById(R.id.imageViewPhoto);
+        photoContainer = findViewById(R.id.photoContainer);
         buttonSubmit = findViewById(R.id.buttonSubmit);
         calendarIcon = findViewById(R.id.calendarIcon);
         checkboxAddFriend = findViewById(R.id.checkboxAddFriend);
@@ -78,7 +76,7 @@ public class InputViewActivity extends AppCompatActivity {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 TextView textView = (TextView) view;
-                textView.setText(formatCurrencyString(textView.getText().toString()));
+                textView.setText(formatCurrencyTitle(textView.getText().toString()));
                 return view;
             }
 
@@ -86,16 +84,20 @@ public class InputViewActivity extends AppCompatActivity {
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
                 View view = super.getDropDownView(position, convertView, parent);
                 TextView textView = (TextView) view;
-                textView.setText(formatCurrencyString(textView.getText().toString()));
+                textView.setText(formatCurrencyDescription(textView.getText().toString()));
                 return view;
             }
 
-            private String formatCurrencyString(String original) {
+            private String formatCurrencyTitle(String original) {
                 if (original.contains("-")) {
                     String[] parts = original.split("-");
-                    return parts[0].trim() + "    " + parts[1].trim();
+                    return parts[0].trim();
                 }
                 return original;
+            }
+
+            private String formatCurrencyDescription(String original) {
+                return original; // 드롭다운에서는 전체 텍스트 표시
             }
         };
 
@@ -120,13 +122,14 @@ public class InputViewActivity extends AppCompatActivity {
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategory.setAdapter(categoryAdapter);
 
-        buttonAddPhoto.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener photoClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, REQUEST_CODE_SELECT_PHOTO);
+                selectPhoto();
             }
-        });
+        };
+        buttonAddPhoto.setOnClickListener(photoClickListener);
+        photoContainer.setOnClickListener(photoClickListener);
 
         editTextDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,6 +194,11 @@ public class InputViewActivity extends AppCompatActivity {
         editTextDate.setText(year + "-" + (month + 1) + "-" + day);
     }
 
+    private void selectPhoto() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, REQUEST_CODE_SELECT_PHOTO);
+    }
+
     private boolean validateFields() {
         boolean isValid = true;
 
@@ -242,6 +250,7 @@ public class InputViewActivity extends AppCompatActivity {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
                 imageViewPhoto.setImageBitmap(bitmap);
                 imageViewPhoto.setVisibility(View.VISIBLE);
+                buttonAddPhoto.setVisibility(View.GONE); // Hide the camera icon when a photo is selected
             } catch (IOException e) {
                 e.printStackTrace();
             }
