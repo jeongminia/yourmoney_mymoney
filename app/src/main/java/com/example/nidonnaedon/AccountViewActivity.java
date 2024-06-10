@@ -44,6 +44,7 @@ public class AccountViewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
 
@@ -82,6 +83,7 @@ public class AccountViewActivity extends AppCompatActivity {
                 Intent mainPageIntent = new Intent(AccountViewActivity.this, MainActivity_page7.class);
                 mainPageIntent.putExtra("itemName", accountList.get(position).getUsageDetails());
                 startActivity(mainPageIntent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
 
@@ -91,6 +93,7 @@ public class AccountViewActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent addIntent = new Intent(AccountViewActivity.this, InputViewActivity.class);
                 startActivityForResult(addIntent, 1);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
 
@@ -101,6 +104,7 @@ public class AccountViewActivity extends AppCompatActivity {
                 Intent searchIntent = new Intent(AccountViewActivity.this, ReportActivity.class);
                 searchIntent.putExtra("title", toolbarTitle.getText().toString());
                 startActivity(searchIntent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
     }

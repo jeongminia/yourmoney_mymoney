@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.transition.ChangeBounds;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -26,6 +28,10 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        getWindow().setEnterTransition(new ChangeBounds());
+        getWindow().setExitTransition(new ChangeBounds());
+
         flexboxLayout = new FlexboxLayout(this);
         flexboxLayout.setFlexDirection(FlexDirection.COLUMN);
         flexboxLayout.setAlignItems(AlignItems.CENTER);
@@ -37,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         textView.setTextSize(100);
         textView.setTextColor(Color.WHITE);
         textView.setTypeface(ResourcesCompat.getFont(this, R.font.nanumpenscript_regular)); // Set custom font
+        textView.setTransitionName("title_transition");
 
         FlexboxLayout.LayoutParams textLayoutParams = new FlexboxLayout.LayoutParams(
                 FlexboxLayout.LayoutParams.WRAP_CONTENT, FlexboxLayout.LayoutParams.WRAP_CONTENT);

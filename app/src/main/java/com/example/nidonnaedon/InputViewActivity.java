@@ -63,6 +63,7 @@ public class InputViewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
 
@@ -137,6 +138,7 @@ public class InputViewActivity extends AppCompatActivity {
                     resultIntent.putExtra("currency", currency);
                     setResult(RESULT_OK, resultIntent);
                     finish();
+                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 }
             }
         });

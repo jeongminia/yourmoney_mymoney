@@ -33,6 +33,7 @@ public class MainActivity_page7 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
 
@@ -48,6 +49,7 @@ public class MainActivity_page7 extends AppCompatActivity {
                 intent.putExtra("usageDetails", itemUsageDetails.getText().toString());
                 intent.putExtra("category", itemCategory.getText().toString());
                 startActivityForResult(intent, REQUEST_CODE_EDIT);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
     }

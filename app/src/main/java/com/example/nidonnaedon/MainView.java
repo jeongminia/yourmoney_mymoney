@@ -55,6 +55,7 @@ public class MainView extends AppCompatActivity {
                 Intent intent = new Intent(MainView.this, AccountViewActivity.class);
                 intent.putExtra("itemName", myExpenseList.get(position).getName());
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         }, this);
 
@@ -66,6 +67,7 @@ public class MainView extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainView.this, MyPageView.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
 
@@ -96,6 +98,7 @@ public class MainView extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainView.this, MainActivity_page8.class);
                 startActivityForResult(intent, REQUEST_CODE_CREATE_ACCOUNT);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
 
@@ -111,6 +114,7 @@ public class MainView extends AppCompatActivity {
                     Intent intent = new Intent(MainView.this, AccountViewActivity.class);
                     intent.putExtra("itemName", myExpenseList.get(position).getName());
                     startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 }
             }, this);
         } else {
@@ -120,6 +124,7 @@ public class MainView extends AppCompatActivity {
                     Intent intent = new Intent(MainView.this, AccountViewActivity.class);
                     intent.putExtra("itemName", sharedExpenseList.get(position).getName());
                     startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 }
             }, this);
         }

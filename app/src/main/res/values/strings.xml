@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Nisonnaeson</string>
+    <string name="app_name">니돈내돈</string>
     <string name="usage_details">사용 내역</string>
     <string name="category">카테고리</string>
     <string name="usage_amount">사용 금액</string>
