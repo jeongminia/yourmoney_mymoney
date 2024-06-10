@@ -91,8 +91,6 @@ public class MyPageView extends AppCompatActivity {
         editor.putString("nickname", nickname);
         editor.apply();
 
-        // 사용자에게 저장 완료 메시지 표시
-        Toast.makeText(MyPageView.this, "저장되었습니다.", Toast.LENGTH_SHORT).show();
     }
 
     // 로그아웃
