@@ -113,13 +113,14 @@ public class MainActivity_page8 extends AppCompatActivity {
             }
         });
 
+        // 기본 참여자 추가 ("신호연")
+        addParticipant("신호연");
+
         // 참여자 추가 버튼 클릭 시 처리
         addParticipantButton.setOnClickListener(v -> {
             String participant = participantName.getText().toString();
             if (!participant.isEmpty()) {
-                TextView textView = new TextView(MainActivity_page8.this);
-                textView.setText(participant);
-                participantList.addView(textView);
+                addParticipant(participant);
                 participantName.setText(""); // 입력 필드를 초기화합니다.
             } else {
                 participantName.setError("참가자 이름을 입력하세요.");
@@ -187,5 +188,14 @@ public class MainActivity_page8 extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
         String dateRange = sdf.format(startDate.getTime()) + " - " + sdf.format(endDate.getTime());
         date.setText(dateRange);
+    }
+
+    // 참여자 추가 함수
+    private void addParticipant(String name) {
+        TextView textView = new TextView(MainActivity_page8.this);
+        textView.setText(name);
+        textView.setTextSize(18); // 글씨 크기를 18sp로 설정
+        textView.setTextColor(getResources().getColor(android.R.color.black)); // 글씨 색을 검정으로 설정
+        participantList.addView(textView);
     }
 }
