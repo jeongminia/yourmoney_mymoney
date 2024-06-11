@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -16,25 +15,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.example.nisonnaeson.R;
-import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ReportActivity extends AppCompatActivity {
 
-    private HorizontalBarChart barChart;
     private PieChart pieChart;
 
     @Override
@@ -88,27 +79,12 @@ public class ReportActivity extends AppCompatActivity {
 
         parentLayout.addView(toolbarLayout);
 
-        // Bar chart for user balances
-        barChart = new HorizontalBarChart(this);
-        barChart.setId(View.generateViewId());
-        RelativeLayout.LayoutParams barChartParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT, convertToPx(200)); // Use int for conversion
-        barChartParams.addRule(RelativeLayout.BELOW, toolbarLayout.getId());
-        barChartParams.setMargins(0, 0, 0, convertToPx(20)); // Use int for conversion
-        barChart.setLayoutParams(barChartParams);
-        barChart.setTouchEnabled(false); // 터치 이벤트 비활성화
-        barChart.setScaleEnabled(false); // 확대/축소 비활성화
-        barChart.setPinchZoom(false); // 핀치 줌 비활성화
-        barChart.setDoubleTapToZoomEnabled(false); // 더블 탭으로 확대 비활성화
-        barChart.setDragEnabled(false); // 드래그 비활성화
-        parentLayout.addView(barChart);
-
         // Pie chart
         pieChart = new PieChart(this);
         pieChart.setId(View.generateViewId());
         RelativeLayout.LayoutParams pieChartParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT, convertToPx(300)); // Use int for conversion
-        pieChartParams.addRule(RelativeLayout.BELOW, barChart.getId());
+        pieChartParams.addRule(RelativeLayout.BELOW, toolbarLayout.getId());
         pieChartParams.setMargins(0, convertToPx(20), 0, convertToPx(20)); // Use int for conversion
         pieChart.setLayoutParams(pieChartParams);
         pieChart.setTouchEnabled(false); // 터치 이벤트 비활성화
@@ -142,51 +118,9 @@ public class ReportActivity extends AppCompatActivity {
         setContentView(parentLayout);
 
         // Initialize charts with dummy data
-        updateBarChart();
         updatePieChart();
     }
 
-    private void updateBarChart() {
-        List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0f, 5900f));
-        entries.add(new BarEntry(1f, -8500f));
-        entries.add(new BarEntry(2f, 1800f));
-
-        BarDataSet dataSet = new BarDataSet(entries, "User Balances");
-        dataSet.setColors(Color.parseColor("#bcdaa8"), Color.parseColor("#eebebe"), Color.parseColor("#bcdaa8"));
-        dataSet.setValueTextColor(Color.BLACK);
-
-        BarData barData = new BarData(dataSet);
-
-        barChart.setData(barData);
-        barChart.invalidate(); // refresh
-
-        YAxis leftAxis = barChart.getAxisLeft();
-        YAxis rightAxis = barChart.getAxisRight();
-        XAxis xAxis = barChart.getXAxis();
-
-        leftAxis.setDrawLabels(false); // Remove left Y-axis labels
-        rightAxis.setDrawLabels(false); // Remove right Y-axis labels
-        xAxis.setDrawLabels(false); // Remove X-axis labels
-
-        leftAxis.setDrawGridLines(false); // Remove grid lines
-        rightAxis.setDrawGridLines(false); // Remove grid lines
-        xAxis.setDrawGridLines(false); // Remove grid lines
-
-        leftAxis.setDrawAxisLine(false); // Remove axis line
-        rightAxis.setDrawAxisLine(false); // Remove axis line
-
-        barChart.getDescription().setEnabled(false); // Remove description label
-        barChart.getLegend().setEnabled(false); // Remove legend
-
-        barChart.setDrawBorders(false); // Remove border lines
-        barChart.setDrawGridBackground(false); // Remove grid background
-
-        barChart.getAxisRight().setEnabled(false); // Remove right axis completely
-
-        // Custom renderer to draw values inside bars and names next to bars
-        barChart.setRenderer(new CustomBarChartRenderer(barChart, barChart.getAnimator(), barChart.getViewPortHandler(), this));
-    }
     private void updatePieChart() {
         List<PieEntry> entries = new ArrayList<>();
         entries.add(new PieEntry(40f, "식비"));
