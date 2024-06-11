@@ -89,9 +89,10 @@ public class MainActivity_page7 extends AppCompatActivity {
             String usageDetails = data.getStringExtra("usageDetails");
             String category = data.getStringExtra("category");
             String imageUri = data.getStringExtra("imageUri");
+            String currency = data.getStringExtra("currency");
 
             itemDate.setText(date);
-            itemPrice.setText(price);
+            itemPrice.setText(price + " " + currency);
             itemUsageDetails.setText(usageDetails);
             itemCategory.setText(category);
             if (imageUri != null) {

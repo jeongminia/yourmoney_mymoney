@@ -18,11 +18,11 @@
         <item>기타</item>
     </string-array>
     <string-array name="currency_array">
+        <item>KRW - South Korean Won</item>
         <item>USD - US Dollar</item>
         <item>EUR - Euro</item>
         <item>JPY - Japanese Yen</item>
         <item>CNY - Chinese Yuan</item>
-        <item>KRW - South Korean Won</item>
         <item>AUD - Australian Dollar</item>
         <item>GBP - British Pound</item>
     </string-array>

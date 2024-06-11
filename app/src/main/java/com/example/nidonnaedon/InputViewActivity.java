@@ -85,7 +85,7 @@ public class InputViewActivity extends AppCompatActivity {
             String imageUri = intent.getStringExtra("imageUri");
 
             editTextDate.setText(date);
-            editTextAmount.setText(price);
+            editTextAmount.setText(price != null ? price.split(" ")[0] : "");
             editTextUsageDetails.setText(usageDetails);
             if (imageUri != null) {
                 Uri uri = Uri.parse(imageUri);
@@ -97,27 +97,40 @@ public class InputViewActivity extends AppCompatActivity {
                 imageViewPhoto.setVisibility(View.GONE);
                 buttonAddPhoto.setVisibility(View.VISIBLE);
             }
-
-            ArrayAdapter<CharSequence> currencyAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.currency_array)) {
-                @Override
-                public View getView(int position, View convertView, ViewGroup parent) {
-                    View view = super.getView(position, convertView, parent);
-                    if (view instanceof TextView) {
-                        TextView textView = (TextView) view;
-                        String currentText = textView.getText().toString();
-                        if (currentText.contains("-")) {
-                            currentText = currentText.substring(0, currentText.indexOf("-")).trim();
-                        }
-                        textView.setText(currentText);
-                    }
-                    return view;
-                }
-            };
-            currencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerCurrency.setAdapter(currencyAdapter);
         }
 
+        ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(this, R.array.category_array, android.R.layout.simple_spinner_item);
+        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCategory.setAdapter(categoryAdapter);
+
+        ArrayAdapter<CharSequence> currencyAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.currency_array)) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                if (view instanceof TextView) {
+                    TextView textView = (TextView) view;
+                    String currentText = textView.getText().toString();
+                    if (currentText.contains("-")) {
+                        currentText = currentText.substring(0, currentText.indexOf("-")).trim();
+                    }
+                    textView.setText(currentText);
+                }
+                return view;
+            }
+        };
+        currencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCurrency.setAdapter(currencyAdapter);
+
+        spinnerCurrency.setSelection(currencyAdapter.getPosition("KRW"));
+
         buttonAddPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkPermissionsAndSelectPhoto();
+            }
+        });
+
+        imageViewPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 checkPermissionsAndSelectPhoto();
