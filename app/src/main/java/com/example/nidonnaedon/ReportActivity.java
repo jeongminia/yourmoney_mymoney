@@ -94,6 +94,11 @@ public class ReportActivity extends AppCompatActivity {
         barChartParams.addRule(RelativeLayout.BELOW, toolbarLayout.getId());
         barChartParams.setMargins(0, 0, 0, convertToPx(20)); // Use int for conversion
         barChart.setLayoutParams(barChartParams);
+        barChart.setTouchEnabled(false); // 터치 이벤트 비활성화
+        barChart.setScaleEnabled(false); // 확대/축소 비활성화
+        barChart.setPinchZoom(false); // 핀치 줌 비활성화
+        barChart.setDoubleTapToZoomEnabled(false); // 더블 탭으로 확대 비활성화
+        barChart.setDragEnabled(false); // 드래그 비활성화
         parentLayout.addView(barChart);
 
         // Pie chart
@@ -104,6 +109,8 @@ public class ReportActivity extends AppCompatActivity {
         pieChartParams.addRule(RelativeLayout.BELOW, barChart.getId());
         pieChartParams.setMargins(0, convertToPx(20), 0, convertToPx(20)); // Use int for conversion
         pieChart.setLayoutParams(pieChartParams);
+        pieChart.setTouchEnabled(false); // 터치 이벤트 비활성화
+        pieChart.setRotationEnabled(false); // 회전 비활성화
         parentLayout.addView(pieChart);
 
         // 버튼 생성
