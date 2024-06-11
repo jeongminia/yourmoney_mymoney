@@ -283,7 +283,7 @@
     <Button
         android:id="@+id/buttonSubmit"
         android:layout_width="330dp"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:text="입력"
         android:gravity="center"
         style="@style/CustomButtonStyle"

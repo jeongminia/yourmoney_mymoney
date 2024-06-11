@@ -194,7 +194,7 @@
     <Button
         android:id="@+id/create_account_button"
         android:layout_width="330dp"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:text="가계부 생성"
         style="@style/CustomButtonStyle"
         android:layout_alignParentBottom="true"

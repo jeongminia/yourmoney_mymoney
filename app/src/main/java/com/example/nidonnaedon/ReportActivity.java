@@ -3,9 +3,8 @@ package com.example.nidonnaedon;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.view.ContextThemeWrapper;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -40,17 +39,18 @@ public class ReportActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Parent LinearLayout
-        LinearLayout parentLayout = new LinearLayout(this);
-        parentLayout.setOrientation(LinearLayout.VERTICAL);
+        // Parent RelativeLayout
+        RelativeLayout parentLayout = new RelativeLayout(this);
         parentLayout.setBackgroundColor(Color.WHITE); // 배경 색 흰색으로 설정
-        parentLayout.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        parentLayout.setLayoutParams(new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
 
         // Toolbar
         RelativeLayout toolbarLayout = new RelativeLayout(this);
-        toolbarLayout.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, convertToPx(58))); // Use int for conversion
+        toolbarLayout.setId(View.generateViewId());
+        RelativeLayout.LayoutParams toolbarParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT, convertToPx(58)); // Use int for conversion
+        toolbarLayout.setLayoutParams(toolbarParams);
         toolbarLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
         ImageView backButton = new ImageView(this);
@@ -69,6 +69,7 @@ public class ReportActivity extends AppCompatActivity {
         toolbarLayout.addView(backButton);
 
         TextView titleView = new TextView(this);
+        titleView.setId(View.generateViewId());
         Intent intent = getIntent();
         String title = intent.getStringExtra("title"); // AccountViewActivity에서 전달된 타이틀
         if (title != null) {
@@ -87,31 +88,47 @@ public class ReportActivity extends AppCompatActivity {
 
         // Bar chart for user balances
         barChart = new HorizontalBarChart(this);
-        LinearLayout.LayoutParams barChartParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, convertToPx(200)); // Use int for conversion
+        barChart.setId(View.generateViewId());
+        RelativeLayout.LayoutParams barChartParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT, convertToPx(200)); // Use int for conversion
+        barChartParams.addRule(RelativeLayout.BELOW, toolbarLayout.getId());
         barChartParams.setMargins(0, 0, 0, convertToPx(20)); // Use int for conversion
         barChart.setLayoutParams(barChartParams);
         parentLayout.addView(barChart);
 
         // Pie chart
         pieChart = new PieChart(this);
-        LinearLayout.LayoutParams pieChartParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, convertToPx(300)); // Use int for conversion
+        pieChart.setId(View.generateViewId());
+        RelativeLayout.LayoutParams pieChartParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT, convertToPx(300)); // Use int for conversion
+        pieChartParams.addRule(RelativeLayout.BELOW, barChart.getId());
         pieChartParams.setMargins(0, convertToPx(20), 0, convertToPx(20)); // Use int for conversion
         pieChart.setLayoutParams(pieChartParams);
         parentLayout.addView(pieChart);
 
-        // Save button
-        Context context = new ContextThemeWrapper(this, R.style.CustomButtonStyle);
-        Button saveButton = new Button(context);
-        saveButton.setText("나의 가계부에 담기");
+        // 버튼 생성
+        Button button = new Button(this);
+        button.setText("나의 가게부에 담기");
 
-        LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        buttonParams.gravity = Gravity.CENTER_HORIZONTAL; // Center horizontally
-        buttonParams.setMargins(convertToPx(90), convertToPx(120), convertToPx(90), convertToPx(20)); // Use int for conversion
-        saveButton.setLayoutParams(buttonParams);
-        parentLayout.addView(saveButton);
+        // 버튼 스타일 설정
+        button.setBackgroundColor(Color.parseColor("#DCE7D5"));
+        button.setTextColor(Color.parseColor("#000000"));
+        button.setElevation(convertToPx(2));
+
+        GradientDrawable buttonBackground = new GradientDrawable();
+        buttonBackground.setColor(Color.parseColor("#DCE7D5"));
+        buttonBackground.setCornerRadius(convertToPx(5));
+        buttonBackground.setStroke(convertToPx(1), Color.parseColor("#818181"));
+        button.setBackground(buttonBackground);
+
+        RelativeLayout.LayoutParams buttonLayoutParams = new RelativeLayout.LayoutParams(
+                convertToPx(330), convertToPx(56)); // 버튼 크기를 명시적으로 설정
+        buttonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        buttonLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        buttonLayoutParams.setMargins(convertToPx(16), convertToPx(16), convertToPx(16), convertToPx(16));
+        button.setLayoutParams(buttonLayoutParams);
+
+        parentLayout.addView(button);
 
         setContentView(parentLayout);
 
@@ -195,4 +212,5 @@ public class ReportActivity extends AppCompatActivity {
     private int convertToPx(int dp) {
         return (int) (dp * getResources().getDisplayMetrics().density);
     }
+
 }
