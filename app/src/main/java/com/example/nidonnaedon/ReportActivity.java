@@ -49,7 +49,7 @@ public class ReportActivity extends AppCompatActivity {
 
         // Parent RelativeLayout
         RelativeLayout parentLayout = new RelativeLayout(this);
-        parentLayout.setBackgroundColor(Color.WHITE); // 배경 색 흰색으로 설정
+        parentLayout.setBackgroundColor(Color.parseColor("#F5F5F5")); // 배경 색 흰색으로 설정
         parentLayout.setLayoutParams(new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
 
