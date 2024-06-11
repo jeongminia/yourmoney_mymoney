@@ -34,10 +34,15 @@ public class AccountAdapter extends ArrayAdapter<Account> {
         category.setText(account.getCategory());
         date.setText(account.getDate());
 
-        // amount에서 필요한 부분만 추출하여 설정
+        // amount에서 첫 단어만 추출하여 설정
         String fullAmount = account.getAmount();
-        String shortAmount = fullAmount.split("-")[0];
-        amount.setText(shortAmount);
+        String[] amountParts = fullAmount.split(" ");
+        if (amountParts.length > 0) {
+            String shortAmount = amountParts[0] + " " + amountParts[1];
+            amount.setText(shortAmount);
+        } else {
+            amount.setText(fullAmount);
+        }
 
         return convertView;
     }
