@@ -1,13 +1,14 @@
 plugins {
     alias(libs.plugins.android.application)
+
 }
 
 android {
-    namespace = "com.example.nisonnaeson"  // namespace는 원하는 것을 선택합니다.
+    namespace = "com.example.nidonnaedon"  // namespace는 원하는 것을 선택합니다.
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.nisonnaeson"  // applicationId는 원하는 것을 선택합니다.
+        applicationId = "com.example.nidonnaedon"  // applicationId는 원하는 것을 선택합니다.
         minSdk = 24
         targetSdk = 34
         versionCode = 1

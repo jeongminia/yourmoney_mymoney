@@ -8,7 +8,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
-import com.example.nisonnaeson.R;
+import com.example.nidonnaedon.R;
 
 public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     private final Drawable divider;

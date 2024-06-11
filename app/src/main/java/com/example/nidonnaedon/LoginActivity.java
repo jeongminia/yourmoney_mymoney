@@ -13,7 +13,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
-import com.example.nisonnaeson.R;
+import com.example.nidonnaedon.R;
 import com.google.android.flexbox.AlignItems;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.flexbox.FlexDirection;

@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import com.example.nisonnaeson.R;
+import com.example.nidonnaedon.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

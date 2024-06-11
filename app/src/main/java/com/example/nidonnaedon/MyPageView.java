@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.nisonnaeson.R;
+import com.example.nidonnaedon.R;
 
 public class MyPageView extends AppCompatActivity {
 

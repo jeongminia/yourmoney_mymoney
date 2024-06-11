@@ -44,7 +44,7 @@ class CustomBarChartRenderer extends HorizontalBarChartRenderer {
         Paint textPaint = new Paint();
         textPaint.setTextSize(convertToPx(12)); // Use float for text size
         textPaint.setColor(Color.BLACK);
-        textPaint.setTypeface(ResourcesCompat.getFont(activity, com.example.nisonnaeson.R.font.nanumpenscript_regular)); // Correct R import
+        textPaint.setTypeface(ResourcesCompat.getFont(activity, com.example.nidonnaedon.R.font.nanumpenscript_regular)); // Correct R import
 
         String[] labels = new String[]{"유재원", "곽지원", "신호연"};
         for (int i = 0; i < labels.length; i++) {

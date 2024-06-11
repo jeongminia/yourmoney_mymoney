@@ -7,7 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.nisonnaeson.R;
+import com.example.nidonnaedon.R;
 
 public class CreateAccountActivity extends AppCompatActivity {
 

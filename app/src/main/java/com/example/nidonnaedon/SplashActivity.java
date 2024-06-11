@@ -8,7 +8,7 @@ import android.view.Window;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.nisonnaeson.R;
+import com.example.nidonnaedon.R;
 
 public class SplashActivity extends AppCompatActivity {
 

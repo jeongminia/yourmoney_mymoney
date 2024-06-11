@@ -10,7 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.nisonnaeson.R;
+import com.example.nidonnaedon.R;
 
 public class MainActivity_page7 extends AppCompatActivity {
 

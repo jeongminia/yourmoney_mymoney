@@ -1,6 +1,5 @@
 package com.example.nidonnaedon;
 
-import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -27,7 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.nisonnaeson.R;
+import com.example.nidonnaedon.R;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -35,7 +35,7 @@ import java.util.Calendar;
 public class InputViewActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_SELECT_PHOTO = 1;
-    private static final int REQUEST_CODE_PERMISSIONS = 2;
+    private static final int REQUEST_READ_EXTERNAL_STORAGE = 2;
 
     private EditText editTextAmount, editTextDate, editTextUsageDetails;
     private Spinner spinnerCategory, spinnerCurrency;
@@ -66,6 +66,14 @@ public class InputViewActivity extends AppCompatActivity {
         checkboxYooJaewon = findViewById(R.id.checkboxYooJaewon);
         friendList = findViewById(R.id.friendList);
         backButton = findViewById(R.id.back_button);
+
+        // 권한 요청
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
+                    REQUEST_READ_EXTERNAL_STORAGE);
+        }
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,7 +135,7 @@ public class InputViewActivity extends AppCompatActivity {
         View.OnClickListener photoClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkPermissionsAndSelectPhoto();
+                selectPhoto();
             }
         };
         buttonAddPhoto.setOnClickListener(photoClickListener);
@@ -185,29 +193,9 @@ public class InputViewActivity extends AppCompatActivity {
         editTextDate.setText(year + "-" + (month + 1) + "-" + day);
     }
 
-    private void checkPermissionsAndSelectPhoto() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_PERMISSIONS);
-        } else {
-            selectPhoto();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CODE_PERMISSIONS) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                selectPhoto();
-            } else {
-                Toast.makeText(this, "권한이 필요합니다.", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
     private void selectPhoto() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
         startActivityForResult(intent, REQUEST_CODE_SELECT_PHOTO);
     }
 
@@ -222,7 +210,6 @@ public class InputViewActivity extends AppCompatActivity {
                 imageViewPhoto.setVisibility(View.VISIBLE);
                 buttonAddPhoto.setVisibility(View.GONE);
 
-                // 이미지 URI를 저장합니다.
                 selectedImageUri = selectedImage.toString();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -271,5 +258,18 @@ public class InputViewActivity extends AppCompatActivity {
         );
         datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         datePickerDialog.show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_READ_EXTERNAL_STORAGE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 권한이 허용된 경우 처리
+            } else {
+                // 권한이 거부된 경우 처리
+                Toast.makeText(this, "권한이 거부되었습니다.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
