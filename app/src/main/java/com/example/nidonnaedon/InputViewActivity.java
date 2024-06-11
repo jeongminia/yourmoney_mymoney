@@ -123,19 +123,16 @@ public class InputViewActivity extends AppCompatActivity {
 
         spinnerCurrency.setSelection(currencyAdapter.getPosition("KRW"));
 
-        buttonAddPhoto.setOnClickListener(new View.OnClickListener() {
+        // 버튼과 사진 이미지뷰에 클릭 리스너를 추가합니다.
+        View.OnClickListener photoClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 checkPermissionsAndSelectPhoto();
             }
-        });
-
-        imageViewPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkPermissionsAndSelectPhoto();
-            }
-        });
+        };
+        buttonAddPhoto.setOnClickListener(photoClickListener);
+        imageViewPhoto.setOnClickListener(photoClickListener);
+        photoContainer.setOnClickListener(photoClickListener); // photoContainer 클릭 리스너 추가
 
         calendarIcon.setOnClickListener(new View.OnClickListener() {
             @Override
