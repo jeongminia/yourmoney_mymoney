@@ -268,7 +268,6 @@ public class InputViewActivity extends AppCompatActivity {
                 // 권한이 허용된 경우 처리
             } else {
                 // 권한이 거부된 경우 처리
-                Toast.makeText(this, "권한이 거부되었습니다.", Toast.LENGTH_SHORT).show();
             }
         }
     }

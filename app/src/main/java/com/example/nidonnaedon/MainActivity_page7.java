@@ -1,16 +1,16 @@
 package com.example.nidonnaedon;
 
+import com.bumptech.glide.Glide;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.nidonnaedon.R;
 
 public class MainActivity_page7 extends AppCompatActivity {
 
@@ -24,7 +24,6 @@ public class MainActivity_page7 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page7);
-
         itemDate = findViewById(R.id.item_date);
         itemPrice = findViewById(R.id.item_price);
         itemUsageDetails = findViewById(R.id.item_usage_details);
@@ -44,9 +43,21 @@ public class MainActivity_page7 extends AppCompatActivity {
             itemPrice.setText(price);
             itemUsageDetails.setText(usageDetails);
             itemCategory.setText(category);
+
+            Log.d("MainActivity_page7", "Received image URI: " + imageUri);
+
             if (imageUri != null) {
                 itemImageUri = Uri.parse(imageUri);
-                itemImageView.setImageURI(itemImageUri);
+                // Glide를 사용하여 이미지 로드
+                Glide.with(this)
+                        .load(itemImageUri)
+                        .placeholder(R.drawable.ic_menu_gallery) // 이미지가 비어있을 때 기본 이미지 로드
+                        .into(itemImageView);
+            } else {
+                // 이미지 URI가 비어있을 때 기본 이미지 로드
+                Glide.with(this)
+                        .load(R.drawable.ic_menu_gallery)
+                        .into(itemImageView);
             }
         }
 
@@ -95,9 +106,21 @@ public class MainActivity_page7 extends AppCompatActivity {
             itemPrice.setText(price + " " + currency);
             itemUsageDetails.setText(usageDetails);
             itemCategory.setText(category);
+
+            Log.d("MainActivity_page7", "Updated image URI: " + imageUri);
+
             if (imageUri != null) {
                 itemImageUri = Uri.parse(imageUri);
-                itemImageView.setImageURI(itemImageUri);
+                // Glide를 사용하여 수정된 이미지 로드
+                Glide.with(this)
+                        .load(itemImageUri)
+                        .placeholder(R.drawable.ic_menu_gallery) // 이미지가 비어있을 때 기본 이미지 로드
+                        .into(itemImageView);
+            } else {
+                // 이미지 URI가 비어있을 때 기본 이미지 로드
+                Glide.with(this)
+                        .load(R.drawable.ic_menu_gallery)
+                        .into(itemImageView);
             }
         }
     }

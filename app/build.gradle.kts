@@ -1,49 +1,43 @@
 plugins {
-    alias(libs.plugins.android.application)
-
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
-    namespace = "com.example.nidonnaedon"  // namespace는 원하는 것을 선택합니다.
-    compileSdk = 34
+    namespace = "com.example.nidonnaedon"
+    compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.example.nidonnaedon"  // applicationId는 원하는 것을 선택합니다.
-        minSdk = 24
-        targetSdk = 34
+        applicationId = "com.example.nidonnaedon"
+        minSdk = 21
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
-        vectorDrawables.useSupportLibrary = true
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
 
 dependencies {
-    implementation(libs.appcompat)
-    implementation(libs.material)
-    implementation(libs.activity)
-    implementation(libs.constraintlayout)
-    implementation ("com.google.android.material:material:1.4.0")
-    implementation("com.google.android.flexbox:flexbox:3.0.0")
-    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
-    implementation ("com.google.android.material:material:1.4.0")
-    implementation ("androidx.core:core-ktx:1.6.0")
-    implementation ("androidx.appcompat:appcompat:1.3.1")
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.ext.junit)
-    androidTestImplementation(libs.espresso.core)
+    implementation("androidx.core:core-ktx:1.10.1")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.8.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
+    implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0") // MPAndroidChart 라이브러리 추가
+    implementation("com.google.android.flexbox:flexbox:3.0.0") // Flexbox 레이아웃 라이브러리 추가 (올바른 버전)
+    implementation("androidx.annotation:annotation:1.6.0") // Nullable 어노테이션 추가
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }
