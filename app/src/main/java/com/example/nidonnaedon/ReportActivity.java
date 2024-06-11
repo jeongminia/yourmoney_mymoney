@@ -26,6 +26,8 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -185,7 +187,6 @@ public class ReportActivity extends AppCompatActivity {
         // Custom renderer to draw values inside bars and names next to bars
         barChart.setRenderer(new CustomBarChartRenderer(barChart, barChart.getAnimator(), barChart.getViewPortHandler(), this));
     }
-
     private void updatePieChart() {
         List<PieEntry> entries = new ArrayList<>();
         entries.add(new PieEntry(40f, "식비"));
@@ -197,27 +198,28 @@ public class ReportActivity extends AppCompatActivity {
         dataSet.setColors(Color.parseColor("#e6c0ff"),
                 Color.parseColor("#b8ffcc"),
                 Color.parseColor("#ffdca7"),
-                Color.parseColor("#ff8e8f")); // 예시 색상
-        dataSet.setValueTextColor(Color.BLACK); // 글씨 색을 검정색으로 설정
-        dataSet.setValueTextSize(14f); // 숫자 폰트 사이즈 키우기
-
-        dataSet.setSliceSpace(1f); // 조각 간의 간격 설정
-        dataSet.setValueLineColor(Color.parseColor("#262625")); // 경계선 색상 검은색으로 설정
+                Color.parseColor("#ff8e8f"));
+        dataSet.setSliceSpace(1f);
+        dataSet.setValueLineColor(Color.BLACK);
+        dataSet.setValueTextSize(14f);
+        dataSet.setValueTextColor(Color.BLACK);
+        dataSet.setValueFormatter(new PercentFormatter(pieChart));
 
         PieData pieData = new PieData(dataSet);
-        pieData.setValueFormatter(new CustomValueFormatter()); // 커스텀 ValueFormatter 설정
 
         pieChart.setData(pieData);
-        pieChart.setDrawHoleEnabled(false); // 중심의 구멍 제거
-        pieChart.getDescription().setEnabled(false); // 설명 라벨 제거
-        pieChart.getLegend().setEnabled(false); // 범례 제거
-        pieChart.invalidate(); // 새로 고침
+        pieChart.setDrawHoleEnabled(false);
+        pieChart.getDescription().setEnabled(false);
+        pieChart.getLegend().setEnabled(false);
 
-        pieChart.setEntryLabelColor(Color.TRANSPARENT); // 항목 이름 비활성화
+        pieChart.setEntryLabelColor(Color.BLACK);
+        pieChart.setEntryLabelTextSize(14f);
+        pieChart.setUsePercentValues(true);
+
+        pieChart.invalidate();
     }
 
     private int convertToPx(int dp) {
         return (int) (dp * getResources().getDisplayMetrics().density);
     }
-
 }
