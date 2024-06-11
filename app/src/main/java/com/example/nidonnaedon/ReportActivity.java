@@ -1,32 +1,47 @@
 package com.example.nidonnaedon;
 
-import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.example.nisonnaeson.R;
+import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 public class ReportActivity extends AppCompatActivity {
 
     private PieChart pieChart;
+    private HorizontalBarChart barChart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,12 +94,22 @@ public class ReportActivity extends AppCompatActivity {
 
         parentLayout.addView(toolbarLayout);
 
+        // Horizontal bar chart
+        barChart = new HorizontalBarChart(this);
+        barChart.setId(View.generateViewId());
+        RelativeLayout.LayoutParams barChartParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT, convertToPx(200)); // Use int for conversion
+        barChartParams.addRule(RelativeLayout.BELOW, toolbarLayout.getId());
+        barChartParams.setMargins(0, convertToPx(20), 0, 0); // Use int for conversion
+        barChart.setLayoutParams(barChartParams);
+        parentLayout.addView(barChart);
+
         // Pie chart
         pieChart = new PieChart(this);
         pieChart.setId(View.generateViewId());
         RelativeLayout.LayoutParams pieChartParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT, convertToPx(300)); // Use int for conversion
-        pieChartParams.addRule(RelativeLayout.BELOW, toolbarLayout.getId());
+        pieChartParams.addRule(RelativeLayout.BELOW, barChart.getId());
         pieChartParams.setMargins(0, convertToPx(20), 0, convertToPx(20)); // Use int for conversion
         pieChart.setLayoutParams(pieChartParams);
         pieChart.setTouchEnabled(false); // 터치 이벤트 비활성화
@@ -117,8 +142,64 @@ public class ReportActivity extends AppCompatActivity {
 
         setContentView(parentLayout);
 
-        // Initialize charts with dummy data
+        // Initialize charts with data
+        updateBarChart();
         updatePieChart();
+    }
+
+    private void updateBarChart() {
+        List<BarEntry> entries = new ArrayList<>();
+        entries.add(new BarEntry(0, 5900));
+        entries.add(new BarEntry(1, 1800));
+        entries.add(new BarEntry(2, -8500));
+
+        BarDataSet dataSet = new BarDataSet(entries, "Values");
+        dataSet.setColors(Color.parseColor("#BCDAA9"), Color.parseColor("#BCDAA9"), Color.parseColor("#EFBEBE"));
+        dataSet.setValueTextSize(14f);
+        dataSet.setValueTextColor(Color.BLACK);
+
+        BarData barData = new BarData(dataSet);
+        barData.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getBarLabel(BarEntry barEntry) {
+                return String.format("%+d원", (int) barEntry.getY());
+            }
+        });
+
+        barChart.setData(barData);
+        barChart.getDescription().setEnabled(false);
+        barChart.getLegend().setEnabled(false);
+
+        barChart.getXAxis().setDrawGridLines(false); // Hide grid lines
+        barChart.getAxisLeft().setDrawGridLines(false);
+        barChart.getAxisRight().setDrawGridLines(false);
+        barChart.getAxisRight().setDrawLabels(false);
+        barChart.getAxisLeft().setDrawLabels(false);
+        barChart.getXAxis().setDrawAxisLine(false); // Hide x-axis line
+
+        // Add names next to the bars
+        barChart.getXAxis().setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return ""; // Return empty to avoid labels on the x-axis
+            }
+        });
+
+        barChart.getAxisLeft().setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                if (value == 0) return "신호연";
+                if (value == 1) return "곽지원";
+                if (value == 2) return "유재원";
+                return "";
+            }
+        });
+
+        barChart.getAxisLeft().setDrawAxisLine(false);
+        barChart.getAxisRight().setDrawAxisLine(false);
+
+        barChart.setFitBars(true);
+        barChart.invalidate();
     }
 
     private void updatePieChart() {
@@ -137,7 +218,13 @@ public class ReportActivity extends AppCompatActivity {
         dataSet.setValueLineColor(Color.BLACK);
         dataSet.setValueTextSize(14f);
         dataSet.setValueTextColor(Color.BLACK);
-        dataSet.setValueFormatter(new PercentFormatter(pieChart));
+
+        // Add the following line to set the offset percentage
+        dataSet.setValueLinePart1OffsetPercentage(80.f);
+
+        // Apply the custom value formatter
+        CustomValueFormatter customFormatter = new CustomValueFormatter();
+        dataSet.setValueFormatter(customFormatter);
 
         PieData pieData = new PieData(dataSet);
 
@@ -146,11 +233,12 @@ public class ReportActivity extends AppCompatActivity {
         pieChart.getDescription().setEnabled(false);
         pieChart.getLegend().setEnabled(false);
 
-        pieChart.setEntryLabelColor(Color.BLACK);
-        pieChart.setEntryLabelTextSize(14f);
-        pieChart.setUsePercentValues(true);
+        // Disable default entry labels to avoid duplication
+        pieChart.setDrawEntryLabels(false);
 
-        pieChart.invalidate();
+        // Refresh the chart
+        pieChart.notifyDataSetChanged(); // Notify that the data has changed
+        pieChart.invalidate(); // Refresh the chart
     }
 
     private int convertToPx(int dp) {
