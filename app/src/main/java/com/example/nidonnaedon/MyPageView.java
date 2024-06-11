@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.nidonnaedon.R;
+import android.content.Context;
+import android.view.inputmethod.InputMethodManager;
 
 public class MyPageView extends AppCompatActivity {
 
@@ -90,6 +92,13 @@ public class MyPageView extends AppCompatActivity {
         editor.putString("name", name);
         editor.putString("nickname", nickname);
         editor.apply();
+
+        // 키보드 숨기기
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
 
         Toast.makeText(this, "저장되었습니다", Toast.LENGTH_SHORT).show();
     }
