@@ -67,6 +67,7 @@ public class MainActivity_page8 extends AppCompatActivity {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 TextView textView = (TextView) view;
+                textView.setTextColor(getResources().getColor(android.R.color.black)); // 텍스트 색상 설정
                 textView.setText(formatCurrencyString(textView.getText().toString()));
                 return view;
             }
@@ -75,6 +76,7 @@ public class MainActivity_page8 extends AppCompatActivity {
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
                 View view = super.getDropDownView(position, convertView, parent);
                 TextView textView = (TextView) view;
+                textView.setTextColor(getResources().getColor(android.R.color.black)); // 텍스트 색상 설정
                 textView.setText(formatCurrencyString(textView.getText().toString()));
                 return view;
             }

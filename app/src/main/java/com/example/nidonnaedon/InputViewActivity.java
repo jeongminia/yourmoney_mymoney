@@ -264,6 +264,7 @@ public class InputViewActivity extends AppCompatActivity {
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         String selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
                         editTextDate.setText(selectedDate);
+                        editTextDate.setTextColor(getResources().getColor(android.R.color.black)); // 텍스트 색상 설정
                     }
                 },
                 year, month, day

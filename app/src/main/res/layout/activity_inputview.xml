@@ -55,7 +55,7 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/text_underline">
+                android:background="@drawable/edit_text_underline">
 
                 <EditText
                     android:id="@+id/editTextUsageDetails"
@@ -90,7 +90,7 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/text_underline">
+                android:background="@drawable/edit_text_underline">
 
                 <EditText
                     android:id="@+id/editTextAmount"
@@ -126,7 +126,7 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/text_underline"
+                android:background="@drawable/edit_text_underline"
                 android:padding="8dp">
 
                 <EditText
@@ -137,7 +137,8 @@
                     android:hint="사용 일자를 선택하세요."
                     android:focusable="false"
                     android:clickable="true"
-                    android:background="@android:color/transparent" />
+                    android:background="@android:color/transparent"
+                    android:textColor="@android:color/black" />
 
                 <ImageView
                     android:id="@+id/calendarIcon"
@@ -182,7 +183,8 @@
                 android:layout_height="wrap_content"
                 android:text="For whom"
                 android:layout_marginBottom="8dp"
-                android:buttonTint="@color/checkbox_selector" />
+                android:buttonTint="@color/checkbox_selector"
+                android:textColor="@android:color/black" />
 
             <LinearLayout
                 android:id="@+id/friendList"
