@@ -91,6 +91,7 @@ public class MyPageView extends AppCompatActivity {
         editor.putString("nickname", nickname);
         editor.apply();
 
+        Toast.makeText(this, "저장되었습니다", Toast.LENGTH_SHORT).show();
     }
 
     // 로그아웃
