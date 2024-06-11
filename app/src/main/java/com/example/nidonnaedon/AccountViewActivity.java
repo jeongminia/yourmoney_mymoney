@@ -61,7 +61,9 @@ public class AccountViewActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-        loadAccounts();
+        // Clear all accounts and add initial data
+        clearAccounts();
+        addInitialData();
 
         if (intent != null) {
             String amount = intent.getStringExtra("amount");
