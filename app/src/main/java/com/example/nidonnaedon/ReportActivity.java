@@ -102,6 +102,7 @@ public class ReportActivity extends AppCompatActivity {
         barChartParams.addRule(RelativeLayout.BELOW, toolbarLayout.getId());
         barChartParams.setMargins(0, convertToPx(20), 0, 0); // Use int for conversion
         barChart.setLayoutParams(barChartParams);
+        barChart.setTouchEnabled(false); // 터치 이벤트 비활성화
         parentLayout.addView(barChart);
 
         // Pie chart
