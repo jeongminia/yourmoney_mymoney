@@ -267,6 +267,15 @@
                     android:visibility="gone" />
             </LinearLayout>
 
+            <!-- 여기에 EditText 추가 -->
+            <EditText
+                android:id="@+id/editTextImageUri"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:padding="8dp"
+                android:visibility="gone" /> <!-- 숨겨진 필드로 이미지 URI 저장 -->
+
         </LinearLayout>
 
     </ScrollView>

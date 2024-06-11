@@ -1,7 +1,9 @@
 package com.example.nidonnaedon;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,7 +11,6 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -21,7 +22,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.nisonnaeson.R;
 
@@ -30,12 +34,16 @@ import java.util.Calendar;
 
 public class InputViewActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CODE_SELECT_PHOTO = 1;
+    private static final int REQUEST_CODE_PERMISSIONS = 2;
+
     private EditText editTextAmount, editTextDate, editTextUsageDetails;
     private Spinner spinnerCategory, spinnerCurrency;
     private ImageView buttonAddPhoto, imageViewPhoto, calendarIcon, backButton;
     private Button buttonSubmit;
     private CheckBox checkboxAddFriend, checkboxPayer, checkboxGwakJiwon, checkboxYooJaewon;
     private LinearLayout friendList, photoContainer;
+    private String selectedImageUri; // 선택된 이미지 URI를 저장할 변수
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,10 +82,21 @@ public class InputViewActivity extends AppCompatActivity {
             String price = intent.getStringExtra("price");
             String usageDetails = intent.getStringExtra("usageDetails");
             String category = intent.getStringExtra("category");
+            String imageUri = intent.getStringExtra("imageUri");
 
             editTextDate.setText(date);
             editTextAmount.setText(price);
             editTextUsageDetails.setText(usageDetails);
+            if (imageUri != null) {
+                Uri uri = Uri.parse(imageUri);
+                imageViewPhoto.setImageURI(uri);
+                imageViewPhoto.setVisibility(View.VISIBLE);
+                buttonAddPhoto.setVisibility(View.GONE);
+                selectedImageUri = imageUri; // 이미지 URI 설정
+            } else {
+                imageViewPhoto.setVisibility(View.GONE);
+                buttonAddPhoto.setVisibility(View.VISIBLE);
+            }
 
             ArrayAdapter<CharSequence> currencyAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.currency_array)) {
                 @Override
@@ -101,7 +120,7 @@ public class InputViewActivity extends AppCompatActivity {
         buttonAddPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectPhoto();
+                checkPermissionsAndSelectPhoto();
             }
         });
 
@@ -127,7 +146,7 @@ public class InputViewActivity extends AppCompatActivity {
                     String amount = editTextAmount.getText().toString();
                     String date = editTextDate.getText().toString();
                     String usageDetails = editTextUsageDetails.getText().toString();
-                    String category = spinnerCategory.getSelectedItem().toString();
+                    String category = spinnerCategory.getSelectedItem() != null ? spinnerCategory.getSelectedItem().toString() : "기타";
                     String currency = spinnerCurrency.getSelectedItem() != null ? spinnerCurrency.getSelectedItem().toString() : "";
 
                     Intent resultIntent = new Intent();
@@ -136,6 +155,12 @@ public class InputViewActivity extends AppCompatActivity {
                     resultIntent.putExtra("usageDetails", usageDetails);
                     resultIntent.putExtra("category", category);
                     resultIntent.putExtra("currency", currency);
+
+                    // selectedImageUri가 null인지 확인하고, null이 아닌 경우에만 추가합니다.
+                    if (selectedImageUri != null) {
+                        resultIntent.putExtra("imageUri", selectedImageUri);
+                    }
+
                     setResult(RESULT_OK, resultIntent);
                     finish();
                     overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
@@ -150,21 +175,44 @@ public class InputViewActivity extends AppCompatActivity {
         editTextDate.setText(year + "-" + (month + 1) + "-" + day);
     }
 
+    private void checkPermissionsAndSelectPhoto() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE_PERMISSIONS);
+        } else {
+            selectPhoto();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                selectPhoto();
+            } else {
+                Toast.makeText(this, "권한이 필요합니다.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     private void selectPhoto() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, 1);
+        startActivityForResult(intent, REQUEST_CODE_SELECT_PHOTO);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
+        if (requestCode == REQUEST_CODE_SELECT_PHOTO && resultCode == RESULT_OK && data != null) {
             Uri selectedImage = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
                 imageViewPhoto.setImageBitmap(bitmap);
                 imageViewPhoto.setVisibility(View.VISIBLE);
                 buttonAddPhoto.setVisibility(View.GONE);
+
+                // 이미지 URI를 저장합니다.
+                selectedImageUri = selectedImage.toString();
             } catch (IOException e) {
                 e.printStackTrace();
             }

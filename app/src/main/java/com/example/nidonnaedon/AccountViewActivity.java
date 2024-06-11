@@ -71,9 +71,10 @@ public class AccountViewActivity extends AppCompatActivity {
             String usageDetails = intent.getStringExtra("usageDetails");
             String category = intent.getStringExtra("category");
             String currency = intent.getStringExtra("currency");
+            String imageUri = intent.getStringExtra("imageUri");
 
             if (amount != null && date != null && usageDetails != null && category != null && currency != null) {
-                accountList.add(new Account(usageDetails, category, formatDate(date), amount + " " + currency));
+                accountList.add(new Account(usageDetails, category, formatDate(date), amount + " " + currency, imageUri));
                 adapter.notifyDataSetChanged();
                 saveAccounts();
             }
@@ -84,6 +85,10 @@ public class AccountViewActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent mainPageIntent = new Intent(AccountViewActivity.this, MainActivity_page7.class);
                 mainPageIntent.putExtra("itemName", accountList.get(position).getUsageDetails());
+                mainPageIntent.putExtra("date", accountList.get(position).getDate());
+                mainPageIntent.putExtra("price", accountList.get(position).getAmount());
+                mainPageIntent.putExtra("category", accountList.get(position).getCategory());
+                mainPageIntent.putExtra("imageUri", accountList.get(position).getImageUri());
                 startActivity(mainPageIntent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
@@ -120,9 +125,10 @@ public class AccountViewActivity extends AppCompatActivity {
             String usageDetails = data.getStringExtra("usageDetails");
             String category = data.getStringExtra("category");
             String currency = data.getStringExtra("currency");
+            String imageUri = data.getStringExtra("imageUri");
 
             if (amount != null && date != null && usageDetails != null && category != null && currency != null) {
-                accountList.add(new Account(usageDetails, category, formatDate(date), amount + " " + currency));
+                accountList.add(new Account(usageDetails, category, formatDate(date), amount + " " + currency, imageUri));
                 adapter.notifyDataSetChanged();
                 saveAccounts();
             }
@@ -134,15 +140,19 @@ public class AccountViewActivity extends AppCompatActivity {
         accountList.clear();
         for (String accountString : accountSet) {
             String[] parts = accountString.split(" ");
-            if (parts.length >= 5) {
+            if (parts.length >= 6) {
                 String usageDetails = parts[0];
                 String category = parts[1];
                 String date = formatDate(parts[2]);
                 String amount = parts[3];
+                StringBuilder imageUri = new StringBuilder();
                 for (int i = 4; i < parts.length; i++) {
-                    amount += " " + parts[i];
+                    if (i > 4) {
+                        imageUri.append(" ");
+                    }
+                    imageUri.append(parts[i]);
                 }
-                accountList.add(new Account(usageDetails, category, date, amount));
+                accountList.add(new Account(usageDetails, category, date, amount, imageUri.toString()));
             }
         }
         adapter.notifyDataSetChanged();
@@ -151,7 +161,7 @@ public class AccountViewActivity extends AppCompatActivity {
     private void saveAccounts() {
         Set<String> accountSet = new HashSet<>();
         for (Account account : accountList) {
-            accountSet.add(account.getUsageDetails() + " " + account.getCategory() + " " + account.getDate() + " " + account.getAmount());
+            accountSet.add(account.getUsageDetails() + " " + account.getCategory() + " " + account.getDate() + " " + account.getAmount() + " " + account.getImageUri());
         }
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putStringSet(KEY_ACCOUNTS, accountSet);
@@ -167,8 +177,8 @@ public class AccountViewActivity extends AppCompatActivity {
     }
 
     private void addInitialData() {
-        accountList.add(new Account("휴지", "기타", formatDate("2024-6-5"), "3000 KRW"));
-        accountList.add(new Account("도넛", "식비", formatDate("2024-5-31"), "2500 KRW"));
+        accountList.add(new Account("휴지", "기타", formatDate("2024-6-5"), "3000 KRW", "android.resource://com.example.nisonnaeson/drawable/ic_menu_gallery"));
+        accountList.add(new Account("도넛", "식비", formatDate("2024-5-31"), "2500 KRW", "android.resource://com.example.nisonnaeson/drawable/ic_menu_gallery"));
         saveAccounts();
         adapter.notifyDataSetChanged();
     }
