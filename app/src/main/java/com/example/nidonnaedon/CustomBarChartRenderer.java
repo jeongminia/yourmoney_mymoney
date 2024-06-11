@@ -33,7 +33,8 @@ class CustomBarChartRenderer extends HorizontalBarChartRenderer {
         valuePaint.setTextAlign(Paint.Align.CENTER);
 
         float adjustedX = x > 0 ? x - convertToPx(10) : x + convertToPx(10); // Use float for adjustment
-        c.drawText(valueText, adjustedX, y, valuePaint);
+        String formattedValue = valueText + "원"; // 값 뒤에 "원" 추가
+        c.drawText(formattedValue, adjustedX, y, valuePaint);
     }
 
     @Override
