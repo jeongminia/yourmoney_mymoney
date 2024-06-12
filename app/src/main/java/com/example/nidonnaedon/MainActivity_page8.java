@@ -1,10 +1,12 @@
 package com.example.nidonnaedon;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -124,6 +126,10 @@ public class MainActivity_page8 extends AppCompatActivity {
             if (!participant.isEmpty()) {
                 addParticipant(participant);
                 participantName.setText(""); // 입력 필드를 초기화합니다.
+
+                // 키보드 숨기기
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(participantName.getWindowToken(), 0);
             } else {
                 participantName.setError("참가자 이름을 입력하세요.");
             }
