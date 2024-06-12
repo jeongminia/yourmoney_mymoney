@@ -37,7 +37,7 @@ public class AccountAdapter extends ArrayAdapter<Account> {
         // amount에서 첫 단어만 추출하여 설정
         String fullAmount = account.getAmount();
         String[] amountParts = fullAmount.split(" ");
-        if (amountParts.length > 0) {
+        if (amountParts.length > 1) {
             String shortAmount = amountParts[0] + " " + amountParts[1];
             amount.setText(shortAmount);
         } else {

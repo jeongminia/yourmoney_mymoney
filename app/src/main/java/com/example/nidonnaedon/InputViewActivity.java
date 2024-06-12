@@ -3,12 +3,11 @@ package com.example.nidonnaedon;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -27,9 +26,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.nidonnaedon.R;
-
-import java.io.IOException;
 import java.util.Calendar;
 
 public class InputViewActivity extends AppCompatActivity {
@@ -43,7 +39,7 @@ public class InputViewActivity extends AppCompatActivity {
     private Button buttonSubmit;
     private CheckBox checkboxAddFriend, checkboxPayer, checkboxGwakJiwon, checkboxYooJaewon;
     private LinearLayout friendList, photoContainer;
-    private String selectedImageUri; // 선택된 이미지 URI를 저장할 변수
+    private String selectedImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,11 +92,13 @@ public class InputViewActivity extends AppCompatActivity {
             editTextAmount.setText(price != null ? price.split(" ")[0] : "");
             editTextUsageDetails.setText(usageDetails);
             if (imageUri != null) {
-                Uri uri = Uri.parse(imageUri);
-                imageViewPhoto.setImageURI(uri);
-                imageViewPhoto.setVisibility(View.VISIBLE);
-                buttonAddPhoto.setVisibility(View.GONE);
-                selectedImageUri = imageUri; // 이미지 URI 설정
+                selectedImageUri = imageUri;
+                if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    imageViewPhoto.setImageURI(Uri.parse(imageUri));
+                    imageViewPhoto.setVisibility(View.VISIBLE);
+                    buttonAddPhoto.setVisibility(View.GONE);
+                }
             } else {
                 imageViewPhoto.setVisibility(View.GONE);
                 buttonAddPhoto.setVisibility(View.VISIBLE);
@@ -131,7 +129,6 @@ public class InputViewActivity extends AppCompatActivity {
 
         spinnerCurrency.setSelection(currencyAdapter.getPosition("KRW"));
 
-        // 버튼과 사진 이미지뷰에 클릭 리스너를 추가합니다.
         View.OnClickListener photoClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,7 +137,7 @@ public class InputViewActivity extends AppCompatActivity {
         };
         buttonAddPhoto.setOnClickListener(photoClickListener);
         imageViewPhoto.setOnClickListener(photoClickListener);
-        photoContainer.setOnClickListener(photoClickListener); // photoContainer 클릭 리스너 추가
+        photoContainer.setOnClickListener(photoClickListener);
 
         calendarIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,7 +171,6 @@ public class InputViewActivity extends AppCompatActivity {
                     resultIntent.putExtra("category", category);
                     resultIntent.putExtra("currency", currency);
 
-                    // selectedImageUri가 null인지 확인하고, null이 아닌 경우에만 추가합니다.
                     if (selectedImageUri != null) {
                         resultIntent.putExtra("imageUri", selectedImageUri);
                     }
@@ -194,7 +190,8 @@ public class InputViewActivity extends AppCompatActivity {
     }
 
     private void selectPhoto() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("image/*");
         startActivityForResult(intent, REQUEST_CODE_SELECT_PHOTO);
     }
@@ -204,16 +201,10 @@ public class InputViewActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_SELECT_PHOTO && resultCode == RESULT_OK && data != null) {
             Uri selectedImage = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-                imageViewPhoto.setImageBitmap(bitmap);
-                imageViewPhoto.setVisibility(View.VISIBLE);
-                buttonAddPhoto.setVisibility(View.GONE);
-
-                selectedImageUri = selectedImage.toString();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            imageViewPhoto.setImageURI(selectedImage);
+            imageViewPhoto.setVisibility(View.VISIBLE);
+            buttonAddPhoto.setVisibility(View.GONE);
+            selectedImageUri = selectedImage.toString();
         }
     }
 
@@ -251,7 +242,7 @@ public class InputViewActivity extends AppCompatActivity {
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         String selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
                         editTextDate.setText(selectedDate);
-                        editTextDate.setTextColor(getResources().getColor(android.R.color.black)); // 텍스트 색상 설정
+                        editTextDate.setTextColor(getResources().getColor(android.R.color.black));
                     }
                 },
                 year, month, day
@@ -266,6 +257,11 @@ public class InputViewActivity extends AppCompatActivity {
         if (requestCode == REQUEST_READ_EXTERNAL_STORAGE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // 권한이 허용된 경우 처리
+                if (selectedImageUri != null) {
+                    imageViewPhoto.setImageURI(Uri.parse(selectedImageUri));
+                    imageViewPhoto.setVisibility(View.VISIBLE);
+                    buttonAddPhoto.setVisibility(View.GONE);
+                }
             } else {
                 // 권한이 거부된 경우 처리
             }

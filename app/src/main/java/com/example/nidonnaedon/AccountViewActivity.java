@@ -49,7 +49,6 @@ public class AccountViewActivity extends AppCompatActivity {
             }
         });
 
-        // ImageButton for showing options menu
         ImageButton buttonOptions = findViewById(R.id.buttonOptions);
         buttonOptions.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,9 +70,7 @@ public class AccountViewActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-        // Clear all accounts and add initial data
-        clearAccounts();
-        addInitialData();
+        loadAccounts();
 
         if (intent != null) {
             String amount = intent.getStringExtra("amount");
@@ -157,32 +154,12 @@ public class AccountViewActivity extends AppCompatActivity {
         popup.show();
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.action_invite_friends:
-//                // Handle invite friends action
-//                return true;
-//            case R.id.action_share_link:
-//                // Handle share link action
-//                return true;
-//            case R.id.action_add_to_my_account:
-//                // Handle add to my account action
-//                return true;
-//            case R.id.action_delete_account:
-//                // Handle delete account action
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
-
     private void loadAccounts() {
         Set<String> accountSet = sharedPreferences.getStringSet(KEY_ACCOUNTS, new HashSet<>());
         accountList.clear();
         for (String accountString : accountSet) {
             String[] parts = accountString.split(" ");
-            if (parts.length >= 6) {
+            if (parts.length >= 5) {
                 String usageDetails = parts[0];
                 String category = parts[1];
                 String date = formatDate(parts[2]);
@@ -208,21 +185,6 @@ public class AccountViewActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putStringSet(KEY_ACCOUNTS, accountSet);
         editor.apply();
-    }
-
-    private void clearAccounts() {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
-        accountList.clear();
-        adapter.notifyDataSetChanged();
-    }
-
-    private void addInitialData() {
-        accountList.add(new Account("휴지", "기타", formatDate("2024-6-5"), "3000 KRW", "android.resource://com.example.nisonnaeson/drawable/ic_menu_gallery"));
-        accountList.add(new Account("도넛", "식비", formatDate("2024-5-31"), "2500 KRW", "android.resource://com.example.nisonnaeson/drawable/ic_menu_gallery"));
-        saveAccounts();
-        adapter.notifyDataSetChanged();
     }
 
     private String formatDate(String date) {

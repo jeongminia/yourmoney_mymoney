@@ -18,7 +18,7 @@ public class MainActivity_page7 extends AppCompatActivity {
 
     private TextView itemDate, itemPrice, itemUsageDetails, itemCategory;
     private ImageView itemImageView;
-    private Uri itemImageUri;
+    private Uri itemImageUri = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,6 @@ public class MainActivity_page7 extends AppCompatActivity {
         itemCategory = findViewById(R.id.item_category);
         itemImageView = findViewById(R.id.item_image);
 
-        // Intent에서 데이터 가져오기
         Intent intent = getIntent();
         if (intent != null) {
             String date = intent.getStringExtra("date");
@@ -39,7 +38,6 @@ public class MainActivity_page7 extends AppCompatActivity {
             String category = intent.getStringExtra("category");
             String imageUri = intent.getStringExtra("imageUri");
 
-            // price에서 통화코드와 금액 추출
             if (price != null && price.contains(" ")) {
                 String[] priceParts = price.split(" ");
                 if (priceParts.length > 1) {
@@ -60,16 +58,10 @@ public class MainActivity_page7 extends AppCompatActivity {
                 itemImageUri = Uri.parse(imageUri);
                 Glide.with(this)
                         .load(itemImageUri)
-                        .placeholder(R.drawable.ic_menu_gallery)
-                        .into(itemImageView);
-            } else {
-                Glide.with(this)
-                        .load(R.drawable.ic_menu_gallery)
                         .into(itemImageView);
             }
         }
 
-        // 뒤로 가기 버튼 기능
         ImageView backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +71,6 @@ public class MainActivity_page7 extends AppCompatActivity {
             }
         });
 
-        // 수정하기 버튼 기능
         Button modifyButton = findViewById(R.id.modify_button);
         modifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,7 +100,6 @@ public class MainActivity_page7 extends AppCompatActivity {
             String imageUri = data.getStringExtra("imageUri");
             String currency = data.getStringExtra("currency");
 
-            // currency에서 "-" 이전 부분만 추출
             if (currency != null && currency.contains("-")) {
                 currency = currency.substring(0, currency.indexOf("-")).trim();
             }
@@ -125,11 +115,6 @@ public class MainActivity_page7 extends AppCompatActivity {
                 itemImageUri = Uri.parse(imageUri);
                 Glide.with(this)
                         .load(itemImageUri)
-                        .placeholder(R.drawable.ic_menu_gallery)
-                        .into(itemImageView);
-            } else {
-                Glide.with(this)
-                        .load(R.drawable.ic_menu_gallery)
                         .into(itemImageView);
             }
         }
