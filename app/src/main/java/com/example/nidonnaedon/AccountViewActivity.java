@@ -3,8 +3,6 @@ package com.example.nidonnaedon;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,14 +20,22 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.Date;
+import java.util.List;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AccountViewActivity extends AppCompatActivity {
 
-    private ArrayList<Account> accountList;
+    private ArrayList<ExpenditureDetailsDTO> expenditureList;
     private AccountAdapter adapter;
     private SharedPreferences sharedPreferences;
     private static final String PREFS_NAME = "account_data";
     private static final String KEY_ACCOUNTS = "accounts";
+    private Retrofit retrofit;
+    private NidonNaedonAPI nidonNaedonAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,39 +69,30 @@ public class AccountViewActivity extends AppCompatActivity {
             toolbarTitle.setText(itemName);
         }
 
-        accountList = new ArrayList<>();
+        expenditureList = new ArrayList<>();
         ListView listViewAccounts = findViewById(R.id.listViewAccounts);
-        adapter = new AccountAdapter(this, accountList);
+        adapter = new AccountAdapter(this, expenditureList);
         listViewAccounts.setAdapter(adapter);
 
         sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-        loadAccounts();
+        retrofit = new Retrofit.Builder()
+                .baseUrl("http://localhost:8080")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        nidonNaedonAPI = retrofit.create(NidonNaedonAPI.class);
 
-        if (intent != null) {
-            String amount = intent.getStringExtra("amount");
-            String date = intent.getStringExtra("date");
-            String usageDetails = intent.getStringExtra("usageDetails");
-            String category = intent.getStringExtra("category");
-            String currency = intent.getStringExtra("currency");
-            String imageUri = intent.getStringExtra("imageUri");
-
-            if (amount != null && date != null && usageDetails != null && category != null && currency != null) {
-                accountList.add(new Account(usageDetails, category, formatDate(date), amount + " " + currency, imageUri));
-                adapter.notifyDataSetChanged();
-                saveAccounts();
-            }
-        }
+        loadExpenditures();
 
         listViewAccounts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent mainPageIntent = new Intent(AccountViewActivity.this, MainActivity_page7.class);
-                mainPageIntent.putExtra("itemName", accountList.get(position).getUsageDetails());
-                mainPageIntent.putExtra("date", accountList.get(position).getDate());
-                mainPageIntent.putExtra("price", accountList.get(position).getAmount());
-                mainPageIntent.putExtra("category", accountList.get(position).getCategory());
-                mainPageIntent.putExtra("imageUri", accountList.get(position).getImageUri());
+                mainPageIntent.putExtra("itemName", expenditureList.get(position).getExpenditureName());
+                mainPageIntent.putExtra("date", expenditureList.get(position).getExpenditureDate());
+                mainPageIntent.putExtra("price", expenditureList.get(position).getExpenditureAmount() + " " + expenditureList.get(position).getExpenditureCurrency());
+                mainPageIntent.putExtra("category", expenditureList.get(position).getExpenditureCategory());
+                mainPageIntent.putExtra("imageUri", expenditureList.get(position).getExpenditurePhoto());
                 startActivity(mainPageIntent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
@@ -135,9 +132,9 @@ public class AccountViewActivity extends AppCompatActivity {
             String imageUri = data.getStringExtra("imageUri");
 
             if (amount != null && date != null && usageDetails != null && category != null && currency != null) {
-                accountList.add(new Account(usageDetails, category, formatDate(date), amount + " " + currency, imageUri));
-                adapter.notifyDataSetChanged();
-                saveAccounts();
+                ExpenditureDetailsDTO expenditure = new ExpenditureDetailsDTO(0, "", usageDetails, Double.parseDouble(amount),
+                        currency, 1.0, new ArrayList<>(), formatDate(date), imageUri, "", category);
+                createExpenditure(expenditure);
             }
         }
     }
@@ -154,37 +151,41 @@ public class AccountViewActivity extends AppCompatActivity {
         popup.show();
     }
 
-    private void loadAccounts() {
-        Set<String> accountSet = sharedPreferences.getStringSet(KEY_ACCOUNTS, new HashSet<>());
-        accountList.clear();
-        for (String accountString : accountSet) {
-            String[] parts = accountString.split(" ");
-            if (parts.length >= 5) {
-                String usageDetails = parts[0];
-                String category = parts[1];
-                String date = formatDate(parts[2]);
-                String amount = parts[3];
-                StringBuilder imageUri = new StringBuilder();
-                for (int i = 4; i < parts.length; i++) {
-                    if (i > 4) {
-                        imageUri.append(" ");
-                    }
-                    imageUri.append(parts[i]);
+    private void loadExpenditures() {
+        Call<List<ExpenditureDetailsDTO>> call = nidonNaedonAPI.getAllExpenditureDetailsByAccountId("your_account_id");
+        call.enqueue(new Callback<List<ExpenditureDetailsDTO>>() {
+            @Override
+            public void onResponse(Call<List<ExpenditureDetailsDTO>> call, Response<List<ExpenditureDetailsDTO>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    expenditureList.clear();
+                    expenditureList.addAll(response.body());
+                    adapter.notifyDataSetChanged();
                 }
-                accountList.add(new Account(usageDetails, category, date, amount, imageUri.toString()));
             }
-        }
-        adapter.notifyDataSetChanged();
+
+            @Override
+            public void onFailure(Call<List<ExpenditureDetailsDTO>> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
     }
 
-    private void saveAccounts() {
-        Set<String> accountSet = new HashSet<>();
-        for (Account account : accountList) {
-            accountSet.add(account.getUsageDetails() + " " + account.getCategory() + " " + account.getDate() + " " + account.getAmount() + " " + account.getImageUri());
-        }
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putStringSet(KEY_ACCOUNTS, accountSet);
-        editor.apply();
+    private void createExpenditure(ExpenditureDetailsDTO expenditure) {
+        Call<ExpenditureDetailsDTO> call = nidonNaedonAPI.createExpenditure(expenditure);
+        call.enqueue(new Callback<ExpenditureDetailsDTO>() {
+            @Override
+            public void onResponse(Call<ExpenditureDetailsDTO> call, Response<ExpenditureDetailsDTO> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    expenditureList.add(response.body());
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ExpenditureDetailsDTO> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
     }
 
     private String formatDate(String date) {

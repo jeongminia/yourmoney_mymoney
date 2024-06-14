@@ -13,16 +13,22 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
-import com.example.nidonnaedon.R;
 import com.google.android.flexbox.AlignItems;
-import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexboxLayout;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
 
     private FlexboxLayout flexboxLayout;
     private TextView textView;
     private Button kakaoLoginButton, kakaoSignupButton;
+    private NidonNaedonAPI nidonNaedonAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +76,8 @@ public class LoginActivity extends AppCompatActivity {
 
         // Set onClickListener for login button
         kakaoLoginButton.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, MainView.class);
-            startActivity(intent);
+            // 실제 로그인 API 호출 추가
+            loginUser();
         });
 
         // Initialize the Kakao signup button
@@ -93,11 +99,55 @@ public class LoginActivity extends AppCompatActivity {
 
         // Set onClickListener for signup button
         kakaoSignupButton.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, MainView.class);
-            startActivity(intent);
+            // 실제 회원가입 API 호출 추가
+            signUpUser();
         });
 
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://localhost:8080")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        nidonNaedonAPI = retrofit.create(NidonNaedonAPI.class);
+
         setContentView(flexboxLayout);
+    }
+
+    private void loginUser() {
+        // 로그인 API 호출 로직 구현
+        Call<String> call = nidonNaedonAPI.login("username", "password");
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+                    Intent intent = new Intent(LoginActivity.this, MainView.class);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void signUpUser() {
+        // 회원가입 API 호출 로직 구현
+        Call<String> call = nidonNaedonAPI.signUp("username", "password");
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+                    Intent intent = new Intent(LoginActivity.this, MainView.class);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
     }
 
     private int convertToPx(int dp) {

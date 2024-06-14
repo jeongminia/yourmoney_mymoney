@@ -6,43 +6,35 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
 import com.example.nidonnaedon.R;
-
 import java.util.ArrayList;
 
-public class AccountAdapter extends ArrayAdapter<Account> {
+public class AccountAdapter extends ArrayAdapter<ExpenditureDetailsDTO> {
 
-    public AccountAdapter(Context context, ArrayList<Account> accounts) {
-        super(context, 0, accounts);
+    public AccountAdapter(Context context, ArrayList<ExpenditureDetailsDTO> expenditures) {
+        super(context, 0, expenditures);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Account account = getItem(position);
+        ExpenditureDetailsDTO expenditure = getItem(position);
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_account, parent, false);
         }
 
-        TextView usageDetails = convertView.findViewById(R.id.usageDetails);
-        TextView category = convertView.findViewById(R.id.category);
-        TextView date = convertView.findViewById(R.id.date);
-        TextView amount = convertView.findViewById(R.id.amount);
+        TextView expenditureName = convertView.findViewById(R.id.usageDetails);
+        TextView expenditureCategory = convertView.findViewById(R.id.category);
+        TextView expenditureDate = convertView.findViewById(R.id.date);
+        TextView expenditureAmount = convertView.findViewById(R.id.amount);
 
-        usageDetails.setText(account.getUsageDetails());
-        category.setText(account.getCategory());
-        date.setText(account.getDate());
+        expenditureName.setText(expenditure.getExpenditureName());
+        expenditureCategory.setText(expenditure.getExpenditureCategory());
+        expenditureDate.setText(expenditure.getExpenditureDate());
 
-        // amount에서 첫 단어만 추출하여 설정
-        String fullAmount = account.getAmount();
-        String[] amountParts = fullAmount.split(" ");
-        if (amountParts.length > 1) {
-            String shortAmount = amountParts[0] + " " + amountParts[1];
-            amount.setText(shortAmount);
-        } else {
-            amount.setText(fullAmount);
-        }
+        // 금액과 통화를 합쳐서 표시
+        String fullAmount = expenditure.getExpenditureAmount() + " " + expenditure.getExpenditureCurrency();
+        expenditureAmount.setText(fullAmount);
 
         return convertView;
     }

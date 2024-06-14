@@ -1,23 +1,18 @@
 package com.example.nidonnaedon;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
 
-import com.example.nidonnaedon.R;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.BarData;
@@ -26,26 +21,33 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ReportActivity extends AppCompatActivity {
 
     private PieChart pieChart;
     private HorizontalBarChart barChart;
+    private NidonNaedonAPI nidonNaedonAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Retrofit 초기화
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:8080")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        nidonNaedonAPI = retrofit.create(NidonNaedonAPI.class);
 
         // Parent RelativeLayout
         RelativeLayout parentLayout = new RelativeLayout(this);
@@ -144,16 +146,28 @@ public class ReportActivity extends AppCompatActivity {
         setContentView(parentLayout);
 
         // Initialize charts with data
-        updateBarChart();
-        updatePieChart();
+        loadBarChartData();
+        loadPieChartData();
     }
 
-    private void updateBarChart() {
-        List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0, 5900));
-        entries.add(new BarEntry(1, 1800));
-        entries.add(new BarEntry(2, -8500));
+    private void loadBarChartData() {
+        Call<List<BarEntry>> call = nidonNaedonAPI.getBarChartData();
+        call.enqueue(new Callback<List<BarEntry>>() {
+            @Override
+            public void onResponse(Call<List<BarEntry>> call, Response<List<BarEntry>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    updateBarChart(response.body());
+                }
+            }
 
+            @Override
+            public void onFailure(Call<List<BarEntry>> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void updateBarChart(List<BarEntry> entries) {
         BarDataSet dataSet = new BarDataSet(entries, "Values");
         dataSet.setColors(Color.parseColor("#BCDAA9"), Color.parseColor("#BCDAA9"), Color.parseColor("#EFBEBE"));
         dataSet.setValueTextSize(14f);
@@ -203,13 +217,24 @@ public class ReportActivity extends AppCompatActivity {
         barChart.invalidate();
     }
 
-    private void updatePieChart() {
-        List<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(40f, "식비"));
-        entries.add(new PieEntry(30f, "교통"));
-        entries.add(new PieEntry(20f, "숙박"));
-        entries.add(new PieEntry(10f, "기타"));
+    private void loadPieChartData() {
+        Call<List<PieEntry>> call = nidonNaedonAPI.getPieChartData();
+        call.enqueue(new Callback<List<PieEntry>>() {
+            @Override
+            public void onResponse(Call<List<PieEntry>> call, Response<List<PieEntry>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    updatePieChart(response.body());
+                }
+            }
 
+            @Override
+            public void onFailure(Call<List<PieEntry>> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void updatePieChart(List<PieEntry> entries) {
         PieDataSet dataSet = new PieDataSet(entries, "Expense Categories");
         dataSet.setColors(Color.parseColor("#e6c0ff"),
                 Color.parseColor("#b8ffcc"),
