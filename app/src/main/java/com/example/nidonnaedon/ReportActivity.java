@@ -26,28 +26,14 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
 public class ReportActivity extends AppCompatActivity {
 
     private PieChart pieChart;
     private HorizontalBarChart barChart;
-    private NidonNaedonAPI nidonNaedonAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Retrofit 초기화
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        nidonNaedonAPI = retrofit.create(NidonNaedonAPI.class);
 
         // Parent RelativeLayout
         RelativeLayout parentLayout = new RelativeLayout(this);
@@ -151,20 +137,12 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     private void loadBarChartData() {
-        Call<List<BarEntry>> call = nidonNaedonAPI.getBarChartData();
-        call.enqueue(new Callback<List<BarEntry>>() {
-            @Override
-            public void onResponse(Call<List<BarEntry>> call, Response<List<BarEntry>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    updateBarChart(response.body());
-                }
-            }
+        List<BarEntry> entries = new ArrayList<>();
+        entries.add(new BarEntry(0f, 100));
+        entries.add(new BarEntry(1f, 200));
+        entries.add(new BarEntry(2f, 300));
 
-            @Override
-            public void onFailure(Call<List<BarEntry>> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
+        updateBarChart(entries);
     }
 
     private void updateBarChart(List<BarEntry> entries) {
@@ -218,20 +196,12 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     private void loadPieChartData() {
-        Call<List<PieEntry>> call = nidonNaedonAPI.getPieChartData();
-        call.enqueue(new Callback<List<PieEntry>>() {
-            @Override
-            public void onResponse(Call<List<PieEntry>> call, Response<List<PieEntry>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    updatePieChart(response.body());
-                }
-            }
+        List<PieEntry> entries = new ArrayList<>();
+        entries.add(new PieEntry(30f, "Category 1"));
+        entries.add(new PieEntry(20f, "Category 2"));
+        entries.add(new PieEntry(50f, "Category 3"));
 
-            @Override
-            public void onFailure(Call<List<PieEntry>> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
+        updatePieChart(entries);
     }
 
     private void updatePieChart(List<PieEntry> entries) {

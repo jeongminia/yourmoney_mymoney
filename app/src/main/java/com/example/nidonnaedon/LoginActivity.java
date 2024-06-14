@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.transition.ChangeBounds;
+import android.util.Log;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,6 +19,9 @@ import com.google.android.flexbox.AlignItems;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayout;
 
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -76,8 +81,10 @@ public class LoginActivity extends AppCompatActivity {
 
         // Set onClickListener for login button
         kakaoLoginButton.setOnClickListener(v -> {
-            // 실제 로그인 API 호출 추가
-            loginUser();
+            // 웹 브라우저를 통해 카카오 로그인 페이지로 이동
+            String loginUrl = "http://10.0.2.2:8080/oauth2/authorization/kakao";
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(loginUrl));
+            startActivity(browserIntent);
         });
 
         // Initialize the Kakao signup button
@@ -97,14 +104,8 @@ public class LoginActivity extends AppCompatActivity {
         kakaoSignupButton.setLayoutParams(signupButtonParams);
         flexboxLayout.addView(kakaoSignupButton);
 
-        // Set onClickListener for signup button
-        kakaoSignupButton.setOnClickListener(v -> {
-            // 실제 회원가입 API 호출 추가
-            signUpUser();
-        });
-
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://localhost:8080")
+                .baseUrl("http://10.0.2.2:8080") // Localhost 주소 수정
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         nidonNaedonAPI = retrofit.create(NidonNaedonAPI.class);
@@ -112,42 +113,16 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(flexboxLayout);
     }
 
-    private void loginUser() {
-        // 로그인 API 호출 로직 구현
-        Call<String> call = nidonNaedonAPI.login("username", "password");
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if (response.isSuccessful()) {
-                    Intent intent = new Intent(LoginActivity.this, MainView.class);
-                    startActivity(intent);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
-    }
-
-    private void signUpUser() {
-        // 회원가입 API 호출 로직 구현
-        Call<String> call = nidonNaedonAPI.signUp("username", "password");
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if (response.isSuccessful()) {
-                    Intent intent = new Intent(LoginActivity.this, MainView.class);
-                    startActivity(intent);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Uri uri = intent.getData();
+        if (uri != null && uri.toString().startsWith("yourapp://callback")) {
+            // 로그인 성공 후 서버에서 받은 데이터를 처리
+            String code = uri.getQueryParameter("code");
+            // 코드를 이용해 서버와 통신하여 사용자 정보를 받아오거나 토큰을 처리
+            // 예: 서버에 이 코드를 보내서 사용자 인증 정보를 받아옵니다.
+        }
     }
 
     private int convertToPx(int dp) {
