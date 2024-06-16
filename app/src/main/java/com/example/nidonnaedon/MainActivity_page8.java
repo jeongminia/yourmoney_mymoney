@@ -13,9 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
@@ -29,9 +29,12 @@ import com.google.android.material.datepicker.DateValidatorPointForward;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
+import okhttp3.Credentials;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -157,8 +160,23 @@ public class MainActivity_page8 extends AppCompatActivity {
         // 캘린더 아이콘 클릭 이벤트 설정
         findViewById(R.id.calendar_icon).setOnClickListener(this::showDatePicker);
 
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(loggingInterceptor)
+                .addInterceptor(chain -> {
+                    Request original = chain.request();
+                    Request.Builder requestBuilder = original.newBuilder()
+                            .header("Authorization", Credentials.basic("user", "password"));
+                    Request request = requestBuilder.build();
+                    return chain.proceed(request);
+                })
+                .build();
+
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://localhost:8080")
+                .baseUrl("http://10.0.2.2:8080")
+                .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         nidonNaedonAPI = retrofit.create(NidonNaedonAPI.class);
@@ -218,10 +236,10 @@ public class MainActivity_page8 extends AppCompatActivity {
         participantList.addView(textView);
     }
 
-    // MainActivity_page8.java
+    // 가계부 생성 함수
     private void createAccount(String name, String date) {
         AccountDTO account = new AccountDTO(null, name, date, "KRW", 1.0, new ArrayList<>());
-        Call<AccountDTO> call = NidonNaedonApplication.getApi().createAccount(account);
+        Call<AccountDTO> call = nidonNaedonAPI.createAccount(account);
         call.enqueue(new Callback<AccountDTO>() {
             @Override
             public void onResponse(Call<AccountDTO> call, Response<AccountDTO> response) {
@@ -231,12 +249,15 @@ public class MainActivity_page8 extends AppCompatActivity {
                     resultIntent.putExtra("ACCOUNT_DATE", response.body().getAccountSchedule());
                     setResult(RESULT_OK, resultIntent);
                     finish();
+                } else {
+                    Toast.makeText(MainActivity_page8.this, "가계부 생성에 실패했습니다.", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<AccountDTO> call, Throwable t) {
                 t.printStackTrace();
+                Toast.makeText(MainActivity_page8.this, "네트워크 오류로 가계부 생성에 실패했습니다.", Toast.LENGTH_SHORT).show();
             }
         });
     }

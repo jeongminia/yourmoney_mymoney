@@ -3,6 +3,7 @@ package com.example.nidonnaedon;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,9 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
 import java.util.Date;
 import java.util.List;
 import retrofit2.Call;
@@ -26,6 +25,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import java.io.IOException;
+import okhttp3.OkHttpClient;
+import okhttp3.Credentials;
+import okhttp3.Interceptor;
+import okhttp3.Request;
 
 public class AccountViewActivity extends AppCompatActivity {
 
@@ -36,6 +40,7 @@ public class AccountViewActivity extends AppCompatActivity {
     private static final String KEY_ACCOUNTS = "accounts";
     private Retrofit retrofit;
     private NidonNaedonAPI nidonNaedonAPI;
+    private static final String TAG = "AccountViewActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +81,22 @@ public class AccountViewActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
+        // Retrofit 클라이언트 설정
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(new Interceptor() {
+                    @Override
+                    public okhttp3.Response intercept(Chain chain) throws IOException {
+                        Request request = chain.request().newBuilder()
+                                .header("Authorization", Credentials.basic("user", "password")) // 사용자 이름과 비밀번호 입력
+                                .build();
+                        return chain.proceed(request);
+                    }
+                })
+                .build();
+
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://localhost:8080")
+                .baseUrl("http://10.0.2.2:8080") // baseUrl이 맞는지 확인하세요.
+                .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         nidonNaedonAPI = retrofit.create(NidonNaedonAPI.class);
@@ -178,11 +197,21 @@ public class AccountViewActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     expenditureList.add(response.body());
                     adapter.notifyDataSetChanged();
+                } else {
+                    Log.d(TAG, "createExpenditure onResponse: 서버 응답 실패");
+                    Log.d(TAG, "응답 코드: " + response.code());
+                    Log.d(TAG, "응답 메시지: " + response.message());
+                    try {
+                        Log.d(TAG, "응답 본문: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<ExpenditureDetailsDTO> call, Throwable t) {
+                Log.d(TAG, "createExpenditure onFailure: 서버 통신 실패");
                 t.printStackTrace();
             }
         });

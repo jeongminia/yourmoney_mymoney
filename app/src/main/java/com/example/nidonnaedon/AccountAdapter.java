@@ -32,8 +32,16 @@ public class AccountAdapter extends ArrayAdapter<ExpenditureDetailsDTO> {
         expenditureCategory.setText(expenditure.getExpenditureCategory());
         expenditureDate.setText(expenditure.getExpenditureDate());
 
+        // 통화의 첫 단어만 표시
+        String currency = expenditure.getExpenditureCurrency();
+        if (currency != null && currency.contains("-")) {
+            currency = currency.split("-")[0].trim();
+        } else if (currency == null) {
+            currency = "";
+        }
+
         // 금액과 통화를 합쳐서 표시
-        String fullAmount = expenditure.getExpenditureAmount() + " " + expenditure.getExpenditureCurrency();
+        String fullAmount = expenditure.getExpenditureAmount() + " " + currency;
         expenditureAmount.setText(fullAmount);
 
         return convertView;

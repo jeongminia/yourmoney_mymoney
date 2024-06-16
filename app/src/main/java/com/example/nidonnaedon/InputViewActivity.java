@@ -5,9 +5,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -26,20 +25,29 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import com.example.nidonnaedon.ExpenditureDetailsDTO;
+import com.example.nidonnaedon.NidonNaedonAPI;
+import com.example.nidonnaedon.R;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Credentials;
+import okhttp3.Interceptor;
+import okhttp3.Request;
+import okhttp3.Response;
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
 
 public class InputViewActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_SELECT_PHOTO = 1;
     private static final int REQUEST_READ_EXTERNAL_STORAGE = 2;
+    private static final String TAG = "InputViewActivity";
 
     private EditText editTextAmount, editTextDate, editTextUsageDetails;
     private Spinner spinnerCategory, spinnerCurrency;
@@ -89,9 +97,22 @@ public class InputViewActivity extends AppCompatActivity {
             }
         });
 
-        // Retrofit 초기화
+        // Retrofit 클라이언트 설정
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(new Interceptor() {
+                    @Override
+                    public Response intercept(Chain chain) throws IOException {
+                        Request request = chain.request().newBuilder()
+                                .header("Authorization", Credentials.basic("user", "password")) // 여기에 사용자 이름과 비밀번호를 입력
+                                .build();
+                        return chain.proceed(request);
+                    }
+                })
+                .build();
+
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://localhost:8080")
+                .baseUrl("http://10.0.2.2:8080") // baseUrl이 맞는지 확인하세요.
+                .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         nidonNaedonAPI = retrofit.create(NidonNaedonAPI.class);
@@ -160,6 +181,7 @@ public class InputViewActivity extends AppCompatActivity {
                             new ArrayList<>(), date, selectedImageUri, "", category
                     );
 
+                    Log.d(TAG, "createExpenditure 호출 전: " + expenditure.toString());
                     createExpenditure(expenditure);
                 }
             }
@@ -238,7 +260,10 @@ public class InputViewActivity extends AppCompatActivity {
         Call<ExpenditureDetailsDTO> call = nidonNaedonAPI.createExpenditure(expenditure);
         call.enqueue(new Callback<ExpenditureDetailsDTO>() {
             @Override
-            public void onResponse(Call<ExpenditureDetailsDTO> call, Response<ExpenditureDetailsDTO> response) {
+            public void onResponse(Call<ExpenditureDetailsDTO> call, retrofit2.Response<ExpenditureDetailsDTO> response) {
+                Log.d(TAG, "onResponse: 호출 성공");
+                Log.d(TAG, "응답 코드: " + response.code());
+                Log.d(TAG, "응답 메시지: " + response.message());
                 if (response.isSuccessful() && response.body() != null) {
                     Intent resultIntent = new Intent();
                     resultIntent.putExtra("date", response.body().getExpenditureDate());
@@ -252,11 +277,15 @@ public class InputViewActivity extends AppCompatActivity {
                     setResult(RESULT_OK, resultIntent);
                     finish();
                     overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                } else {
+                    Log.d(TAG, "onResponse: 호출 실패");
+                    Log.d(TAG, "응답 본문: " + response.errorBody());
                 }
             }
 
             @Override
             public void onFailure(Call<ExpenditureDetailsDTO> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
                 t.printStackTrace();
                 Toast.makeText(InputViewActivity.this, "서버와의 통신에 실패했습니다.", Toast.LENGTH_SHORT).show();
             }
