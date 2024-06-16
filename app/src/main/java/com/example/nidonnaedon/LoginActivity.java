@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.transition.ChangeBounds;
 import android.view.Window;
@@ -13,16 +14,21 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
-import com.example.nidonnaedon.R;
 import com.google.android.flexbox.AlignItems;
-import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexboxLayout;
+
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
 
     private FlexboxLayout flexboxLayout;
     private TextView textView;
-    private Button kakaoLoginButton, kakaoSignupButton;
+    private Button kakaoLoginButton, kakaoSignupButton, testLoginButton;
+    private NidonNaedonAPI nidonNaedonAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,12 +74,6 @@ public class LoginActivity extends AppCompatActivity {
         kakaoLoginButton.setLayoutParams(loginButtonParams);
         flexboxLayout.addView(kakaoLoginButton);
 
-        // Set onClickListener for login button
-        kakaoLoginButton.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, MainView.class);
-            startActivity(intent);
-        });
-
         // Initialize the Kakao signup button
         kakaoSignupButton = new Button(this);
         kakaoSignupButton.setText("카카오톡 회원가입");
@@ -91,13 +91,59 @@ public class LoginActivity extends AppCompatActivity {
         kakaoSignupButton.setLayoutParams(signupButtonParams);
         flexboxLayout.addView(kakaoSignupButton);
 
-        // Set onClickListener for signup button
-        kakaoSignupButton.setOnClickListener(v -> {
+        // Initialize the test login button
+        testLoginButton = new Button(this);
+        testLoginButton.setText("테스트 로그인");
+        testLoginButton.setTextColor(Color.BLACK);
+        testLoginButton.setTypeface(null, Typeface.BOLD);
+        // Set background with rounded corners and blue color
+        GradientDrawable testLoginButtonShape = new GradientDrawable();
+        testLoginButtonShape.setShape(GradientDrawable.RECTANGLE);
+        testLoginButtonShape.setColor(Color.parseColor("#00aaff"));
+        testLoginButtonShape.setCornerRadius(convertToPx(5)); // 5px border radius
+        testLoginButton.setBackground(testLoginButtonShape);
+        FlexboxLayout.LayoutParams testLoginButtonParams = new FlexboxLayout.LayoutParams(
+                convertToPx(297), convertToPx(48)); // Set width and height
+        testLoginButtonParams.setMargins(0, convertToPx(20), 0, 0); // top margin
+        testLoginButton.setLayoutParams(testLoginButtonParams);
+        flexboxLayout.addView(testLoginButton);
+
+        // Set onClickListener for test login button
+        testLoginButton.setOnClickListener(v -> {
+            // MainView로 바로 이동
             Intent intent = new Intent(LoginActivity.this, MainView.class);
             startActivity(intent);
+            finish();
         });
 
+        // HTTP 로깅 인터셉터 추가
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(loggingInterceptor)
+                .build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:8080") // Localhost 주소 수정
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        nidonNaedonAPI = retrofit.create(NidonNaedonAPI.class);
+
         setContentView(flexboxLayout);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Uri uri = intent.getData();
+        if (uri != null && uri.toString().startsWith("yourapp://callback")) {
+            // 로그인 성공 후 서버에서 받은 데이터를 처리
+            String code = uri.getQueryParameter("code");
+            // 코드를 이용해 서버와 통신하여 사용자 정보를 받아오거나 토큰을 처리
+            // 예: 서버에 이 코드를 보내서 사용자 인증 정보를 받아옵니다.
+        }
     }
 
     private int convertToPx(int dp) {

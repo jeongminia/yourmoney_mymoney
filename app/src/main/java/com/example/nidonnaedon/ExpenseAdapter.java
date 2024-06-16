@@ -8,16 +8,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.nidonnaedon.R;
 import java.util.List;
 
 public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseViewHolder> {
 
-    private final List<ExpenseItem> expenseList;
+    private final List<ExpenditureDetailsDTO> expenseList;
     private final OnItemClickListener listener;
     private final Context context;
 
-    public ExpenseAdapter(List<ExpenseItem> expenseList, OnItemClickListener listener, Context context) {
+    public ExpenseAdapter(List<ExpenditureDetailsDTO> expenseList, OnItemClickListener listener, Context context) {
         this.expenseList = expenseList;
         this.listener = listener;
         this.context = context;
@@ -34,10 +33,10 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
     @Override
     public void onBindViewHolder(@NonNull ExpenseViewHolder holder, int position) {
         // Get the current expense item
-        ExpenseItem expense = expenseList.get(position);
+        ExpenditureDetailsDTO expense = expenseList.get(position);
         // Bind the data to the TextViews
-        holder.accountNameTextView.setText(expense.getName());
-        holder.accountDateTextView.setText(expense.getDate());
+        holder.accountNameTextView.setText(expense.getExpenditureName());
+        holder.accountDateTextView.setText(expense.getExpenditureDate());
 
         // Set click listener for the item view
         holder.itemView.setOnClickListener(new View.OnClickListener() {

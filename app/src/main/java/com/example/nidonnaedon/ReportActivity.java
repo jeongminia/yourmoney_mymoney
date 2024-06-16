@@ -1,23 +1,18 @@
 package com.example.nidonnaedon;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
 
-import com.example.nidonnaedon.R;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.BarData;
@@ -26,17 +21,10 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
 
 public class ReportActivity extends AppCompatActivity {
 
@@ -144,16 +132,20 @@ public class ReportActivity extends AppCompatActivity {
         setContentView(parentLayout);
 
         // Initialize charts with data
-        updateBarChart();
-        updatePieChart();
+        loadBarChartData();
+        loadPieChartData();
     }
 
-    private void updateBarChart() {
+    private void loadBarChartData() {
         List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0, 5900));
-        entries.add(new BarEntry(1, 1800));
-        entries.add(new BarEntry(2, -8500));
+        entries.add(new BarEntry(0f, 100));
+        entries.add(new BarEntry(1f, 200));
+        entries.add(new BarEntry(2f, 300));
 
+        updateBarChart(entries);
+    }
+
+    private void updateBarChart(List<BarEntry> entries) {
         BarDataSet dataSet = new BarDataSet(entries, "Values");
         dataSet.setColors(Color.parseColor("#BCDAA9"), Color.parseColor("#BCDAA9"), Color.parseColor("#EFBEBE"));
         dataSet.setValueTextSize(14f);
@@ -203,13 +195,16 @@ public class ReportActivity extends AppCompatActivity {
         barChart.invalidate();
     }
 
-    private void updatePieChart() {
+    private void loadPieChartData() {
         List<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(40f, "식비"));
-        entries.add(new PieEntry(30f, "교통"));
-        entries.add(new PieEntry(20f, "숙박"));
-        entries.add(new PieEntry(10f, "기타"));
+        entries.add(new PieEntry(30f, "Category 1"));
+        entries.add(new PieEntry(20f, "Category 2"));
+        entries.add(new PieEntry(50f, "Category 3"));
 
+        updatePieChart(entries);
+    }
+
+    private void updatePieChart(List<PieEntry> entries) {
         PieDataSet dataSet = new PieDataSet(entries, "Expense Categories");
         dataSet.setColors(Color.parseColor("#e6c0ff"),
                 Color.parseColor("#b8ffcc"),

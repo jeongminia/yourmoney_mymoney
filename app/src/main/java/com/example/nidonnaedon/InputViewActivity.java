@@ -5,9 +5,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -26,12 +25,29 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.nidonnaedon.ExpenditureDetailsDTO;
+import com.example.nidonnaedon.NidonNaedonAPI;
+import com.example.nidonnaedon.R;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Credentials;
+import okhttp3.Interceptor;
+import okhttp3.Request;
+import okhttp3.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class InputViewActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_SELECT_PHOTO = 1;
     private static final int REQUEST_READ_EXTERNAL_STORAGE = 2;
+    private static final String TAG = "InputViewActivity";
 
     private EditText editTextAmount, editTextDate, editTextUsageDetails;
     private Spinner spinnerCategory, spinnerCurrency;
@@ -40,6 +56,8 @@ public class InputViewActivity extends AppCompatActivity {
     private CheckBox checkboxAddFriend, checkboxPayer, checkboxGwakJiwon, checkboxYooJaewon;
     private LinearLayout friendList, photoContainer;
     private String selectedImageUri;
+
+    private NidonNaedonAPI nidonNaedonAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,31 +97,25 @@ public class InputViewActivity extends AppCompatActivity {
             }
         });
 
-        // 받아온 데이터 설정
-        Intent intent = getIntent();
-        if (intent != null) {
-            String date = intent.getStringExtra("date");
-            String price = intent.getStringExtra("price");
-            String usageDetails = intent.getStringExtra("usageDetails");
-            String category = intent.getStringExtra("category");
-            String imageUri = intent.getStringExtra("imageUri");
+        // Retrofit 클라이언트 설정
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(new Interceptor() {
+                    @Override
+                    public Response intercept(Chain chain) throws IOException {
+                        Request request = chain.request().newBuilder()
+                                .header("Authorization", Credentials.basic("user", "password")) // 여기에 사용자 이름과 비밀번호를 입력
+                                .build();
+                        return chain.proceed(request);
+                    }
+                })
+                .build();
 
-            editTextDate.setText(date);
-            editTextAmount.setText(price != null ? price.split(" ")[0] : "");
-            editTextUsageDetails.setText(usageDetails);
-            if (imageUri != null) {
-                selectedImageUri = imageUri;
-                if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                        == PackageManager.PERMISSION_GRANTED) {
-                    imageViewPhoto.setImageURI(Uri.parse(imageUri));
-                    imageViewPhoto.setVisibility(View.VISIBLE);
-                    buttonAddPhoto.setVisibility(View.GONE);
-                }
-            } else {
-                imageViewPhoto.setVisibility(View.GONE);
-                buttonAddPhoto.setVisibility(View.VISIBLE);
-            }
-        }
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:8080") // baseUrl이 맞는지 확인하세요.
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        nidonNaedonAPI = retrofit.create(NidonNaedonAPI.class);
 
         ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(this, R.array.category_array, android.R.layout.simple_spinner_item);
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -164,20 +176,13 @@ public class InputViewActivity extends AppCompatActivity {
                     String category = spinnerCategory.getSelectedItem() != null ? spinnerCategory.getSelectedItem().toString() : "기타";
                     String currency = spinnerCurrency.getSelectedItem() != null ? spinnerCurrency.getSelectedItem().toString() : "";
 
-                    Intent resultIntent = new Intent();
-                    resultIntent.putExtra("date", date);
-                    resultIntent.putExtra("price", amount);
-                    resultIntent.putExtra("usageDetails", usageDetails);
-                    resultIntent.putExtra("category", category);
-                    resultIntent.putExtra("currency", currency);
+                    ExpenditureDetailsDTO expenditure = new ExpenditureDetailsDTO(
+                            0, "", usageDetails, Double.parseDouble(amount), currency, 1.0,
+                            new ArrayList<>(), date, selectedImageUri, "", category
+                    );
 
-                    if (selectedImageUri != null) {
-                        resultIntent.putExtra("imageUri", selectedImageUri);
-                    }
-
-                    setResult(RESULT_OK, resultIntent);
-                    finish();
-                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                    Log.d(TAG, "createExpenditure 호출 전: " + expenditure.toString());
+                    createExpenditure(expenditure);
                 }
             }
         });
@@ -249,6 +254,42 @@ public class InputViewActivity extends AppCompatActivity {
         );
         datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         datePickerDialog.show();
+    }
+
+    private void createExpenditure(ExpenditureDetailsDTO expenditure) {
+        Call<ExpenditureDetailsDTO> call = nidonNaedonAPI.createExpenditure(expenditure);
+        call.enqueue(new Callback<ExpenditureDetailsDTO>() {
+            @Override
+            public void onResponse(Call<ExpenditureDetailsDTO> call, retrofit2.Response<ExpenditureDetailsDTO> response) {
+                Log.d(TAG, "onResponse: 호출 성공");
+                Log.d(TAG, "응답 코드: " + response.code());
+                Log.d(TAG, "응답 메시지: " + response.message());
+                if (response.isSuccessful() && response.body() != null) {
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("date", response.body().getExpenditureDate());
+                    resultIntent.putExtra("price", String.valueOf(response.body().getExpenditureAmount()));
+                    resultIntent.putExtra("usageDetails", response.body().getExpenditureName());
+                    resultIntent.putExtra("category", response.body().getExpenditureCategory());
+                    resultIntent.putExtra("currency", response.body().getExpenditureCurrency());
+                    if (response.body().getExpenditurePhoto() != null) {
+                        resultIntent.putExtra("imageUri", response.body().getExpenditurePhoto());
+                    }
+                    setResult(RESULT_OK, resultIntent);
+                    finish();
+                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                } else {
+                    Log.d(TAG, "onResponse: 호출 실패");
+                    Log.d(TAG, "응답 본문: " + response.errorBody());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ExpenditureDetailsDTO> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
+                t.printStackTrace();
+                Toast.makeText(InputViewActivity.this, "서버와의 통신에 실패했습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

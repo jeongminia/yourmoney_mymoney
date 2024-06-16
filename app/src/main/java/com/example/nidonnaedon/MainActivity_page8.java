@@ -13,14 +13,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
 
-import com.example.nidonnaedon.R;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
@@ -28,8 +27,19 @@ import com.google.android.material.datepicker.MaterialDatePicker.Builder;
 import com.google.android.material.datepicker.DateValidatorPointForward;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
+
+import okhttp3.Credentials;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity_page8 extends AppCompatActivity {
 
@@ -44,6 +54,8 @@ public class MainActivity_page8 extends AppCompatActivity {
 
     private Calendar startDate = Calendar.getInstance();
     private Calendar endDate = Calendar.getInstance();
+
+    private NidonNaedonAPI nidonNaedonAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,16 +153,33 @@ public class MainActivity_page8 extends AppCompatActivity {
             String newAccountDate = date.getText().toString();
 
             if (validateFields(newAccountName, newAccountDate)) {
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("ACCOUNT_NAME", newAccountName);
-                resultIntent.putExtra("ACCOUNT_DATE", newAccountDate);
-                setResult(RESULT_OK, resultIntent);
-                finish(); // 이전 화면으로 돌아가기
+                createAccount(newAccountName, newAccountDate);
             }
         });
 
         // 캘린더 아이콘 클릭 이벤트 설정
         findViewById(R.id.calendar_icon).setOnClickListener(this::showDatePicker);
+
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(loggingInterceptor)
+                .addInterceptor(chain -> {
+                    Request original = chain.request();
+                    Request.Builder requestBuilder = original.newBuilder()
+                            .header("Authorization", Credentials.basic("user", "password"));
+                    Request request = requestBuilder.build();
+                    return chain.proceed(request);
+                })
+                .build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:8080")
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        nidonNaedonAPI = retrofit.create(NidonNaedonAPI.class);
     }
 
     // 필드 검증 함수
@@ -205,5 +234,31 @@ public class MainActivity_page8 extends AppCompatActivity {
         textView.setTextSize(18); // 글씨 크기를 18sp로 설정
         textView.setTextColor(getResources().getColor(android.R.color.black)); // 글씨 색을 검정으로 설정
         participantList.addView(textView);
+    }
+
+    // 가계부 생성 함수
+    private void createAccount(String name, String date) {
+        AccountDTO account = new AccountDTO(null, name, date, "KRW", 1.0, new ArrayList<>());
+        Call<AccountDTO> call = nidonNaedonAPI.createAccount(account);
+        call.enqueue(new Callback<AccountDTO>() {
+            @Override
+            public void onResponse(Call<AccountDTO> call, Response<AccountDTO> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("ACCOUNT_NAME", response.body().getAccountName());
+                    resultIntent.putExtra("ACCOUNT_DATE", response.body().getAccountSchedule());
+                    setResult(RESULT_OK, resultIntent);
+                    finish();
+                } else {
+                    Toast.makeText(MainActivity_page8.this, "가계부 생성에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AccountDTO> call, Throwable t) {
+                t.printStackTrace();
+                Toast.makeText(MainActivity_page8.this, "네트워크 오류로 가계부 생성에 실패했습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
