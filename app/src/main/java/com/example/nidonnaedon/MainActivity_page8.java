@@ -218,9 +218,10 @@ public class MainActivity_page8 extends AppCompatActivity {
         participantList.addView(textView);
     }
 
+    // MainActivity_page8.java
     private void createAccount(String name, String date) {
         AccountDTO account = new AccountDTO(null, name, date, "KRW", 1.0, new ArrayList<>());
-        Call<AccountDTO> call = nidonNaedonAPI.createAccount(account);
+        Call<AccountDTO> call = NidonNaedonApplication.getApi().createAccount(account);
         call.enqueue(new Callback<AccountDTO>() {
             @Override
             public void onResponse(Call<AccountDTO> call, Response<AccountDTO> response) {

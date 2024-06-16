@@ -7,7 +7,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.transition.ChangeBounds;
-import android.util.Log;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,12 +18,8 @@ import com.google.android.flexbox.AlignItems;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayout;
 
-import java.io.IOException;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -32,7 +27,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private FlexboxLayout flexboxLayout;
     private TextView textView;
-    private Button kakaoLoginButton, kakaoSignupButton;
+    private Button kakaoLoginButton, kakaoSignupButton, testLoginButton;
     private NidonNaedonAPI nidonNaedonAPI;
 
     @Override
@@ -79,14 +74,6 @@ public class LoginActivity extends AppCompatActivity {
         kakaoLoginButton.setLayoutParams(loginButtonParams);
         flexboxLayout.addView(kakaoLoginButton);
 
-        // Set onClickListener for login button
-        kakaoLoginButton.setOnClickListener(v -> {
-            // 웹 브라우저를 통해 카카오 로그인 페이지로 이동
-            String loginUrl = "http://10.0.2.2:8080/oauth2/authorization/kakao";
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(loginUrl));
-            startActivity(browserIntent);
-        });
-
         // Initialize the Kakao signup button
         kakaoSignupButton = new Button(this);
         kakaoSignupButton.setText("카카오톡 회원가입");
@@ -104,8 +91,42 @@ public class LoginActivity extends AppCompatActivity {
         kakaoSignupButton.setLayoutParams(signupButtonParams);
         flexboxLayout.addView(kakaoSignupButton);
 
+        // Initialize the test login button
+        testLoginButton = new Button(this);
+        testLoginButton.setText("테스트 로그인");
+        testLoginButton.setTextColor(Color.BLACK);
+        testLoginButton.setTypeface(null, Typeface.BOLD);
+        // Set background with rounded corners and blue color
+        GradientDrawable testLoginButtonShape = new GradientDrawable();
+        testLoginButtonShape.setShape(GradientDrawable.RECTANGLE);
+        testLoginButtonShape.setColor(Color.parseColor("#00aaff"));
+        testLoginButtonShape.setCornerRadius(convertToPx(5)); // 5px border radius
+        testLoginButton.setBackground(testLoginButtonShape);
+        FlexboxLayout.LayoutParams testLoginButtonParams = new FlexboxLayout.LayoutParams(
+                convertToPx(297), convertToPx(48)); // Set width and height
+        testLoginButtonParams.setMargins(0, convertToPx(20), 0, 0); // top margin
+        testLoginButton.setLayoutParams(testLoginButtonParams);
+        flexboxLayout.addView(testLoginButton);
+
+        // Set onClickListener for test login button
+        testLoginButton.setOnClickListener(v -> {
+            // MainView로 바로 이동
+            Intent intent = new Intent(LoginActivity.this, MainView.class);
+            startActivity(intent);
+            finish();
+        });
+
+        // HTTP 로깅 인터셉터 추가
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(loggingInterceptor)
+                .build();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://10.0.2.2:8080") // Localhost 주소 수정
+                .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         nidonNaedonAPI = retrofit.create(NidonNaedonAPI.class);

@@ -13,6 +13,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.view.inputmethod.InputMethodManager;
 
+import okhttp3.Credentials;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,9 +37,26 @@ public class MyPageView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_page);
 
+        // HTTP 로깅 인터셉터 추가
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        // 기본 인증 추가
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(loggingInterceptor)
+                .addInterceptor(chain -> {
+                    Request original = chain.request();
+                    Request.Builder requestBuilder = original.newBuilder()
+                            .header("Authorization", Credentials.basic("user", "password"));  // Postman에서 사용한 인증 정보로 대체
+                    Request request = requestBuilder.build();
+                    return chain.proceed(request);
+                })
+                .build();
+
         // Retrofit 초기화
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://localhost:8080")
+                .baseUrl("http://10.0.2.2:8080")
+                .client(client)  // 클라이언트 추가
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         nidonNaedonAPI = retrofit.create(NidonNaedonAPI.class);
