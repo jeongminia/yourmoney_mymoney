@@ -1,0 +1,27 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - master  # 배포할 브랜치 (여기서는 master)
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest  # GitHub Actions에서 실행할 환경 (Ubuntu latest)
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2  # GitHub Action에서 코드 체크아웃
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}  # GitHub Secrets에 저장한 SSH 개인 키
+
+      - name: Deploy to EC2
+        run: |
+          ssh ubuntu@your-ec2-ip-address "cd /var/www/frontend && git pull origin master"
+          # 필요에 따라 추가적인 빌드 스크립트 또는 명령어를 실행할 수 있습니다
+          
+      - name: Notify Deployment
+        run: echo "Deployment to EC2 completed successfully!"
