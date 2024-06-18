@@ -51,4 +51,6 @@ public interface NidonNaedonAPI {
     Call<ResponseBody> getMessage();
 
 
+    @GET("/validateUser")
+    Call<Boolean> validateUser(@Query("kakaoId") String kakaoId);
 }

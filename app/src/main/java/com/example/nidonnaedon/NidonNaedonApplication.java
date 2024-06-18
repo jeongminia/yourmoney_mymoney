@@ -2,8 +2,6 @@ package com.example.nidonnaedon;
 
 import android.app.Application;
 
-import com.example.nidonnaedon.NidonNaedonAPI;
-
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import retrofit2.Retrofit;

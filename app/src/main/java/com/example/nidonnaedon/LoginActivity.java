@@ -10,6 +10,7 @@ import android.transition.ChangeBounds;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
@@ -18,8 +19,13 @@ import com.google.android.flexbox.AlignItems;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayout;
 
+import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -110,10 +116,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // Set onClickListener for test login button
         testLoginButton.setOnClickListener(v -> {
-            // MainView로 바로 이동
-            Intent intent = new Intent(LoginActivity.this, MainView.class);
-            startActivity(intent);
-            finish();
+            testLogin();
         });
 
         // HTTP 로깅 인터셉터 추가
@@ -122,6 +125,13 @@ public class LoginActivity extends AppCompatActivity {
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
+                .addInterceptor(chain -> {
+                    Request original = chain.request();
+                    Request.Builder requestBuilder = original.newBuilder()
+                            .header("Authorization", Credentials.basic("user", "password")); // replace with your credentials
+                    Request request = requestBuilder.build();
+                    return chain.proceed(request);
+                })
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -132,6 +142,27 @@ public class LoginActivity extends AppCompatActivity {
         nidonNaedonAPI = retrofit.create(NidonNaedonAPI.class);
 
         setContentView(flexboxLayout);
+    }
+
+    private void testLogin() {
+        Call<Boolean> call = nidonNaedonAPI.validateUser("test_kakao_id");
+        call.enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                if (response.isSuccessful() && response.body() != null && response.body()) {
+                    Intent intent = new Intent(LoginActivity.this, MainView.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
