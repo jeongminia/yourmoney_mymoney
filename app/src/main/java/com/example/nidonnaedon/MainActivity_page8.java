@@ -29,6 +29,7 @@ import com.google.android.material.datepicker.DateValidatorPointForward;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import okhttp3.Credentials;
@@ -57,10 +58,34 @@ public class MainActivity_page8 extends AppCompatActivity {
 
     private NidonNaedonAPI nidonNaedonAPI;
 
+    private List<String> participants = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page8);
+
+        // Retrofit 초기화
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(loggingInterceptor)
+                .addInterceptor(chain -> {
+                    Request original = chain.request();
+                    Request.Builder requestBuilder = original.newBuilder()
+                            .header("Authorization", Credentials.basic("user", "password"));
+                    Request request = requestBuilder.build();
+                    return chain.proceed(request);
+                })
+                .build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:8080")
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        nidonNaedonAPI = retrofit.create(NidonNaedonAPI.class);
 
         accountName = findViewById(R.id.account_name);
         date = findViewById(R.id.date);
@@ -129,8 +154,8 @@ public class MainActivity_page8 extends AppCompatActivity {
             }
         });
 
-        // 기본 참여자 추가 ("신호연")
-        addParticipant("신호연");
+        // 기본 참여자 추가 ("신호연"을 kakao_id로 대체)
+        addDefaultParticipant("test_kakao_id");
 
         // 참여자 추가 버튼 클릭 시 처리
         addParticipantButton.setOnClickListener(v -> {
@@ -159,27 +184,29 @@ public class MainActivity_page8 extends AppCompatActivity {
 
         // 캘린더 아이콘 클릭 이벤트 설정
         findViewById(R.id.calendar_icon).setOnClickListener(this::showDatePicker);
+    }
 
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+    // 기본 참여자 추가 함수
+    private void addDefaultParticipant(String kakaoId) {
+        nidonNaedonAPI.getUserNickname(kakaoId).enqueue(new Callback<UserDTO>() {
+            @Override
+            public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    String nickname = response.body().getNickname();
+                    if (!participants.contains(nickname)) {
+                        addParticipant(nickname);
+                    }
+                } else {
+                    Toast.makeText(MainActivity_page8.this, "기본 참여자 정보를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
 
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(loggingInterceptor)
-                .addInterceptor(chain -> {
-                    Request original = chain.request();
-                    Request.Builder requestBuilder = original.newBuilder()
-                            .header("Authorization", Credentials.basic("user", "password"));
-                    Request request = requestBuilder.build();
-                    return chain.proceed(request);
-                })
-                .build();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080")
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        nidonNaedonAPI = retrofit.create(NidonNaedonAPI.class);
+            @Override
+            public void onFailure(Call<UserDTO> call, Throwable t) {
+                t.printStackTrace();
+                Toast.makeText(MainActivity_page8.this, "기본 참여자 정보를 가져오는 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     // 필드 검증 함수
@@ -229,17 +256,22 @@ public class MainActivity_page8 extends AppCompatActivity {
 
     // 참여자 추가 함수
     private void addParticipant(String name) {
-        TextView textView = new TextView(MainActivity_page8.this);
-        textView.setText(name);
-        textView.setTextSize(18); // 글씨 크기를 18sp로 설정
-        textView.setTextColor(getResources().getColor(android.R.color.black)); // 글씨 색을 검정으로 설정
-        participantList.addView(textView);
+        if (!participants.contains(name)) {
+            TextView textView = new TextView(MainActivity_page8.this);
+            textView.setText(name);
+            textView.setTextSize(18); // 글씨 크기를 18sp로 설정
+            textView.setTextColor(getResources().getColor(android.R.color.black)); // 글씨 색을 검정으로 설정
+            participantList.addView(textView);
+            participants.add(name);
+        }
     }
 
     // 가계부 생성 함수
     private void createAccount(String name, String date) {
-        AccountDTO account = new AccountDTO(null, name, date, "KRW", 1.0, new ArrayList<>());
-        Call<AccountDTO> call = nidonNaedonAPI.createAccount(account);
+        String kakaoId = "test_kakao_id"; // 실제 kakaoId를 설정해야 합니다.
+        AccountDTO account = new AccountDTO(null, name, date, "KRW", 1.0, participants);
+
+        Call<AccountDTO> call = nidonNaedonAPI.createAccount(account, kakaoId);
         call.enqueue(new Callback<AccountDTO>() {
             @Override
             public void onResponse(Call<AccountDTO> call, Response<AccountDTO> response) {

@@ -24,7 +24,7 @@ public interface NidonNaedonAPI {
     Call<ExpenditureDetailsDTO> createExpenditure(@Body ExpenditureDetailsDTO expenditure);
 
     @POST("/accounts")
-    Call<AccountDTO> createAccount(@Body AccountDTO account);
+    Call<AccountDTO> createAccount(@Body AccountDTO accountDTO, @Query("userId") String userId);
 
     @POST("/auth/login")
     Call<String> login(@Query("username") String username, @Query("password") String password);
@@ -50,7 +50,9 @@ public interface NidonNaedonAPI {
     @GET("/endpoint")
     Call<ResponseBody> getMessage();
 
-
     @GET("/validateUser")
     Call<Boolean> validateUser(@Query("kakaoId") String kakaoId);
+
+    @GET("/users/nickname")
+    Call<UserDTO> getUserNickname(@Query("kakaoId") String kakaoId);
 }
