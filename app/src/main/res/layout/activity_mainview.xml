@@ -32,35 +32,12 @@
             android:gravity="center" />
     </RelativeLayout>
 
-    <!-- 가계부 선택 버튼 -->
-    <LinearLayout
-        android:id="@+id/expense_buttons"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@id/header"
-        android:layout_marginTop="-8dp">
-
-        <Button
-            android:id="@+id/my_expense_button"
-            style="@style/ClickedButtonStyle"
-            android:text="나의 가계부" />
-
-        <Button
-            android:id="@+id/shared_expense_button"
-            style="@style/UnclickedButtonStyle"
-            android:text="공유 가계부" />
-
-    </LinearLayout>
-
-
-
     <!-- RecyclerView를 header 아래에 위치하게 설정 -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/expense_buttons"
+        android:layout_below="@id/header"
         android:padding="16dp"
         android:layout_centerHorizontal="true" />
 

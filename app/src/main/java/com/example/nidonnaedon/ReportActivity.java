@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -104,30 +103,6 @@ public class ReportActivity extends AppCompatActivity {
         pieChart.setTouchEnabled(false); // 터치 이벤트 비활성화
         pieChart.setRotationEnabled(false); // 회전 비활성화
         parentLayout.addView(pieChart);
-
-        // 버튼 생성
-        Button button = new Button(this);
-        button.setText("나의 가게부에 담기");
-
-        // 버튼 스타일 설정
-        button.setBackgroundColor(Color.parseColor("#DCE7D5"));
-        button.setTextColor(Color.parseColor("#000000"));
-        button.setElevation(convertToPx(2));
-
-        GradientDrawable buttonBackground = new GradientDrawable();
-        buttonBackground.setColor(Color.parseColor("#DCE7D5"));
-        buttonBackground.setCornerRadius(convertToPx(5));
-        buttonBackground.setStroke(convertToPx(1), Color.parseColor("#818181"));
-        button.setBackground(buttonBackground);
-
-        RelativeLayout.LayoutParams buttonLayoutParams = new RelativeLayout.LayoutParams(
-                convertToPx(330), convertToPx(56)); // 버튼 크기를 명시적으로 설정
-        buttonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        buttonLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        buttonLayoutParams.setMargins(convertToPx(16), convertToPx(16), convertToPx(16), convertToPx(16));
-        button.setLayoutParams(buttonLayoutParams);
-
-        parentLayout.addView(button);
 
         setContentView(parentLayout);
 

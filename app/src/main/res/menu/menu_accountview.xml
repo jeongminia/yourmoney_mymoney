@@ -7,9 +7,6 @@
         android:id="@+id/action_share_link"
         android:title="링크 공유" />
     <item
-        android:id="@+id/action_add_to_my_account"
-        android:title="나의 가계부에 담기" />
-    <item
         android:id="@+id/action_delete_account"
         android:title="내역 삭제" />
 </menu>

@@ -230,8 +230,7 @@ public class MainActivity_page8 extends AppCompatActivity {
 
     // 캘린더 아이콘 클릭 이벤트 핸들러
     public void showDatePicker(View view) {
-        CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder()
-                .setValidator(DateValidatorPointForward.now());
+        CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder();
 
         Builder<Pair<Long, Long>> builder = MaterialDatePicker.Builder.dateRangePicker()
                 .setTitleText("날짜 선택")
