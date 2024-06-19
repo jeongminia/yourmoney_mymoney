@@ -2,6 +2,7 @@ package com.example.nidonnaedon;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -155,7 +156,10 @@ public class MainActivity_page8 extends AppCompatActivity {
         });
 
         // 기본 참여자 추가 ("신호연"을 kakao_id로 대체)
-        addDefaultParticipant("test_kakao_id");
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String kakaoId = sharedPreferences.getString("kakao_id", "default_kakao_id"); // 기본 값 설정
+
+        addDefaultParticipant(kakaoId);
 
         // 참여자 추가 버튼 클릭 시 처리
         addParticipantButton.setOnClickListener(v -> {
@@ -178,7 +182,7 @@ public class MainActivity_page8 extends AppCompatActivity {
             String newAccountDate = date.getText().toString();
 
             if (validateFields(newAccountName, newAccountDate)) {
-                createAccount(newAccountName, newAccountDate);
+                createAccount(newAccountName, newAccountDate, kakaoId);
             }
         });
 
@@ -267,8 +271,7 @@ public class MainActivity_page8 extends AppCompatActivity {
     }
 
     // 가계부 생성 함수
-    private void createAccount(String name, String date) {
-        String kakaoId = "test_kakao_id"; // 실제 kakaoId를 설정해야 합니다.
+    private void createAccount(String name, String date, String kakaoId) {
         AccountDTO account = new AccountDTO(null, name, date, "KRW", 1.0, participants);
 
         Call<AccountDTO> call = nidonNaedonAPI.createAccount(account, kakaoId);

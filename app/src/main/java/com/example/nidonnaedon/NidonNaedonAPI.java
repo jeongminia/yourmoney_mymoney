@@ -55,4 +55,11 @@ public interface NidonNaedonAPI {
 
     @GET("/users/nickname")
     Call<UserDTO> getUserNickname(@Query("kakaoId") String kakaoId);
+
+    @PUT("/user/update")
+    Call<Void> updateUserData(
+            @Query("kakaoId") String kakaoId,
+            @Query("name") String name,
+            @Query("nickname") String nickname
+    );
 }

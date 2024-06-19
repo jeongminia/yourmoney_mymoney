@@ -71,7 +71,6 @@
                 android:id="@+id/name_edit_text"
                 android:layout_width="180dp"
                 android:layout_height="48dp"
-                android:text="김블랑"
                 android:textSize="18sp"
                 android:textColor="#000000"
                 android:background="@drawable/edit_text_underline"  />
@@ -88,7 +87,6 @@
                 android:id="@+id/nickname_edit_text"
                 android:layout_width="180dp"
                 android:layout_height="48dp"
-                android:text="동에번쩍"
                 android:textSize="18sp"
                 android:textColor="#000000"
                 android:background="@drawable/edit_text_underline" />

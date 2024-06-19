@@ -108,30 +108,58 @@ public class MyPageView extends AppCompatActivity {
     // 사용자 데이터 로드
     private void loadUserData() {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        String name = sharedPreferences.getString("name", "김블랑");
-        String nickname = sharedPreferences.getString("nickname", "동에번쩍");
+        String kakaoId = sharedPreferences.getString("kakao_id", null);
 
-        nameEditText.setText(name);
-        nicknameEditText.setText(nickname);
+        if (kakaoId != null) {
+            Call<UserDTO> call = nidonNaedonAPI.getUserNickname(kakaoId);
+            call.enqueue(new Callback<UserDTO>() {
+                @Override
+                public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        UserDTO userDTO = response.body();
+                        nameEditText.setText(userDTO.getName()); // DB의 name을 nameEditText에 설정
+                        nicknameEditText.setText(userDTO.getNickname());
+                    } else {
+                        Toast.makeText(MyPageView.this, "사용자 정보를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UserDTO> call, Throwable t) {
+                    Toast.makeText(MyPageView.this, "사용자 정보를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Toast.makeText(this, "로그인 정보가 없습니다.", Toast.LENGTH_SHORT).show();
+            // 로그인 액티비티로 이동
+            Intent intent = new Intent(MyPageView.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     // 사용자 데이터 저장
     private void saveUserData() {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String kakaoId = sharedPreferences.getString("kakao_id", null);
+
+        if (kakaoId == null) {
+            Toast.makeText(this, "로그인 정보가 없습니다.", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MyPageView.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
         String name = nameEditText.getText().toString();
         String nickname = nicknameEditText.getText().toString();
 
         // 사용자 데이터 업데이트 API 호출
-        Call<Void> call = nidonNaedonAPI.updateUserData(name, nickname);
+        Call<Void> call = nidonNaedonAPI.updateUserData(kakaoId, name, nickname);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("name", name);
-                    editor.putString("nickname", nickname);
-                    editor.apply();
-
                     // 키보드 숨기기
                     View view = MyPageView.this.getCurrentFocus();
                     if (view != null) {

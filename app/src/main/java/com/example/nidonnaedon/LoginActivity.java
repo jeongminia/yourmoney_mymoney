@@ -1,6 +1,7 @@
 package com.example.nidonnaedon;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
@@ -150,9 +151,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                 if (response.isSuccessful() && response.body() != null && response.body()) {
-                    Intent intent = new Intent(LoginActivity.this, MainView.class);
-                    startActivity(intent);
-                    finish();
+                    onLoginSuccess("test_kakao_id"); // 저장하고 메인화면으로 이동
                 } else {
                     Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
                 }
@@ -163,6 +162,18 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    // 로그인 성공 시 kakaoId 저장
+    private void onLoginSuccess(String kakaoId) {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("kakao_id", kakaoId);
+        editor.apply();
+
+        Intent intent = new Intent(LoginActivity.this, MainView.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override
