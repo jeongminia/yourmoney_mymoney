@@ -1,7 +1,6 @@
 package com.example.nidonnaedon;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +11,12 @@ import java.util.List;
 
 public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseViewHolder> {
 
-    private final List<ExpenditureDetailsDTO> expenseList;
+    private final List<AccountDTO> accountList;
     private final OnItemClickListener listener;
     private final Context context;
 
-    public ExpenseAdapter(List<ExpenditureDetailsDTO> expenseList, OnItemClickListener listener, Context context) {
-        this.expenseList = expenseList;
+    public ExpenseAdapter(List<AccountDTO> accountList, OnItemClickListener listener, Context context) {
+        this.accountList = accountList;
         this.listener = listener;
         this.context = context;
     }
@@ -32,11 +31,11 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
 
     @Override
     public void onBindViewHolder(@NonNull ExpenseViewHolder holder, int position) {
-        // Get the current expense item
-        ExpenditureDetailsDTO expense = expenseList.get(position);
+        // Get the current account item
+        AccountDTO account = accountList.get(position);
         // Bind the data to the TextViews
-        holder.accountNameTextView.setText(expense.getExpenditureName());
-        holder.accountDateTextView.setText(expense.getExpenditureDate());
+        holder.accountNameTextView.setText(account.getAccountName());
+        holder.accountDateTextView.setText(account.getAccountSchedule());
 
         // Set click listener for the item view
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -52,7 +51,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
 
     @Override
     public int getItemCount() {
-        return expenseList.size();
+        return accountList.size();
     }
 
     // Interface for handling item clicks

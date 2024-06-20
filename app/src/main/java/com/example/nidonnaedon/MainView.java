@@ -1,7 +1,6 @@
 package com.example.nidonnaedon;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,9 +9,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Credentials;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -24,7 +28,7 @@ public class MainView extends AppCompatActivity {
     private static final int REQUEST_CODE_CREATE_ACCOUNT = 1;
     private RecyclerView recyclerView;
     private ExpenseAdapter expenseAdapter;
-    private List<ExpenditureDetailsDTO> myExpenseList;
+    private List<AccountDTO> myAccountList;
     private NidonNaedonAPI nidonNaedonAPI;
 
     @Override
@@ -35,22 +39,37 @@ public class MainView extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        myExpenseList = new ArrayList<>();
+        myAccountList = new ArrayList<>();
 
         // Retrofit 초기화
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(loggingInterceptor)
+                .addInterceptor(chain -> {
+                    Request original = chain.request();
+                    Request.Builder requestBuilder = original.newBuilder()
+                            .header("Authorization", Credentials.basic("user", "password")); // 설정된 사용자 이름과 비밀번호 사용
+                    Request request = requestBuilder.build();
+                    return chain.proceed(request);
+                })
+                .build();
+
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://localhost:8080")
+                .baseUrl("http://10.0.2.2:8080") // localhost 대신 10.0.2.2 사용
+                .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         nidonNaedonAPI = retrofit.create(NidonNaedonAPI.class);
 
-        loadMyExpenses();
+        loadMyAccounts();
 
-        expenseAdapter = new ExpenseAdapter(myExpenseList, new ExpenseAdapter.OnItemClickListener() {
+        expenseAdapter = new ExpenseAdapter(myAccountList, new ExpenseAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 Intent intent = new Intent(MainView.this, AccountViewActivity.class);
-                intent.putExtra("itemName", myExpenseList.get(position).getExpenditureName());
+                intent.putExtra("accountName", myAccountList.get(position).getAccountName());
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
@@ -86,32 +105,31 @@ public class MainView extends AppCompatActivity {
             String accountName = data.getStringExtra("ACCOUNT_NAME");
             String accountDate = data.getStringExtra("ACCOUNT_DATE");
             if (accountName != null && accountDate != null) {
-                ExpenditureDetailsDTO newAccount = new ExpenditureDetailsDTO(0, "", accountName, 0, "KRW", 1.0, new ArrayList<>(), accountDate, null, "", "기타");
+                AccountDTO newAccount = new AccountDTO(null, accountName, accountDate, "KRW", 1.0, new ArrayList<>());
                 addAccountToList(newAccount);
             }
         }
     }
 
-    private void addAccountToList(ExpenditureDetailsDTO account) {
-        myExpenseList.add(account);
+    private void addAccountToList(AccountDTO account) {
+        myAccountList.add(account);
         expenseAdapter.notifyDataSetChanged();
     }
 
-    private void loadMyExpenses() {
-        // 내 지출 내역 API 호출 로직 구현
-        Call<List<ExpenditureDetailsDTO>> call = nidonNaedonAPI.getAllExpenditureDetailsByAccountId("my_account_id");
-        call.enqueue(new Callback<List<ExpenditureDetailsDTO>>() {
+    private void loadMyAccounts() {
+        Call<List<AccountDTO>> call = nidonNaedonAPI.getAllAccounts();
+        call.enqueue(new Callback<List<AccountDTO>>() {
             @Override
-            public void onResponse(Call<List<ExpenditureDetailsDTO>> call, Response<List<ExpenditureDetailsDTO>> response) {
+            public void onResponse(Call<List<AccountDTO>> call, Response<List<AccountDTO>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    myExpenseList.clear();
-                    myExpenseList.addAll(response.body());
+                    myAccountList.clear();
+                    myAccountList.addAll(response.body());
                     expenseAdapter.notifyDataSetChanged();
                 }
             }
 
             @Override
-            public void onFailure(Call<List<ExpenditureDetailsDTO>> call, Throwable t) {
+            public void onFailure(Call<List<AccountDTO>> call, Throwable t) {
                 t.printStackTrace();
             }
         });

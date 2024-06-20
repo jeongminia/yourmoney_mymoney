@@ -62,4 +62,7 @@ public interface NidonNaedonAPI {
             @Query("name") String name,
             @Query("nickname") String nickname
     );
+
+    @GET("/accounts")
+    Call<List<AccountDTO>> getAllAccounts();
 }
