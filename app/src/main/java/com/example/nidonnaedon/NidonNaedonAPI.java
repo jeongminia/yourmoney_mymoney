@@ -65,4 +65,10 @@ public interface NidonNaedonAPI {
 
     @GET("/accounts")
     Call<List<AccountDTO>> getAllAccounts();
+
+    @GET("/accounts/{accountId}")
+    Call<AccountDTO> getAccountById(@Path("accountId") String accountId);
+
+    @DELETE("/accounts/{accountId}")
+    Call<Void> deleteAccount(@Path("accountId") String accountId);
 }

@@ -9,10 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -63,12 +61,11 @@ public class MainView extends AppCompatActivity {
                 .build();
         nidonNaedonAPI = retrofit.create(NidonNaedonAPI.class);
 
-        loadMyAccounts();
-
         expenseAdapter = new ExpenseAdapter(myAccountList, new ExpenseAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 Intent intent = new Intent(MainView.this, AccountViewActivity.class);
+                intent.putExtra("accountId", myAccountList.get(position).getAccountId());
                 intent.putExtra("accountName", myAccountList.get(position).getAccountName());
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
@@ -96,6 +93,16 @@ public class MainView extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
+
+        // 초기 데이터 로드
+        loadMyAccounts();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // MainView가 다시 포그라운드로 돌아올 때 계정 목록을 다시 로드
+        loadMyAccounts();
     }
 
     @Override

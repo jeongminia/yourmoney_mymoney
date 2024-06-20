@@ -1,7 +1,6 @@
 package com.example.nidonnaedon;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -35,12 +34,10 @@ public class AccountViewActivity extends AppCompatActivity {
 
     private ArrayList<ExpenditureDetailsDTO> expenditureList;
     private AccountAdapter adapter;
-    private SharedPreferences sharedPreferences;
-    private static final String PREFS_NAME = "account_data";
-    private static final String KEY_ACCOUNTS = "accounts";
     private Retrofit retrofit;
     private NidonNaedonAPI nidonNaedonAPI;
     private static final String TAG = "AccountViewActivity";
+    private String accountId;  // 추가된 변수
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +66,8 @@ public class AccountViewActivity extends AppCompatActivity {
         });
 
         Intent intent = getIntent();
-        String itemName = intent.getStringExtra("itemName");
+        String itemName = intent.getStringExtra("accountName");
+        accountId = intent.getStringExtra("accountId");  // 추가된 부분
         if (itemName != null) {
             toolbarTitle.setText(itemName);
         }
@@ -78,8 +76,6 @@ public class AccountViewActivity extends AppCompatActivity {
         ListView listViewAccounts = findViewById(R.id.listViewAccounts);
         adapter = new AccountAdapter(this, expenditureList);
         listViewAccounts.setAdapter(adapter);
-
-        sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
         // Retrofit 클라이언트 설정
         OkHttpClient client = new OkHttpClient.Builder()
@@ -164,14 +160,18 @@ public class AccountViewActivity extends AppCompatActivity {
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                return onOptionsItemSelected(item);
+                if (item.getItemId() == R.id.action_delete_account) {
+                    deleteAccount();
+                    return true;
+                }
+                return false;
             }
         });
         popup.show();
     }
 
     private void loadExpenditures() {
-        Call<List<ExpenditureDetailsDTO>> call = nidonNaedonAPI.getAllExpenditureDetailsByAccountId("your_account_id");
+        Call<List<ExpenditureDetailsDTO>> call = nidonNaedonAPI.getAllExpenditureDetailsByAccountId(accountId);  // 수정된 부분
         call.enqueue(new Callback<List<ExpenditureDetailsDTO>>() {
             @Override
             public void onResponse(Call<List<ExpenditureDetailsDTO>> call, Response<List<ExpenditureDetailsDTO>> response) {
@@ -227,5 +227,34 @@ public class AccountViewActivity extends AppCompatActivity {
             e.printStackTrace();
             return date;
         }
+    }
+
+    private void deleteAccount() {
+        Call<Void> call = nidonNaedonAPI.deleteAccount(accountId);  // 수정된 부분
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "deleteAccount onResponse: 계정 삭제 성공");
+                    finish();  // 현재 액티비티 종료
+                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                } else {
+                    Log.d(TAG, "deleteAccount onResponse: 서버 응답 실패");
+                    Log.d(TAG, "응답 코드: " + response.code());
+                    Log.d(TAG, "응답 메시지: " + response.message());
+                    try {
+                        Log.d(TAG, "응답 본문: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d(TAG, "deleteAccount onFailure: 서버 통신 실패");
+                t.printStackTrace();
+            }
+        });
     }
 }
