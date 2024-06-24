@@ -15,4 +15,4 @@
 ![스크린샷 2024-04-29 오후 1 33 22](https://github.com/SMWU-NaesoneulJAVA/frontend/assets/89966409/97f1c876-d9b6-4213-ad32-4b379e0b0cb9)
 
 ## Data Flow
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/9d6e4d55-49db-4a12-8cb4-25e9fbc9ab1a/c46ac1c3-ca06-48f7-81a0-e693d57da4fa/image.png)
+![Account Book project](https://github.com/SMWU-NaesoneulJAVA/frontend/assets/89966409/e2502800-43f1-4cb4-8a13-77c64c303aec)
