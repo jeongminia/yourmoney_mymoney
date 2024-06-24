@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private FlexboxLayout flexboxLayout;
     private TextView textView;
-    private Button kakaoLoginButton, kakaoSignupButton, testLoginButton;
+    private Button kakaoLoginButton, kakaoSignupButton;
     private NidonNaedonAPI nidonNaedonAPI;
 
     @Override
@@ -98,28 +98,6 @@ public class LoginActivity extends AppCompatActivity {
         kakaoSignupButton.setLayoutParams(signupButtonParams);
         flexboxLayout.addView(kakaoSignupButton);
 
-        // Initialize the test login button
-        testLoginButton = new Button(this);
-        testLoginButton.setText("테스트 로그인");
-        testLoginButton.setTextColor(Color.BLACK);
-        testLoginButton.setTypeface(null, Typeface.BOLD);
-        // Set background with rounded corners and blue color
-        GradientDrawable testLoginButtonShape = new GradientDrawable();
-        testLoginButtonShape.setShape(GradientDrawable.RECTANGLE);
-        testLoginButtonShape.setColor(Color.parseColor("#00aaff"));
-        testLoginButtonShape.setCornerRadius(convertToPx(5)); // 5px border radius
-        testLoginButton.setBackground(testLoginButtonShape);
-        FlexboxLayout.LayoutParams testLoginButtonParams = new FlexboxLayout.LayoutParams(
-                convertToPx(297), convertToPx(48)); // Set width and height
-        testLoginButtonParams.setMargins(0, convertToPx(20), 0, 0); // top margin
-        testLoginButton.setLayoutParams(testLoginButtonParams);
-        flexboxLayout.addView(testLoginButton);
-
-        // Set onClickListener for test login button
-        testLoginButton.setOnClickListener(v -> {
-            testLogin();
-        });
-
         // HTTP 로깅 인터셉터 추가
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -143,25 +121,6 @@ public class LoginActivity extends AppCompatActivity {
         nidonNaedonAPI = retrofit.create(NidonNaedonAPI.class);
 
         setContentView(flexboxLayout);
-    }
-
-    private void testLogin() {
-        Call<Boolean> call = nidonNaedonAPI.validateUser("test_kakao_id");
-        call.enqueue(new Callback<Boolean>() {
-            @Override
-            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                if (response.isSuccessful() && response.body() != null && response.body()) {
-                    onLoginSuccess("test_kakao_id"); // 저장하고 메인화면으로 이동
-                } else {
-                    Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Boolean> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     // 로그인 성공 시 kakaoId 저장
