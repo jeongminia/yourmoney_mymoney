@@ -12,7 +12,7 @@
 ## 👩🏻‍💻 my role
 ### 💰 information architecture
 
-<img width="780" alt="스크린샷 2024-06-03 오후 2 03 52" src="https://github.com/jeongmin1016/mymoneyyourmoney/assets/109460178/9f4f5a41-2477-4ee8-ad4b-f350084521b8">
+![스크린샷 2024-04-29 오후 1 33 22](https://github.com/SMWU-NaesoneulJAVA/frontend/assets/89966409/97f1c876-d9b6-4213-ad32-4b379e0b0cb9)
 
 ### 💰 Front-end
 figma 기반으로 android studio를 이용해 java, xml 적용
@@ -63,9 +63,6 @@ figma 기반으로 android studio를 이용해 java, xml 적용
 
 ## 사용 기술 스택
 ![Multiple choice](https://github.com/SMWU-NaesoneulJAVA/frontend/assets/89966409/5ef31882-a0ae-45f0-ba96-45f6791e92bd)
-
-## Information Architecture
-![스크린샷 2024-04-29 오후 1 33 22](https://github.com/SMWU-NaesoneulJAVA/frontend/assets/89966409/97f1c876-d9b6-4213-ad32-4b379e0b0cb9)
 
 ## Data Flow
 ![Account Book project](https://github.com/SMWU-NaesoneulJAVA/frontend/assets/89966409/e2502800-43f1-4cb4-8a13-77c64c303aec)
