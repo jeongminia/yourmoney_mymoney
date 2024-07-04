@@ -1,6 +1,6 @@
 # mymoneyyourmoney
 ![ë_´ì__ì__ì__ë°__page-0001](https://github.com/SMWU-NaesoneulJAVA/frontend/assets/89966409/528d8a84-af15-4ef7-b39d-07b667e455d8)
-## 👩🏻‍💻 Background
+## 👩🏻‍💻 My experience -> 
 작년 2023-2 독일 교환학생으로 6개월동안 해외에 거주해보며 다른 친구들과 함께 돈 거래를 
 ## 👩🏻‍💻 main process
 다른 사람들과 함께 지출을 해야하는 상황에서 조금 더 효율적으로 모두가 동등한 지출을 할 수 있도록 하는 "니돈내돈" 어플리케이션 개발
