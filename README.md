@@ -1,7 +1,11 @@
 # 니돈내돈
-### 2024-1 캡스톤디자인_객체지향프로젝트 : java 
-![ë_´ì__ì__ì__ë°__page-0001](https://github.com/SMWU-NaesoneulJAVA/frontend/assets/89966409/528d8a84-af15-4ef7-b39d-07b667e455d8)
-## 👩🏻‍💻 My experience -> 
+### 2024-1 캡스톤디자인 객체지향프로젝트 수업 
+
+
+![제목을 입력해주세요_-002 (2)](https://github.com/user-attachments/assets/c36d94ce-5814-4788-a8db-92a677eddb10)
+java 언어로 프로젝트를 진행했습니다.
+
+## 👩🏻‍💻 My experience
 작년 2023-2 독일 교환학생으로 6개월동안 해외에 거주해보며 다른 친구들과 함께 가계부를 사용해야만 하는 상황이 많았습니다. 여러 번 여행을 가거나 같이 생활용품을 구매하는 등 또한 유로로 결제하거나 한화로 결제 하는 등 이러한 문제를 모두 포괄해서 해결해주는 어플이 없어서 직접 구글 스프레드 시트를 활용해 간이 가계부를 6개월동안 사용했습니다.
 
 ![image](https://github.com/jeongmin1016/mymoneyyourmoney_/assets/109460178/5faafde7-d804-4b45-898d-9d2ce893b3bf)
